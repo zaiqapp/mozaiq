@@ -4,6 +4,7 @@ import {
   BarChart2, TrendingUp, BarChart, PieChart, Filter,
   Activity, Table, CheckSquare, Zap, FileText,
 } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import type { WidgetType, WidgetConfig, WidgetProps } from '@/types/dashboard'
 
 export interface WidgetRegistryEntry {
@@ -21,74 +22,83 @@ export const WIDGET_TYPES: WidgetType[] = [
   'activity-feed', 'text-note',
 ]
 
-// Placeholder stub - will be replaced with real components in Task 9
-const Stub: ComponentType<WidgetProps> = () => null
+const KPICard = dynamic(() => import('@/components/widgets/KPICard')) as unknown as ComponentType<WidgetProps>
+const LineChartWidget = dynamic(() => import('@/components/widgets/LineChartWidget')) as unknown as ComponentType<WidgetProps>
+const AreaChartWidget = dynamic(() => import('@/components/widgets/AreaChartWidget')) as unknown as ComponentType<WidgetProps>
+const BarChartWidget = dynamic(() => import('@/components/widgets/BarChartWidget')) as unknown as ComponentType<WidgetProps>
+const DonutChartWidget = dynamic(() => import('@/components/widgets/DonutChartWidget')) as unknown as ComponentType<WidgetProps>
+const FunnelChartWidget = dynamic(() => import('@/components/widgets/FunnelChartWidget')) as unknown as ComponentType<WidgetProps>
+const GaugeWidget = dynamic(() => import('@/components/widgets/GaugeWidget')) as unknown as ComponentType<WidgetProps>
+const DataTableWidget = dynamic(() => import('@/components/widgets/DataTableWidget')) as unknown as ComponentType<WidgetProps>
+const ProgressTracker = dynamic(() => import('@/components/widgets/ProgressTracker')) as unknown as ComponentType<WidgetProps>
+const ActivityFeed = dynamic(() => import('@/components/widgets/ActivityFeed')) as unknown as ComponentType<WidgetProps>
+const TextNoteWidget = dynamic(() => import('@/components/widgets/TextNoteWidget')) as unknown as ComponentType<WidgetProps>
 
 export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
   'kpi': {
-    component: Stub,
+    component: KPICard,
     defaultSize: { w: 3, h: 2 },
-    defaultConfig: { title: 'KPI', value: 0, change: 0, changeLabel: 'vs last period' } as WidgetConfig,
+    defaultConfig: { title: 'KPI', value: 0, change: 0, changeLabel: 'vs last period' },
     label: 'KPI Card', icon: BarChart2, category: 'metrics',
   },
   'line-chart': {
-    component: Stub,
+    component: LineChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Line Chart', dataKey: 'value' } as WidgetConfig,
+    defaultConfig: { title: 'Line Chart', dataKey: 'value' },
     label: 'Line Chart', icon: TrendingUp, category: 'charts',
   },
   'area-chart': {
-    component: Stub,
+    component: AreaChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Area Chart', dataKey: 'value' } as WidgetConfig,
+    defaultConfig: { title: 'Area Chart', dataKey: 'value' },
     label: 'Area Chart', icon: TrendingUp, category: 'charts',
   },
   'bar-chart': {
-    component: Stub,
+    component: BarChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Bar Chart', dataKey: 'value' } as WidgetConfig,
+    defaultConfig: { title: 'Bar Chart', dataKey: 'value' },
     label: 'Bar Chart', icon: BarChart, category: 'charts',
   },
   'donut-chart': {
-    component: Stub,
+    component: DonutChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Donut Chart', dataKey: 'value' } as WidgetConfig,
+    defaultConfig: { title: 'Donut Chart', dataKey: 'value' },
     label: 'Donut Chart', icon: PieChart, category: 'charts',
   },
   'funnel-chart': {
-    component: Stub,
+    component: FunnelChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Funnel Chart' } as WidgetConfig,
+    defaultConfig: { title: 'Funnel Chart' },
     label: 'Funnel Chart', icon: Filter, category: 'charts',
   },
   'gauge': {
-    component: Stub,
+    component: GaugeWidget,
     defaultSize: { w: 3, h: 3 },
-    defaultConfig: { title: 'Gauge', value: 75, max: 100, unit: '%' } as WidgetConfig,
+    defaultConfig: { title: 'Gauge', value: 75, max: 100, unit: '%' },
     label: 'Gauge', icon: Activity, category: 'metrics',
   },
   'data-table': {
-    component: Stub,
+    component: DataTableWidget,
     defaultSize: { w: 12, h: 4 },
-    defaultConfig: { title: 'Data Table', columns: [], rows: [] } as WidgetConfig,
+    defaultConfig: { title: 'Data Table', columns: [], rows: [] },
     label: 'Data Table', icon: Table, category: 'data',
   },
   'progress-tracker': {
-    component: Stub,
+    component: ProgressTracker,
     defaultSize: { w: 4, h: 4 },
-    defaultConfig: { title: 'Progress', items: [] } as WidgetConfig,
+    defaultConfig: { title: 'Progress', items: [] },
     label: 'Progress', icon: CheckSquare, category: 'data',
   },
   'activity-feed': {
-    component: Stub,
+    component: ActivityFeed,
     defaultSize: { w: 4, h: 4 },
-    defaultConfig: { title: 'Activity Feed', events: [] } as WidgetConfig,
+    defaultConfig: { title: 'Activity Feed', events: [] },
     label: 'Activity Feed', icon: Zap, category: 'misc',
   },
   'text-note': {
-    component: Stub,
+    component: TextNoteWidget,
     defaultSize: { w: 6, h: 2 },
-    defaultConfig: { title: 'Note', content: '' } as WidgetConfig,
+    defaultConfig: { title: 'Note', content: '' },
     label: 'Text / Note', icon: FileText, category: 'misc',
   },
 }
