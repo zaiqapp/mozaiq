@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mozaiq
 
-## Getting Started
+**Build beautiful dashboards in minutes.** Drag, drop, and describe. Mozaiq turns your data into shareable dashboards — no code required.
 
-First, run the development server:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/zaiq/mozaiq&env=NEXT_PUBLIC_APP_URL&envDescription=Your+app+URL)
+
+---
+
+## Features
+
+- 🧩 **Drag & Drop Builder** — 11 widget types: KPI cards, line/area/bar/donut/funnel charts, gauge, data table, progress tracker, activity feed, text note
+- ✨ **AI Generator** — Describe your dashboard in plain English, get a full layout in seconds
+- 📋 **Starter Templates** — Analytics, Inventory, and Purchasing dashboards ready in one click
+- 🔗 **Share Anywhere** — One shareable link. Embeddable via iframe. No login required to view
+- 🔓 **Open Source** — AGPL-3.0. Self-host forever. One-click deploy to Vercel
+- 📡 **Data Ready (v2)** — Google Sheets, CSV, REST API connectors coming soon
+
+---
+
+## Demo
+
+> [ Builder screenshot / demo GIF ]
+
+---
+
+## Quick Start
+
+### Deploy to Vercel (recommended)
+
+Click the button above. Set up a [Neon](https://neon.tech) database and connect it via Vercel Marketplace, then run `npx prisma db push` to initialize the schema.
+
+### Local Development
 
 ```bash
+git clone https://github.com/zaiq/mozaiq
+cd mozaiq
+npm install
+
+# Link to your Vercel project (for AI Gateway + Neon credentials)
+vercel link
+vercel env pull .env.local
+
+# Push schema to your Neon database
+npx prisma db push
+
+# Start the dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Required Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | Neon Postgres connection string |
+| `VERCEL_OIDC_TOKEN` | Auto-provisioned by `vercel env pull` for AI Gateway |
+| `NEXT_PUBLIC_APP_URL` | Your app's public URL (e.g. `https://zaiq.app`) |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Self-Hosting
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Fork this repo and deploy to any platform that supports Next.js
+2. Set `DATABASE_URL` to a Postgres connection string
+3. For the AI generator, set up a [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) API key as `AI_GATEWAY_API_KEY`
+4. Run `npx prisma db push` to initialize the schema
+5. Set `NEXT_PUBLIC_APP_URL` to your domain
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build && npm start
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js 16](https://nextjs.org) — App Router, TypeScript, Tailwind CSS
+- [Zustand](https://github.com/pmndrs/zustand) — Client-side state
+- [react-grid-layout](https://github.com/react-grid-layout/react-grid-layout) — Drag & drop canvas
+- [recharts](https://recharts.org) — Chart widgets
+- [Prisma](https://prisma.io) + [Neon](https://neon.tech) — Database
+- [AI SDK v6](https://sdk.vercel.ai) + [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) — AI generation
+- [shadcn/ui](https://ui.shadcn.com) — UI components
+
+---
+
+## Roadmap
+
+See [ROADMAP.md](./ROADMAP.md) for planned features.
+
+---
+
+## Contributing
+
+Contributions welcome! Open an issue or PR.
+
+---
+
+## License
+
+[AGPL-3.0](./LICENSE) — Free for self-hosting. Contact us for a commercial license.
