@@ -1,4 +1,4 @@
-import type { Layout } from 'react-grid-layout'
+import type { LayoutItem } from 'react-grid-layout'
 
 export type WidgetType =
   | 'kpi' | 'line-chart' | 'area-chart' | 'bar-chart' | 'donut-chart'
@@ -82,7 +82,7 @@ export interface DashboardState {
   name: string
   description?: string
   widgets: Widget[]
-  layout: Layout[]
+  layout: LayoutItem[]
   isDirty: boolean
   isSaving: boolean
   isGenerating: boolean

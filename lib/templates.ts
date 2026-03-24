@@ -1,5 +1,5 @@
 import type { TemplateKey, Widget } from '@/types/dashboard'
-import type { Layout } from 'react-grid-layout'
+import type { LayoutItem } from 'react-grid-layout'
 import {
   CHANNEL_DATA, generateDailyRevenue, CATEGORY_DATA, ACTIVITY_EVENTS,
 } from './mockData'
@@ -7,7 +7,7 @@ import {
 interface TemplateDef {
   name: string
   widgets: Widget[]
-  layout: Layout[]
+  layout: LayoutItem[]
 }
 
 export const templates: Record<TemplateKey, TemplateDef> = {

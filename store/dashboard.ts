@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { nanoid } from 'nanoid'
-import type { Layout } from 'react-grid-layout'
+import type { LayoutItem } from 'react-grid-layout'
 import type {
   DashboardState, Widget, WidgetType, WidgetConfig, TemplateKey,
 } from '@/types/dashboard'
@@ -11,11 +11,11 @@ interface DashboardStore extends DashboardState {
   addWidget: (type: WidgetType) => void
   removeWidget: (id: string) => void
   updateWidgetConfig: (id: string, config: Partial<WidgetConfig>) => void
-  setLayout: (layout: Layout[]) => void
+  setLayout: (layout: LayoutItem[]) => void
   selectWidget: (id: string | null) => void
   setDashboardName: (name: string) => void
   loadTemplate: (template: TemplateKey) => void
-  loadDashboard: (dashboard: { name: string; widgets: Widget[]; layout: Layout[] }) => void
+  loadDashboard: (dashboard: { name: string; widgets: Widget[]; layout: LayoutItem[] }) => void
   clearCanvas: () => void
   saveDashboard: () => Promise<string>
   generateDashboard: (prompt: string) => Promise<void>
@@ -42,7 +42,7 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
     const maxY = currentLayout.length
       ? Math.max(...currentLayout.map((l) => l.y + l.h))
       : 0
-    const newLayoutItem: Layout = { i: id, x: 0, y: maxY, ...entry.defaultSize }
+    const newLayoutItem: LayoutItem = { i: id, x: 0, y: maxY, ...entry.defaultSize }
     set((state) => ({
       widgets: [...state.widgets, newWidget],
       layout: [...state.layout, newLayoutItem],
@@ -113,7 +113,7 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt }),
       })
-      const data = await res.json() as { dashboard?: { name: string; widgets: Widget[]; layout: Layout[] }; error?: string }
+      const data = await res.json() as { dashboard?: { name: string; widgets: Widget[]; layout: LayoutItem[] }; error?: string }
       if (!res.ok || data.error) throw new Error(data.error ?? 'Generation failed')
       get().loadDashboard(data.dashboard!)
     } finally {

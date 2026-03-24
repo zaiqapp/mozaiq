@@ -42,6 +42,6 @@ describe('validateDashboardShape', () => {
 
   it('strips unknown top-level keys', () => {
     const result = validateDashboardShape({ ...validDashboard, extraKey: 'value' } as unknown as typeof validDashboard)
-    expect((result as Record<string, unknown>)['extraKey']).toBeUndefined()
+    expect((result as unknown as Record<string, unknown>)['extraKey']).toBeUndefined()
   })
 })
