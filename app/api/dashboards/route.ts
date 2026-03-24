@@ -3,6 +3,8 @@ import { nanoid } from 'nanoid'
 import { prisma } from '@/lib/prisma'
 import { shareUrl } from '@/lib/utils'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(req: Request) {
   try {
     const body = await req.json() as { name: string; layout: object; widgets: object }
