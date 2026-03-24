@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String      @id @default(cuid())
+  email      String?     @unique
+  name       String?
+  image      String?
+  plan       Plan        @default(FREE)
+  dashboards Dashboard[]
+  createdAt  DateTime    @default(now())
+}
+
+model Dashboard {
+  id          String   @id
+  name        String   @default("Untitled Dashboard")
+  description String?
+  layout      Json
+  widgets     Json
+  isPublic    Boolean  @default(true)
+  views       Int      @default(0)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Plan {
+  FREE
+  PRO
+  WHITE_LABEL
+}
+
+model GenerationLog {
+  id          String   @id @default(cuid())
+  prompt      String
+  success     Boolean
+  widgetCount Int?
+  createdAt   DateTime @default(now())
+}
