@@ -59,31 +59,34 @@ export interface TextNoteConfig extends BaseWidgetConfig {
   content: string
 }
 
-export type DataSourceType = 'csv' | 'google-sheets'
-
-export interface DataSource {
-  type: DataSourceType
-  // CSV snapshot
-  data?: Record<string, unknown>[]
-  fileName?: string
-  // Google Sheets live
-  url?: string
-  gid?: string              // optional numeric sheet tab ID for multi-tab sheets
-  refreshInterval?: number  // seconds; default 60, minimum 10 (enforced in useDataSource); 0 = manual only
-  // Shared
-  mapping?: Record<string, string>  // widgetField → columnName
-  error?: string                    // runtime-only; stripped before persisting
-}
-
 export type WidgetConfig =
   | KPIConfig | ChartConfig | FunnelConfig | GaugeConfig
   | TableConfig | ProgressConfig | ActivityConfig | TextNoteConfig
+
+// --- v2.3 global data source types ---
+
+export interface GlobalDataSource {
+  id: string                           // nanoid
+  name: string                         // user-assigned label
+  type: 'csv' | 'google-sheets'
+  data?: Record<string, unknown>[]     // CSV inline rows
+  fileName?: string                    // CSV original filename
+  url?: string                         // Google Sheets URL
+  gid?: string                         // Sheet tab ID
+  refreshInterval?: number             // seconds; 0 = manual
+}
+
+export interface AxisMapping {
+  column: string        // source column name
+  displayName?: string  // optional display label override
+}
 
 export interface Widget {
   id: string
   type: WidgetType
   config: WidgetConfig
-  dataSource?: DataSource
+  dataSourceId?: string                           // references GlobalDataSource.id
+  dataSourceMapping?: Record<string, AxisMapping> // fieldKey → { column, displayName? }
   aiInsight?: string
 }
 
@@ -93,6 +96,7 @@ export interface DashboardState {
   description?: string
   widgets: Widget[]
   layout: LayoutItem[]
+  dataSources: GlobalDataSource[]
   isDirty: boolean
   isSaving: boolean
   isGenerating: boolean
