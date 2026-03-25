@@ -6,16 +6,6 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id         String      @id @default(cuid())
-  email      String?     @unique
-  name       String?
-  image      String?
-  plan       Plan        @default(FREE)
-  dashboards Dashboard[]
-  createdAt  DateTime    @default(now())
-}
-
 model Dashboard {
   id          String   @id
   name        String   @default("Untitled Dashboard")
@@ -25,15 +15,8 @@ model Dashboard {
   isPublic    Boolean  @default(true)
   views       Int      @default(0)
   userId      String?
-  user        User?    @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-enum Plan {
-  FREE
-  PRO
-  WHITE_LABEL
 }
 
 model GenerationLog {
@@ -41,5 +24,7 @@ model GenerationLog {
   prompt      String
   success     Boolean
   widgetCount Int?
+  ip          String?
+  userId      String?
   createdAt   DateTime @default(now())
 }
