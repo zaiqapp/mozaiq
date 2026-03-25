@@ -9,9 +9,9 @@ export default function KPICard({ config }: WidgetProps) {
 
   return (
     <div className="flex h-full flex-col justify-between p-4">
-      <p className="text-sm font-medium text-gray-500">{c.title}</p>
+      <p className="text-sm font-medium text-[#9ca3af]">{c.title}</p>
       <div>
-        <p className="text-2xl font-bold text-gray-900">
+        <p className="text-2xl font-bold text-[#f9fafb]">
           {c.prefix}{c.value}{c.suffix}
         </p>
         <div className={cn(

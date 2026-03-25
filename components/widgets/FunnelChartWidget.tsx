@@ -15,13 +15,13 @@ export default function FunnelChartWidget({ config }: WidgetProps) {
 
   return (
     <div className="flex h-full flex-col p-4">
-      <p className="mb-2 text-sm font-medium text-gray-700">{c.title}</p>
+      <p className="mb-2 text-sm font-medium text-[#e5e7eb]">{c.title}</p>
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <FunnelChart>
             <Tooltip />
             <Funnel dataKey="value" data={data} isAnimationActive>
-              <LabelList position="right" fill="#6b7280" stroke="none" dataKey="name" style={{ fontSize: 11 }} />
+              <LabelList position="right" fill="#9ca3af" stroke="none" dataKey="name" style={{ fontSize: 11 }} />
             </Funnel>
           </FunnelChart>
         </ResponsiveContainer>

@@ -23,15 +23,15 @@ export default function DataTableWidget({ config }: WidgetProps) {
 
   return (
     <div className="flex h-full flex-col overflow-hidden p-4">
-      <p className="mb-2 text-sm font-medium text-gray-700">{c.title}</p>
+      <p className="mb-2 text-sm font-medium text-[#e5e7eb]">{c.title}</p>
       <div className="flex-1 overflow-auto">
         <table className="w-full text-xs">
           <thead>
-            <tr className="border-b">
+            <tr className="border-b border-[rgba(255,255,255,0.08)]">
               {columns.map((col) => (
                 <th
                   key={col.key}
-                  className={`pb-1 text-left font-medium text-gray-500 ${col.sortable ? 'cursor-pointer select-none' : ''}`}
+                  className={`pb-1 text-left font-medium text-[#9ca3af] ${col.sortable ? 'cursor-pointer select-none' : ''}`}
                   onClick={() => {
                     if (!col.sortable) return
                     if (sortKey === col.key) setSortAsc(!sortAsc)
@@ -50,9 +50,9 @@ export default function DataTableWidget({ config }: WidgetProps) {
           </thead>
           <tbody>
             {sorted.map((row, i) => (
-              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+              <tr key={i} className={i % 2 === 0 ? 'bg-transparent' : 'bg-[rgba(255,255,255,0.04)]'}>
                 {columns.map((col) => (
-                  <td key={col.key} className="py-1 pr-2 text-gray-700">
+                  <td key={col.key} className="py-1 pr-2 text-[#e5e7eb]">
                     {String(row[col.key] ?? '')}
                   </td>
                 ))}

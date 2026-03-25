@@ -12,15 +12,15 @@ export default function ProgressTracker({ config }: WidgetProps) {
 
   return (
     <div className="flex h-full flex-col p-4">
-      <p className="mb-3 text-sm font-medium text-gray-700">{c.title}</p>
+      <p className="mb-3 text-sm font-medium text-[#e5e7eb]">{c.title}</p>
       <div className="flex flex-col gap-3 overflow-auto">
         {items.map((item, i) => {
           const pct = Math.round((item.value / item.max) * 100)
           return (
             <div key={i}>
-              <div className="mb-1 flex justify-between text-xs text-gray-600">
+              <div className="mb-1 flex justify-between text-xs text-[#9ca3af]">
                 <span>{item.label}</span>
-                <span className="text-gray-400">{item.value}/{item.max} ({pct}%)</span>
+                <span className="text-[#6b7280]">{item.value}/{item.max} ({pct}%)</span>
               </div>
               <div className="h-1.5 w-full rounded-full bg-gray-100">
                 <div
