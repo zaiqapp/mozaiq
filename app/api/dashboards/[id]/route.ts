@@ -24,9 +24,14 @@ export async function PATCH(req: Request, { params }: Params) {
     if (dashboard.userId !== userId) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
     const body = await req.json() as { name?: string; layout?: unknown; widgets?: unknown }
+    const { name, layout, widgets } = body
     const updated = await prisma.dashboard.update({
       where: { id },
-      data: body as Parameters<typeof prisma.dashboard.update>[0]['data'],
+      data: {
+        ...(name !== undefined && { name }),
+        ...(layout !== undefined && { layout }),
+        ...(widgets !== undefined && { widgets }),
+      },
     })
     return NextResponse.json(updated)
   } catch {
