@@ -9,7 +9,7 @@ export default function BuilderPage() {
       <Toolbar />
       <div className="flex flex-1 overflow-hidden">
         <LeftSidebar />
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 overflow-y-auto">
           <BuilderCanvas />
         </main>
         <RightPanel />

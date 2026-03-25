@@ -29,8 +29,10 @@ export function Toolbar() {
   return (
     <header className="flex h-12 items-center justify-between border-b bg-white px-4">
       <div className="flex items-center gap-3">
-        <div className="h-6 w-6 rounded bg-indigo-600" />
-        <span className="text-sm font-bold text-gray-900">Mozaiq</span>
+        <Link href="/" className="flex items-center gap-2 hover:opacity-80">
+          <div className="h-6 w-6 rounded bg-indigo-600" />
+          <span className="text-sm font-bold text-gray-900">Mozaiq</span>
+        </Link>
         <span className="text-gray-300">|</span>
         {editingName ? (
           <input

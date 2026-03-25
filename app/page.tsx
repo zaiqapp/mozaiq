@@ -10,7 +10,7 @@ function Nav() {
       </div>
       <div className="flex items-center gap-6">
         <a href="#" className="text-sm text-gray-400 hover:text-white transition">Docs</a>
-        <a href="https://github.com/mozaiq/mozaiq" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white transition">GitHub</a>
+        <a href="https://github.com/zaiqapp/mozaiq" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white transition">GitHub</a>
         <Link href="/builder" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition">
           Start Building Free →
         </Link>
@@ -42,7 +42,7 @@ function Hero() {
             Start Building Free
           </Link>
           <a
-            href="https://github.com/mozaiq/mozaiq"
+            href="https://github.com/zaiqapp/mozaiq"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg border border-[#374151] px-6 py-3 text-sm font-semibold text-gray-300 hover:border-gray-500 hover:text-white transition"
@@ -225,9 +225,9 @@ function Footer() {
           <span className="text-sm text-gray-400">© 2026 Mozaiq — AGPL-3.0</span>
         </div>
         <div className="flex items-center gap-6">
-          <a href="https://github.com/mozaiq/mozaiq" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white">GitHub</a>
-          <a href="https://github.com/mozaiq/mozaiq#self-hosting" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white">Self-host</a>
-          <a href="https://github.com/mozaiq/mozaiq/blob/main/ROADMAP.md" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white">Roadmap</a>
+          <a href="https://github.com/zaiqapp/mozaiq" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white">GitHub</a>
+          <a href="https://github.com/zaiqapp/mozaiq#self-hosting" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white">Self-host</a>
+          <a href="https://github.com/zaiqapp/mozaiq/blob/main/ROADMAP.md" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-white">Roadmap</a>
         </div>
       </div>
     </footer>

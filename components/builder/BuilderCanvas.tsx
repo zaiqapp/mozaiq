@@ -1,5 +1,5 @@
 'use client'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import type { Layout, GridLayoutProps } from 'react-grid-layout'
 import type { ComponentType } from 'react'
@@ -17,6 +17,18 @@ const GridLayout = dynamic(
 
 export function BuilderCanvas() {
   const { widgets, layout, selectedWidgetId, setLayout, selectWidget, removeWidget, isGenerating } = useDashboardStore()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [gridWidth, setGridWidth] = useState(1200)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const observer = new ResizeObserver(([entry]) => {
+      setGridWidth(entry.contentRect.width)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const handleLayoutChange = useCallback((newLayout: Layout) => {
     setLayout([...newLayout])
@@ -24,7 +36,8 @@ export function BuilderCanvas() {
 
   return (
     <div
-      className="flex h-full flex-col bg-[#f4f5f7] p-3"
+      ref={containerRef}
+      className="flex flex-col bg-[#f4f5f7] p-3"
       onClick={() => selectWidget(null)}
     >
       <div className="mb-3">
@@ -32,15 +45,15 @@ export function BuilderCanvas() {
       </div>
 
       {widgets.length === 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-3 text-gray-400">
+        <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 text-gray-400">
           <LayoutGrid className="h-12 w-12 opacity-30" />
           <p className="text-sm">Drag a component or describe your dashboard above</p>
         </div>
       ) : (
-        <div className={`relative flex-1 ${isGenerating ? 'pointer-events-none opacity-50' : ''}`}>
+        <div className={`relative ${isGenerating ? 'pointer-events-none opacity-50' : ''}`}>
           <GridLayout
             layout={layout}
-            width={1200}
+            width={gridWidth}
             gridConfig={{ cols: 12, rowHeight: 80, margin: [12, 12] as [number, number] }}
             dragConfig={{ enabled: true, bounded: false, handle: '.drag-handle', threshold: 3 }}
             resizeConfig={{ enabled: true, handles: ['se'] as const }}

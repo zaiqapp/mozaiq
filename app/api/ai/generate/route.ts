@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
   try {
     const { text } = await generateText({
-      model: 'anthropic/claude-sonnet-4.5',
+      model: 'anthropic/claude-sonnet-4.6',
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: prompt }],
       maxOutputTokens: 2000,
