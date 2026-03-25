@@ -1,8 +1,12 @@
 import Link from 'next/link'
+import { auth } from '@clerk/nextjs/server'
+import { SignInButton } from '@clerk/nextjs'
 import { AnimatedSection } from '@/components/landing/AnimatedSection'
+import { UserMenu } from '@/components/nav/UserMenu'
 
 // ---- Nav ----
-function Nav() {
+async function Nav() {
+  const { userId } = await auth()
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between border-b border-[rgba(255,255,255,0.05)] bg-[rgba(8,8,16,0.8)] px-6 py-4 backdrop-blur-md">
       <div className="flex items-center gap-2">
@@ -12,12 +16,26 @@ function Nav() {
       <div className="flex items-center gap-6">
         <a href="#" className="text-sm text-[#4b5563] transition hover:text-white">Docs</a>
         <a href="https://github.com/zaiqapp/mozaiq" target="_blank" rel="noopener noreferrer" className="text-sm text-[#4b5563] transition hover:text-white">GitHub</a>
-        <Link
-          href="/builder"
-          className="rounded-lg bg-gradient-to-r from-cyan-400 to-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
-        >
-          Start free →
-        </Link>
+        {userId ? (
+          <>
+            <Link href="/my-dashboards" className="text-sm text-[#4b5563] transition hover:text-white">
+              My Dashboards
+            </Link>
+            <UserMenu />
+          </>
+        ) : (
+          <>
+            <SignInButton mode="modal">
+              <button className="text-sm text-[#4b5563] transition hover:text-white">Sign In</button>
+            </SignInButton>
+            <Link
+              href="/builder"
+              className="rounded-lg bg-gradient-to-r from-cyan-400 to-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              Start free →
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   )
