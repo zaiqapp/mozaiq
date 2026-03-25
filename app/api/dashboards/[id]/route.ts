@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
@@ -23,7 +24,7 @@ export async function PATCH(req: Request, { params }: Params) {
     if (!dashboard) return NextResponse.json({ error: 'Not found' }, { status: 404 })
     if (dashboard.userId !== userId) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
-    const body = await req.json() as { name?: string; layout?: unknown; widgets?: unknown }
+    const body = await req.json() as { name?: string; layout?: Prisma.InputJsonValue; widgets?: Prisma.InputJsonValue }
     const { name, layout, widgets } = body
     const updated = await prisma.dashboard.update({
       where: { id },
