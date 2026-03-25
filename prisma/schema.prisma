@@ -12,6 +12,7 @@ model Dashboard {
   description String?
   layout      Json
   widgets     Json
+  dataSources Json     @default("[]")
   isPublic    Boolean  @default(true)
   views       Int      @default(0)
   userId      String?

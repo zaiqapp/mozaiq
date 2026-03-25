@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export async function POST(req: Request) {
   try {
     const { userId } = await auth()
-    const body = await req.json() as { name: string; layout: object; widgets: object }
+    const body = await req.json() as { name: string; layout: object; widgets: object; dataSources?: object }
     const id = nanoid(10)
     const dashboard = await prisma.dashboard.create({
       data: {
@@ -17,6 +17,7 @@ export async function POST(req: Request) {
         name: body.name,
         layout: body.layout,
         widgets: body.widgets,
+        dataSources: body.dataSources ?? [],
         ...(userId ? { userId } : {}),
       },
     })

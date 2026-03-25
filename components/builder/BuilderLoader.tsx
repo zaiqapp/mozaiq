@@ -1,6 +1,6 @@
 'use client'
 import { useEffect } from 'react'
-import type { Widget } from '@/types/dashboard'
+import type { Widget, GlobalDataSource } from '@/types/dashboard'
 import type { LayoutItem } from 'react-grid-layout'
 import { useDashboardStore } from '@/store/dashboard'
 import { BuilderCanvas } from './BuilderCanvas'
@@ -8,15 +8,21 @@ import { LeftSidebar } from './LeftSidebar'
 import { RightPanel } from './RightPanel'
 import { Toolbar } from './Toolbar'
 
-interface Props { id: string; name: string; widgets: Widget[]; layout: LayoutItem[] }
+interface Props {
+  id: string
+  name: string
+  widgets: Widget[]
+  layout: LayoutItem[]
+  dataSources?: GlobalDataSource[]
+}
 
-export function BuilderLoader({ id, name, widgets, layout }: Props) {
+export function BuilderLoader({ id, name, widgets, layout, dataSources = [] }: Props) {
   const { loadDashboard } = useDashboardStore()
 
   useEffect(() => {
     useDashboardStore.setState({ id })
-    loadDashboard({ name, widgets, layout })
-  }, [id, name, widgets, layout, loadDashboard])
+    loadDashboard({ name, widgets, layout, dataSources })
+  }, [id, name, widgets, layout, dataSources, loadDashboard])
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
