@@ -30,14 +30,14 @@ export function BuilderCanvas() {
     return () => observer.disconnect()
   }, [])
 
-  const handleLayoutChange = useCallback((newLayout: Layout[]) => {
+  const handleLayoutChange = useCallback((newLayout: Layout) => {
     setLayout([...newLayout])
   }, [setLayout])
 
   return (
     <div
       ref={containerRef}
-      className="relative flex flex-col bg-[#0f1117] p-3"
+      className="relative flex min-h-full flex-col bg-[#0f1117] p-3"
       onClick={() => selectWidget(null)}
     >
       {/* Dot grid overlay */}

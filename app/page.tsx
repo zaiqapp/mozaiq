@@ -93,7 +93,7 @@ const FEATURES = [
   { title: 'Share Anywhere', desc: 'One link. Embeddable via iframe. No login required.', featured: false },
   { title: 'Starter Templates', desc: 'Analytics, Inventory, Purchasing — ready in one click.', featured: false },
   { title: 'Open Source', desc: 'AGPL-3.0. Self-host forever. One-click deploy to Vercel.', featured: false },
-  { title: 'Data Ready', desc: 'Google Sheets, CSV, REST API connectors coming soon.', featured: false },
+  { title: 'Data Ready', desc: 'Google Sheets, CSV, REST API connectors coming soon.', featured: false, wide: true },
 ]
 
 function Features() {
@@ -115,7 +115,7 @@ function Features() {
             <AnimatedSection
               key={f.title}
               delay={80 + i * 80}
-              className={f.featured ? 'col-span-2' : 'col-span-1'}
+              className={f.wide ? 'col-span-3' : f.featured ? 'col-span-2' : 'col-span-1'}
             >
               <div
                 className={`h-full rounded-xl border p-5 ${
