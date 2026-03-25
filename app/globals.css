@@ -128,3 +128,23 @@
     @apply font-sans;
   }
 }
+
+@layer utilities {
+  .hero-fade {
+    animation: heroFade 0.6s ease forwards;
+  }
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFade {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
