@@ -3,16 +3,19 @@ import { useState, useEffect } from 'react'
 import { Save, Share2, Eye, Trash2, Loader2, Sun, Moon, ArrowUpRight } from 'lucide-react'
 import { useAuth, useClerk } from '@clerk/nextjs'
 import { useDashboardStore } from '@/store/dashboard'
+import type { Widget } from '@/types/dashboard'
+import type { LayoutItem } from 'react-grid-layout'
 import { toast } from 'sonner'
 import { shareUrl } from '@/lib/utils'
 import Link from 'next/link'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 import { UserMenu } from '@/components/nav/UserMenu'
 
+const PENDING_SAVE_KEY = 'mozaiq_pending_save'
+
 export function Toolbar() {
   const { name, id, isDirty, isSaving, setDashboardName, saveDashboard, clearCanvas } = useDashboardStore()
   const [editingName, setEditingName] = useState(false)
-  const [pendingSave, setPendingSave] = useState(false)
   const { theme, toggleTheme } = useBuilderTheme()
   const { isSignedIn } = useAuth()
   const { openSignIn } = useClerk()
@@ -20,8 +23,17 @@ export function Toolbar() {
 
   const handleSave = async () => {
     if (!isSignedIn) {
-      setPendingSave(true)
-      openSignIn()
+      // Persist dashboard state across potential page navigation (sign-up flow)
+      const state = useDashboardStore.getState()
+      if (state.widgets.length > 0) {
+        sessionStorage.setItem(PENDING_SAVE_KEY, JSON.stringify({
+          name: state.name,
+          widgets: state.widgets,
+          layout: state.layout,
+        }))
+      }
+      // Redirect back to this page after auth so we can restore and save
+      openSignIn({ fallbackRedirectUrl: window.location.href })
       return
     }
     try {
@@ -32,15 +44,24 @@ export function Toolbar() {
     }
   }
 
-  // Auto-retry save after successful sign-in
+  // Restore and save pending dashboard after sign-in (handles both modal and redirect flows)
   useEffect(() => {
-    if (isSignedIn && pendingSave) {
-      setPendingSave(false)
+    if (!isSignedIn) return
+    const raw = sessionStorage.getItem(PENDING_SAVE_KEY)
+    if (!raw) return
+    sessionStorage.removeItem(PENDING_SAVE_KEY)
+    try {
+      const saved = JSON.parse(raw) as { name: string; widgets: Widget[]; layout: LayoutItem[] }
+      const { id: currentId } = useDashboardStore.getState()
+      // Only restore if we're on a fresh canvas (no existing dashboard loaded)
+      if (!currentId) {
+        useDashboardStore.setState({ name: saved.name, widgets: saved.widgets, layout: saved.layout, isDirty: true })
+      }
       saveDashboard()
         .then(() => toast.success('Dashboard saved'))
         .catch(() => toast.error('Failed to save — please try again'))
-    }
-  }, [isSignedIn, pendingSave, saveDashboard])
+    } catch { /* invalid JSON, ignore */ }
+  }, [isSignedIn, saveDashboard])
 
   const handleShare = () => {
     if (!id) { toast.error('Save your dashboard first to get a share link'); return }

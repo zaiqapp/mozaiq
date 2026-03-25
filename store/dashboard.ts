@@ -89,14 +89,22 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
     const { id, name, widgets, layout } = get()
     set({ isSaving: true })
     try {
-      const url = id ? `/api/dashboards/${id}` : '/api/dashboards'
-      const method = id ? 'PATCH' : 'POST'
-      const res = await fetch(url, {
-        method,
+      const body = JSON.stringify({ name, widgets, layout })
+      let res = await fetch(id ? `/api/dashboards/${id}` : '/api/dashboards', {
+        method: id ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, widgets, layout }),
+        body,
       })
-      if (!res.ok) throw new Error('Save failed')
+      // If the dashboard was deleted (stale id), fall back to creating a new one
+      if (res.status === 404 && id) {
+        set({ id: undefined })
+        res = await fetch('/api/dashboards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body,
+        })
+      }
+      if (!res.ok) throw new Error(`Save failed (${res.status})`)
       const data = await res.json() as { id: string }
       set({ id: data.id, isDirty: false })
       return data.id
