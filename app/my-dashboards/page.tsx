@@ -25,7 +25,7 @@ export default async function MyDashboardsPage() {
       name: d.name,
       widgetCount: widgets.length,
       widgetTypes: widgets.map((w) => w.type ?? ''),
-      updatedAt: d.updatedAt,
+      updatedAt: d.updatedAt.toISOString(),
     }
   })
 

@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { shareUrl } from '@/lib/utils'
@@ -24,11 +24,11 @@ type Dashboard = {
   name: string
   widgetCount: number
   widgetTypes: string[]
-  updatedAt: Date
+  updatedAt: string
 }
 
-function formatRelative(date: Date): string {
-  const diff = Date.now() - date.getTime()
+function formatRelative(isoString: string): string {
+  const diff = Date.now() - new Date(isoString).getTime()
   const days = Math.floor(diff / 86400000)
   if (days === 0) return 'Today'
   if (days === 1) return 'Yesterday'
@@ -58,6 +58,16 @@ export function DashboardCard({ dashboard }: { dashboard: Dashboard }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [renaming, setRenaming] = useState(false)
   const [renameValue, setRenameValue] = useState(dashboard.name)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!menuOpen) return
+    function handler(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [menuOpen])
 
   const handleShare = () => {
     navigator.clipboard.writeText(shareUrl(dashboard.id))
@@ -147,7 +157,7 @@ export function DashboardCard({ dashboard }: { dashboard: Dashboard }) {
         >
           Share
         </button>
-        <div className="relative">
+        <div ref={menuRef} className="relative">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="rounded-md border border-[rgba(255,255,255,0.08)] px-2.5 py-1.5 text-xs text-[#9ca3af] hover:bg-[rgba(255,255,255,0.05)] transition-colors"
