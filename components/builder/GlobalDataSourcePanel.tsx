@@ -38,6 +38,10 @@ export function GlobalDataSourcePanel() {
   const fileRef = useRef<HTMLInputElement>(null)
   const expandFileRef = useRef<HTMLInputElement>(null)
 
+  // Expand-CSV state (isolated from add-CSV flow)
+  const [expandCsvPreview, setExpandCsvPreview] = useState<SheetPreview | null>(null)
+  const [expandCsvWarning, setExpandCsvWarning] = useState<string | null>(null)
+
   // Sheets state
   const [sheetsUrl, setSheetsUrl] = useState('')
   const [sheetsGid, setSheetsGid] = useState('')
@@ -70,6 +74,16 @@ export function GlobalDataSourcePanel() {
     if (error) { toast.error(error); return }
     setCsvWarning(warning ?? null)
     setCsvPreview({ columns, rows })
+  }
+
+  const handleExpandCsvFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const text = await file.text()
+    const { columns, rows, error, warning } = parseCsvText(text)
+    if (error) { toast.error(error); return }
+    setExpandCsvWarning(warning ?? null)
+    setExpandCsvPreview({ columns, rows })
   }
 
   const handleCsvConnect = () => {
@@ -202,9 +216,9 @@ export function GlobalDataSourcePanel() {
                             setSheetsPreview(null)
                             setSheetsWarning(null)
                           } else {
-                            setCsvPreview(null)
-                            setCsvWarning(null)
-                            if (fileRef.current) fileRef.current.value = ''
+                            setExpandCsvPreview(null)
+                            setExpandCsvWarning(null)
+                            if (expandFileRef.current) expandFileRef.current.value = ''
                           }
                         }
                       }}
@@ -217,29 +231,29 @@ export function GlobalDataSourcePanel() {
                   {isExpanded && ds.type === 'csv' && (
                     <div className={`flex flex-col gap-2 border-t px-3 py-2 ${border}`}>
                       <p className={sectionLabel}>Replace CSV data</p>
-                      <input ref={expandFileRef} type="file" accept=".csv" className={inputClass} onChange={handleCsvFile} />
-                      {csvWarning && <p className="rounded bg-amber-50 px-2 py-1 text-[10px] text-amber-700">{csvWarning}</p>}
-                      {csvPreview && (
+                      <input ref={expandFileRef} type="file" accept=".csv" className={inputClass} onChange={handleExpandCsvFile} />
+                      {expandCsvWarning && <p className="rounded bg-amber-50 px-2 py-1 text-[10px] text-amber-700">{expandCsvWarning}</p>}
+                      {expandCsvPreview && (
                         <div>
-                          <p className={`mb-1 text-[10px] ${textMuted}`}>{csvPreview.columns.length} columns · {csvPreview.rows.length.toLocaleString()} rows</p>
+                          <p className={`mb-1 text-[10px] ${textMuted}`}>{expandCsvPreview.columns.length} columns · {expandCsvPreview.rows.length.toLocaleString()} rows</p>
                           <div className={`overflow-x-auto rounded border text-[10px] ${isDark ? 'bg-[rgba(255,255,255,0.03)] text-[#9ca3af]' : 'bg-white text-gray-700'}`} style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#e5e7eb' }}>
                             <table className="w-full">
-                              <thead><tr className={isDark ? 'border-b border-[rgba(255,255,255,0.06)]' : 'border-b border-gray-100'}>{csvPreview.columns.map((c) => <th key={c} className={`px-2 py-1 text-left font-medium ${textMuted}`}>{c}</th>)}</tr></thead>
-                              <tbody>{csvPreview.rows.slice(0, 3).map((row, i) => (<tr key={i}>{csvPreview.columns.map((c) => <td key={c} className="px-2 py-1">{String(row[c] ?? '')}</td>)}</tr>))}</tbody>
+                              <thead><tr className={isDark ? 'border-b border-[rgba(255,255,255,0.06)]' : 'border-b border-gray-100'}>{expandCsvPreview.columns.map((c) => <th key={c} className={`px-2 py-1 text-left font-medium ${textMuted}`}>{c}</th>)}</tr></thead>
+                              <tbody>{expandCsvPreview.rows.slice(0, 3).map((row, i) => (<tr key={i}>{expandCsvPreview.columns.map((c) => <td key={c} className="px-2 py-1">{String(row[c] ?? '')}</td>)}</tr>))}</tbody>
                             </table>
                           </div>
                         </div>
                       )}
                       <div className="flex gap-2">
                         <button
-                          disabled={!csvPreview}
+                          disabled={!expandCsvPreview}
                           onClick={() => {
-                            if (!csvPreview) return
+                            if (!expandCsvPreview) return
                             const fileName = expandFileRef.current?.files?.[0]?.name
-                            updateGlobalDataSource(ds.id, { data: csvPreview.rows, fileName })
+                            updateGlobalDataSource(ds.id, { data: expandCsvPreview.rows, fileName })
                             setExpandedId(null)
-                            setCsvPreview(null)
-                            setCsvWarning(null)
+                            setExpandCsvPreview(null)
+                            setExpandCsvWarning(null)
                             if (expandFileRef.current) expandFileRef.current.value = ''
                             toast.success('CSV data replaced')
                           }}
@@ -248,7 +262,7 @@ export function GlobalDataSourcePanel() {
                           Replace data
                         </button>
                         <button
-                          onClick={() => { setExpandedId(null); setCsvPreview(null); setCsvWarning(null) }}
+                          onClick={() => { setExpandedId(null); setExpandCsvPreview(null); setExpandCsvWarning(null) }}
                           className={btnSecondary}
                         >
                           Cancel
@@ -374,7 +388,7 @@ export function GlobalDataSourcePanel() {
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <p className={sectionLabel}>Connect Google Sheet</p>
-            <button onClick={() => { setAddMode('none'); setSheetsPreview(null) }} className={textMuted}><X className="h-3 w-3" /></button>
+            <button onClick={() => { setAddMode('none'); setSheetsPreview(null); setSheetsWarning(null) }} className={textMuted}><X className="h-3 w-3" /></button>
           </div>
           <div>
             <label className={`mb-0.5 block text-[10px] ${textSecondary}`}>Sheet URL</label>
