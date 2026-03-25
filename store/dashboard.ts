@@ -104,6 +104,17 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
         const { error: _err, ...ds } = w.dataSource
         return { ...w, dataSource: ds }
       })
+      // Warn if CSV data makes the payload large (Vercel limit is 4.5MB)
+      const csvSize = sanitizedWidgets.reduce((acc, w) => {
+        if (w.dataSource?.type === 'csv' && w.dataSource.data) {
+          return acc + JSON.stringify(w.dataSource.data).length
+        }
+        return acc
+      }, 0)
+      if (csvSize > 3_000_000) {
+        throw new Error('CSV data is too large to save (>3MB). Try uploading a smaller file.')
+      }
+
       const body = JSON.stringify({ name, widgets: sanitizedWidgets, layout })
       let res = await fetch(id ? `/api/dashboards/${id}` : '/api/dashboards', {
         method: id ? 'PATCH' : 'POST',

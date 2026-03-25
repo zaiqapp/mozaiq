@@ -90,9 +90,10 @@ export function DataSourcePanel({ widget }: Props) {
   }
 
   const handleUpdateMapping = (fieldKey: string, colName: string) => {
-    const mapping = { ...(ds?.mapping ?? {}), [fieldKey]: colName }
+    if (!ds) return
+    const mapping = { ...(ds.mapping ?? {}), [fieldKey]: colName }
     if (!colName) delete mapping[fieldKey]
-    updateDataSource(widget.id, { ...ds!, mapping })
+    updateDataSource(widget.id, { ...ds, mapping })
   }
 
   const handleAutoMap = async () => {

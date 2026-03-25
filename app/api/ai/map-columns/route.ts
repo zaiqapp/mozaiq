@@ -36,7 +36,7 @@ If no good match exists for a field, omit it from the mapping.`
 
   try {
     const { text } = await generateText({
-      model: 'anthropic/claude-haiku-4.5-20251001',
+      model: 'anthropic/claude-haiku-4.5',
       messages: [{ role: 'user', content: prompt }],
       maxOutputTokens: 200,
     })
@@ -52,10 +52,10 @@ If no good match exists for a field, omit it from the mapping.`
       return NextResponse.json({ error: 'AI returned invalid mapping shape' }, { status: 500 })
     }
 
-    // Validate all values are strings
+    // Validate all values are strings and known columns
     const validated: Record<string, string> = {}
     for (const [k, v] of Object.entries(mapping as Record<string, unknown>)) {
-      if (typeof v === 'string') validated[k] = v
+      if (typeof v === 'string' && columns.includes(v)) validated[k] = v
     }
 
     return NextResponse.json({ mapping: validated })
