@@ -8,7 +8,10 @@ interface BuilderThemeContextValue {
   toggleTheme: () => void
 }
 
-const BuilderThemeContext = createContext<BuilderThemeContextValue | null>(null)
+const BuilderThemeContext = createContext<BuilderThemeContextValue>({
+  theme: 'dark',
+  toggleTheme: () => {},
+})
 
 export function BuilderThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark')
@@ -34,7 +37,5 @@ export function BuilderThemeProvider({ children }: { children: React.ReactNode }
 }
 
 export function useBuilderTheme(): BuilderThemeContextValue {
-  const ctx = useContext(BuilderThemeContext)
-  if (!ctx) throw new Error('useBuilderTheme must be used within BuilderThemeProvider')
-  return ctx
+  return useContext(BuilderThemeContext)
 }
