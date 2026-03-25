@@ -186,10 +186,136 @@ export function GlobalDataSourcePanel() {
                     {refCount > 0 && <span className={`text-[10px] ${textMuted}`}>{refCount}w</span>}
                     <button onClick={() => handleRename(ds)} className={`p-0.5 ${textMuted} hover:${textSecondary}`}><Pencil className="h-3 w-3" /></button>
                     <button onClick={() => handleDeleteRequest(ds.id)} className={`p-0.5 text-red-400 hover:text-red-300`}><Trash2 className="h-3 w-3" /></button>
-                    <button onClick={() => setExpandedId(isExpanded ? null : ds.id)} className={`p-0.5 ${textMuted}`}>
+                    <button
+                      onClick={() => {
+                        if (isExpanded) {
+                          setExpandedId(null)
+                        } else {
+                          setExpandedId(ds.id)
+                          // Pre-fill state with current source values
+                          if (ds.type === 'google-sheets') {
+                            setSheetsUrl(ds.url ?? '')
+                            setSheetsGid(ds.gid ?? '')
+                            setRefreshInterval(ds.refreshInterval ?? 60)
+                            setSheetsPreview(null)
+                            setSheetsWarning(null)
+                          } else {
+                            setCsvPreview(null)
+                            setCsvWarning(null)
+                            if (fileRef.current) fileRef.current.value = ''
+                          }
+                        }
+                      }}
+                      className={`p-0.5 ${textMuted}`}
+                    >
                       {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                     </button>
                   </div>
+
+                  {isExpanded && ds.type === 'csv' && (
+                    <div className={`flex flex-col gap-2 border-t px-3 py-2 ${border}`}>
+                      <p className={sectionLabel}>Replace CSV data</p>
+                      <input ref={fileRef} type="file" accept=".csv" className={inputClass} onChange={handleCsvFile} />
+                      {csvWarning && <p className="rounded bg-amber-50 px-2 py-1 text-[10px] text-amber-700">{csvWarning}</p>}
+                      {csvPreview && (
+                        <div>
+                          <p className={`mb-1 text-[10px] ${textMuted}`}>{csvPreview.columns.length} columns · {csvPreview.rows.length.toLocaleString()} rows</p>
+                          <div className={`overflow-x-auto rounded border text-[10px] ${isDark ? 'bg-[rgba(255,255,255,0.03)] text-[#9ca3af]' : 'bg-white text-gray-700'}`} style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#e5e7eb' }}>
+                            <table className="w-full">
+                              <thead><tr className={isDark ? 'border-b border-[rgba(255,255,255,0.06)]' : 'border-b border-gray-100'}>{csvPreview.columns.map((c) => <th key={c} className={`px-2 py-1 text-left font-medium ${textMuted}`}>{c}</th>)}</tr></thead>
+                              <tbody>{csvPreview.rows.slice(0, 3).map((row, i) => (<tr key={i}>{csvPreview.columns.map((c) => <td key={c} className="px-2 py-1">{String(row[c] ?? '')}</td>)}</tr>))}</tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex gap-2">
+                        <button
+                          disabled={!csvPreview}
+                          onClick={() => {
+                            if (!csvPreview) return
+                            const fileName = fileRef.current?.files?.[0]?.name
+                            updateGlobalDataSource(ds.id, { data: csvPreview.rows, fileName })
+                            setExpandedId(null)
+                            setCsvPreview(null)
+                            setCsvWarning(null)
+                            if (fileRef.current) fileRef.current.value = ''
+                            toast.success('CSV data replaced')
+                          }}
+                          className={btnPrimary}
+                        >
+                          Replace data
+                        </button>
+                        <button
+                          onClick={() => { setExpandedId(null); setCsvPreview(null); setCsvWarning(null) }}
+                          className={btnSecondary}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {isExpanded && ds.type === 'google-sheets' && (
+                    <div className={`flex flex-col gap-2 border-t px-3 py-2 ${border}`}>
+                      <p className={sectionLabel}>Re-connect Google Sheet</p>
+                      <div>
+                        <label className={`mb-0.5 block text-[10px] ${textSecondary}`}>Sheet URL</label>
+                        <input className={inputClass} placeholder="https://docs.google.com/spreadsheets/d/…" value={sheetsUrl} onChange={(e) => setSheetsUrl(e.target.value)} />
+                      </div>
+                      <div>
+                        <label className={`mb-0.5 block text-[10px] ${textSecondary}`}>Sheet tab ID (optional)</label>
+                        <input className={inputClass} placeholder="Leave blank for first tab" value={sheetsGid} onChange={(e) => setSheetsGid(e.target.value)} />
+                      </div>
+                      <div>
+                        <label className={`mb-0.5 block text-[10px] ${textSecondary}`}>Refresh interval</label>
+                        <select className={inputClass} value={refreshInterval} onChange={(e) => setRefreshInterval(Number(e.target.value))}>
+                          {REFRESH_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                      </div>
+                      <button onClick={handleSheetsPreview} disabled={isFetchingSheets || !sheetsUrl.trim()} className={btnPrimary}>
+                        <RefreshCw className={`h-3 w-3 ${isFetchingSheets ? 'animate-spin' : ''}`} />
+                        {isFetchingSheets ? 'Connecting…' : 'Re-connect'}
+                      </button>
+                      {sheetsWarning && <p className="rounded bg-amber-50 px-2 py-1 text-[10px] text-amber-700">{sheetsWarning}</p>}
+                      {sheetsPreview && (
+                        <div>
+                          <p className={`mb-1 text-[10px] ${textMuted}`}>{sheetsPreview.columns.length} columns · {sheetsPreview.rows.length.toLocaleString()} rows</p>
+                          <div className={`overflow-x-auto rounded border text-[10px] ${isDark ? 'bg-[rgba(255,255,255,0.03)] text-[#9ca3af]' : 'bg-white text-gray-700'}`} style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#e5e7eb' }}>
+                            <table className="w-full">
+                              <thead><tr className={isDark ? 'border-b border-[rgba(255,255,255,0.06)]' : 'border-b border-gray-100'}>{sheetsPreview.columns.map((c) => <th key={c} className={`px-2 py-1 text-left font-medium ${textMuted}`}>{c}</th>)}</tr></thead>
+                              <tbody>{sheetsPreview.rows.slice(0, 3).map((row, i) => (<tr key={i}>{sheetsPreview.columns.map((c) => <td key={c} className="px-2 py-1">{String(row[c] ?? '')}</td>)}</tr>))}</tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex gap-2">
+                        <button
+                          disabled={!sheetsPreview}
+                          onClick={() => {
+                            if (!sheetsPreview) return
+                            updateGlobalDataSource(ds.id, {
+                              url: sheetsUrl,
+                              gid: sheetsGid.trim() || undefined,
+                              refreshInterval,
+                            })
+                            setExpandedId(null)
+                            setSheetsPreview(null)
+                            setSheetsWarning(null)
+                            toast.success('Google Sheet updated')
+                          }}
+                          className={btnPrimary}
+                        >
+                          Update
+                        </button>
+                        <button
+                          onClick={() => { setExpandedId(null); setSheetsPreview(null); setSheetsWarning(null) }}
+                          className={btnSecondary}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
 
                   {deleteConfirmId === ds.id && (
                     <div className={`px-3 py-2 border-t ${border} text-xs ${textSecondary}`}>
