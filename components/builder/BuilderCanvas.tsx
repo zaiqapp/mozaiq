@@ -30,7 +30,7 @@ export function BuilderCanvas() {
     return () => observer.disconnect()
   }, [])
 
-  const handleLayoutChange = useCallback((newLayout: Layout) => {
+  const handleLayoutChange = useCallback((newLayout: Layout[]) => {
     setLayout([...newLayout])
   }, [setLayout])
 

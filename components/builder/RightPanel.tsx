@@ -35,14 +35,16 @@ export function RightPanel() {
         <div className="flex flex-col gap-4 overflow-y-auto p-4">
           <div>
             <p className="mb-1 text-[10px] uppercase tracking-wider text-[#374151]">General</p>
-            <label className="mb-1 block text-xs text-[#4b5563]">Title</label>
+            <label htmlFor="widget-title" className="mb-1 block text-xs text-[#4b5563]">Title</label>
             <input
+              id="widget-title"
               className="w-full rounded border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-2 py-1.5 text-sm text-[#9ca3af] outline-none focus:border-cyan-500/50"
               value={widget.config.title}
               onChange={(e) => updateWidgetConfig(widget.id, { title: e.target.value })}
             />
-            <label className="mb-1 mt-2 block text-xs text-[#4b5563]">Description</label>
+            <label htmlFor="widget-desc" className="mb-1 mt-2 block text-xs text-[#4b5563]">Description</label>
             <textarea
+              id="widget-desc"
               className="w-full rounded border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-2 py-1.5 text-sm text-[#9ca3af] outline-none focus:border-cyan-500/50"
               rows={2}
               value={widget.config.description ?? ''}
