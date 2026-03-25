@@ -37,15 +37,23 @@ export function BuilderCanvas() {
   return (
     <div
       ref={containerRef}
-      className="flex flex-col bg-[#f4f5f7] p-3"
+      className="relative flex flex-col bg-[#0f1117] p-3"
       onClick={() => selectWidget(null)}
     >
+      {/* Dot grid overlay */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)',
+          backgroundSize: '25px 25px',
+        }}
+      />
       <div className="mb-3">
         <AIGeneratorBar />
       </div>
 
       {widgets.length === 0 ? (
-        <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 text-gray-400">
+        <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 text-[#4b5563]">
           <LayoutGrid className="h-12 w-12 opacity-30" />
           <p className="text-sm">Drag a component or describe your dashboard above</p>
         </div>
