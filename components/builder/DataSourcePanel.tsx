@@ -227,10 +227,10 @@ export function DataSourcePanel({ widget }: Props) {
             <p className={`mb-1 text-[10px] ${isDark ? 'text-[#4b5563]' : 'text-gray-400'}`}>
               {preview.columns.length} columns · {preview.rows.length.toLocaleString()} rows
             </p>
-            <div className="overflow-x-auto rounded border text-[10px]" style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#e5e7eb' }}>
+            <div className={`overflow-x-auto rounded border text-[10px] ${isDark ? 'bg-[rgba(255,255,255,0.03)] text-[#9ca3af]' : 'bg-white text-gray-700'}`} style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#e5e7eb' }}>
               <table className="w-full">
                 <thead>
-                  <tr>{preview.columns.map((c) => <th key={c} className="px-2 py-1 text-left font-medium">{c}</th>)}</tr>
+                  <tr className={isDark ? 'border-b border-[rgba(255,255,255,0.06)]' : 'border-b border-gray-100'}>{preview.columns.map((c) => <th key={c} className={`px-2 py-1 text-left font-medium ${isDark ? 'text-[#6b7280]' : 'text-gray-500'}`}>{c}</th>)}</tr>
                 </thead>
                 <tbody>
                   {preview.rows.slice(0, 3).map((row, i) => (
@@ -278,10 +278,10 @@ export function DataSourcePanel({ widget }: Props) {
           <p className={`mb-1 text-[10px] ${isDark ? 'text-[#4b5563]' : 'text-gray-400'}`}>
             {preview.columns.length} columns · {preview.rows.length.toLocaleString()} rows
           </p>
-          <div className="overflow-x-auto rounded border text-[10px]" style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#e5e7eb' }}>
+          <div className={`overflow-x-auto rounded border text-[10px] ${isDark ? 'bg-[rgba(255,255,255,0.03)] text-[#9ca3af]' : 'bg-white text-gray-700'}`} style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#e5e7eb' }}>
             <table className="w-full">
               <thead>
-                <tr>{preview.columns.map((c) => <th key={c} className="px-2 py-1 text-left font-medium">{c}</th>)}</tr>
+                <tr className={isDark ? 'border-b border-[rgba(255,255,255,0.06)]' : 'border-b border-gray-100'}>{preview.columns.map((c) => <th key={c} className={`px-2 py-1 text-left font-medium ${isDark ? 'text-[#6b7280]' : 'text-gray-500'}`}>{c}</th>)}</tr>
               </thead>
               <tbody>
                 {preview.rows.slice(0, 3).map((row, i) => (
