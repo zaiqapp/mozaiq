@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Save, Share2, Eye, Trash2, Loader2, Sun, Moon, ArrowUpRight } from 'lucide-react'
+import { Save, Share2, Eye, Trash2, Loader2, Sun, Moon, ArrowUpRight, Database } from 'lucide-react'
 import { useAuth, useClerk } from '@clerk/nextjs'
 import { useDashboardStore } from '@/store/dashboard'
 import type { Widget } from '@/types/dashboard'
@@ -10,12 +10,14 @@ import { shareUrl } from '@/lib/utils'
 import Link from 'next/link'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 import { UserMenu } from '@/components/nav/UserMenu'
+import { GlobalDataSourcePanel } from './GlobalDataSourcePanel'
 
 const PENDING_SAVE_KEY = 'mozaiq_pending_save'
 
 export function Toolbar() {
-  const { name, id, isDirty, isSaving, setDashboardName, saveDashboard, clearCanvas } = useDashboardStore()
+  const { name, id, isDirty, isSaving, setDashboardName, saveDashboard, clearCanvas, dataSources } = useDashboardStore()
   const [editingName, setEditingName] = useState(false)
+  const [dataPanelOpen, setDataPanelOpen] = useState(false)
   const { theme, toggleTheme } = useBuilderTheme()
   const { isSignedIn } = useAuth()
   const { openSignIn } = useClerk()
@@ -23,16 +25,15 @@ export function Toolbar() {
 
   const handleSave = async () => {
     if (!isSignedIn) {
-      // Persist dashboard state across potential page navigation (sign-up flow)
       const state = useDashboardStore.getState()
       if (state.widgets.length > 0) {
         sessionStorage.setItem(PENDING_SAVE_KEY, JSON.stringify({
           name: state.name,
           widgets: state.widgets,
           layout: state.layout,
+          dataSources: state.dataSources,
         }))
       }
-      // Redirect back to this page after auth so we can restore and save
       openSignIn({ fallbackRedirectUrl: window.location.href })
       return
     }
@@ -44,18 +45,16 @@ export function Toolbar() {
     }
   }
 
-  // Restore and save pending dashboard after sign-in (handles both modal and redirect flows)
   useEffect(() => {
     if (!isSignedIn) return
     const raw = sessionStorage.getItem(PENDING_SAVE_KEY)
     if (!raw) return
     sessionStorage.removeItem(PENDING_SAVE_KEY)
     try {
-      const saved = JSON.parse(raw) as { name: string; widgets: Widget[]; layout: LayoutItem[] }
+      const saved = JSON.parse(raw) as { name: string; widgets: Widget[]; layout: LayoutItem[]; dataSources?: [] }
       const { id: currentId } = useDashboardStore.getState()
-      // Only restore if we're on a fresh canvas (no existing dashboard loaded)
       if (!currentId) {
-        useDashboardStore.setState({ name: saved.name, widgets: saved.widgets, layout: saved.layout, isDirty: true })
+        useDashboardStore.setState({ name: saved.name, widgets: saved.widgets, layout: saved.layout, dataSources: saved.dataSources ?? [], isDirty: true })
       }
       saveDashboard()
         .then(() => toast.success('Dashboard saved'))
@@ -71,101 +70,93 @@ export function Toolbar() {
   }
 
   return (
-    <header className={`flex h-12 items-center justify-between px-4 ${
-      isDark
-        ? 'border-b border-[rgba(255,255,255,0.06)] bg-[#0a0a0f]'
-        : 'border-b border-gray-200 bg-white'
-    }`}>
-      <div className="flex items-center gap-3">
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80">
-          <div className="h-6 w-6 rounded bg-gradient-to-br from-cyan-400 to-indigo-600" />
-          <span className={`text-sm font-bold ${isDark ? 'text-[#f9fafb]' : 'text-gray-900'}`}>Mozaiq</span>
-        </Link>
-        <span className={isDark ? 'text-[rgba(255,255,255,0.15)]' : 'text-gray-300'}>|</span>
-        {editingName ? (
-          <input
-            autoFocus
-            className={`rounded border px-2 py-0.5 text-sm outline-none ${
-              isDark
-                ? 'border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] text-[#f9fafb] focus:border-cyan-500/50'
-                : 'border-gray-300 bg-white text-gray-900 focus:border-indigo-400'
-            }`}
-            value={name}
-            onChange={(e) => setDashboardName(e.target.value)}
-            onBlur={() => setEditingName(false)}
-            onKeyDown={(e) => e.key === 'Enter' && setEditingName(false)}
-          />
-        ) : (
-          <span
-            className={`cursor-pointer text-sm ${
-              isDark ? 'text-[#9ca3af] hover:text-[#f9fafb]' : 'text-gray-500 hover:text-gray-900'
-            }`}
-            onClick={() => setEditingName(true)}
-          >
-            {name}
-          </span>
-        )}
-        {isDirty && <span className={`text-xs ${isDark ? 'text-[#4b5563]' : 'text-gray-400'}`}>•</span>}
-      </div>
-
-      <div className="flex items-center gap-2">
-        <button
-          onClick={toggleTheme}
-          className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs ${
-            isDark ? 'text-[#4b5563] hover:bg-[rgba(255,255,255,0.05)]' : 'text-gray-500 hover:bg-gray-100'
-          }`}
-          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-        </button>
-        <button
-          onClick={() => clearCanvas()}
-          className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs ${
-            isDark ? 'text-[#4b5563] hover:bg-[rgba(255,255,255,0.05)]' : 'text-gray-500 hover:bg-gray-100'
-          }`}
-        >
-          <Trash2 className="h-3.5 w-3.5" /> Clear
-        </button>
-        <button
-          onClick={handleSave}
-          disabled={isSaving}
-          className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs disabled:opacity-50 ${
-            isDark
-              ? 'border-[rgba(255,255,255,0.1)] text-[#6b7280] hover:bg-[rgba(255,255,255,0.05)]'
-              : 'border-gray-200 text-gray-500 hover:bg-gray-50'
-          }`}
-        >
-          {isSaving ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            <Save className="h-3.5 w-3.5" />
-          )}
-          Save
-          {!isSignedIn && <ArrowUpRight className="h-3 w-3 opacity-50" />}
-        </button>
-        <button
-          onClick={handleShare}
-          className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs ${
-            isDark
-              ? 'border-[rgba(255,255,255,0.1)] text-[#6b7280] hover:bg-[rgba(255,255,255,0.05)]'
-              : 'border-gray-200 text-gray-500 hover:bg-gray-50'
-          }`}
-        >
-          <Share2 className="h-3.5 w-3.5" /> Share
-        </button>
-        {id && (
-          <Link
-            href={`/dashboard/${id}`}
-            target="_blank"
-            className="flex items-center gap-1.5 rounded bg-gradient-to-r from-cyan-400 to-indigo-600 px-3 py-1.5 text-xs text-white hover:opacity-90"
-          >
-            <Eye className="h-3.5 w-3.5" /> Preview
+    <>
+      <header className={`flex h-12 items-center justify-between px-4 ${
+        isDark
+          ? 'border-b border-[rgba(255,255,255,0.06)] bg-[#0a0a0f]'
+          : 'border-b border-gray-200 bg-white'
+      }`}>
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80">
+            <div className="h-6 w-6 rounded bg-gradient-to-br from-cyan-400 to-indigo-600" />
+            <span className={`text-sm font-bold ${isDark ? 'text-[#f9fafb]' : 'text-gray-900'}`}>Mozaiq</span>
           </Link>
-        )}
-        <div className="ml-1 border-l border-[rgba(255,255,255,0.06)] pl-3">
-          <UserMenu />
+          <span className={isDark ? 'text-[rgba(255,255,255,0.15)]' : 'text-gray-300'}>|</span>
+          {editingName ? (
+            <input
+              autoFocus
+              className={`rounded border px-2 py-0.5 text-sm outline-none ${
+                isDark
+                  ? 'border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] text-[#f9fafb] focus:border-cyan-500/50'
+                  : 'border-gray-300 bg-white text-gray-900 focus:border-indigo-400'
+              }`}
+              value={name}
+              onChange={(e) => setDashboardName(e.target.value)}
+              onBlur={() => setEditingName(false)}
+              onKeyDown={(e) => e.key === 'Enter' && setEditingName(false)}
+            />
+          ) : (
+            <span
+              className={`cursor-pointer text-sm ${
+                isDark ? 'text-[#9ca3af] hover:text-[#f9fafb]' : 'text-gray-500 hover:text-gray-900'
+              }`}
+              onClick={() => setEditingName(true)}
+            >
+              {name}
+            </span>
+          )}
+          {isDirty && <span className={`text-xs ${isDark ? 'text-[#4b5563]' : 'text-gray-400'}`}>•</span>}
         </div>
-      </div>
-    </header>
+
+        <div className="flex items-center gap-2">
+          {/* Data Sources button */}
+          <button
+            onClick={() => setDataPanelOpen((prev) => !prev)}
+            className={`relative flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs ${
+              dataPanelOpen
+                ? isDark
+                  ? 'border-cyan-500/50 bg-[rgba(34,211,238,0.08)] text-cyan-400'
+                  : 'border-indigo-400 bg-indigo-50 text-indigo-600'
+                : isDark
+                  ? 'border-[rgba(255,255,255,0.1)] text-[#6b7280] hover:bg-[rgba(255,255,255,0.05)]'
+                  : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+            }`}
+          >
+            <Database className="h-3.5 w-3.5" />
+            Data Sources
+            {dataSources.length > 0 && (
+              <span className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-medium ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-indigo-100 text-indigo-600'}`}>
+                {dataSources.length}
+              </span>
+            )}
+          </button>
+
+          <button onClick={toggleTheme} className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs ${isDark ? 'text-[#4b5563] hover:bg-[rgba(255,255,255,0.05)]' : 'text-gray-500 hover:bg-gray-100'}`} title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
+            {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+          </button>
+          <button onClick={() => clearCanvas()} className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs ${isDark ? 'text-[#4b5563] hover:bg-[rgba(255,255,255,0.05)]' : 'text-gray-500 hover:bg-gray-100'}`}>
+            <Trash2 className="h-3.5 w-3.5" /> Clear
+          </button>
+          <button onClick={handleSave} disabled={isSaving} className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs disabled:opacity-50 ${isDark ? 'border-[rgba(255,255,255,0.1)] text-[#6b7280] hover:bg-[rgba(255,255,255,0.05)]' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
+            {isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+            Save
+            {!isSignedIn && <ArrowUpRight className="h-3 w-3 opacity-50" />}
+          </button>
+          <button onClick={handleShare} className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs ${isDark ? 'border-[rgba(255,255,255,0.1)] text-[#6b7280] hover:bg-[rgba(255,255,255,0.05)]' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
+            <Share2 className="h-3.5 w-3.5" /> Share
+          </button>
+          {id && (
+            <Link href={`/dashboard/${id}`} target="_blank" className="flex items-center gap-1.5 rounded bg-gradient-to-r from-cyan-400 to-indigo-600 px-3 py-1.5 text-xs text-white hover:opacity-90">
+              <Eye className="h-3.5 w-3.5" /> Preview
+            </Link>
+          )}
+          <div className="ml-1 border-l border-[rgba(255,255,255,0.06)] pl-3">
+            <UserMenu />
+          </div>
+        </div>
+      </header>
+
+      {dataPanelOpen && <GlobalDataSourcePanel />}
+    </>
   )
 }
