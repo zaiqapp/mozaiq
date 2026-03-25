@@ -27,17 +27,17 @@ export function Toolbar() {
   }
 
   return (
-    <header className="flex h-12 items-center justify-between border-b bg-white px-4">
+    <header className="flex h-12 items-center justify-between border-b border-[rgba(255,255,255,0.06)] bg-[#0a0a0f] px-4">
       <div className="flex items-center gap-3">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80">
-          <div className="h-6 w-6 rounded bg-indigo-600" />
-          <span className="text-sm font-bold text-gray-900">Mozaiq</span>
+          <div className="h-6 w-6 rounded bg-gradient-to-br from-cyan-400 to-indigo-600" />
+          <span className="text-sm font-bold text-[#f9fafb]">Mozaiq</span>
         </Link>
-        <span className="text-gray-300">|</span>
+        <span className="text-[rgba(255,255,255,0.15)]">|</span>
         {editingName ? (
           <input
             autoFocus
-            className="rounded border border-indigo-300 px-2 py-0.5 text-sm outline-none"
+            className="rounded border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] px-2 py-0.5 text-sm text-[#f9fafb] outline-none focus:border-cyan-500/50"
             value={name}
             onChange={(e) => setDashboardName(e.target.value)}
             onBlur={() => setEditingName(false)}
@@ -45,33 +45,33 @@ export function Toolbar() {
           />
         ) : (
           <span
-            className="cursor-pointer text-sm text-gray-700 hover:text-indigo-600"
+            className="cursor-pointer text-sm text-[#9ca3af] hover:text-[#f9fafb]"
             onClick={() => setEditingName(true)}
           >
             {name}
           </span>
         )}
-        {isDirty && <span className="text-xs text-gray-400">•</span>}
+        {isDirty && <span className="text-xs text-[#4b5563]">•</span>}
       </div>
 
       <div className="flex items-center gap-2">
         <button
           onClick={() => clearCanvas()}
-          className="flex items-center gap-1.5 rounded px-3 py-1.5 text-xs text-gray-500 hover:bg-gray-100"
+          className="flex items-center gap-1.5 rounded px-3 py-1.5 text-xs text-[#4b5563] hover:bg-[rgba(255,255,255,0.05)]"
         >
           <Trash2 className="h-3.5 w-3.5" /> Clear
         </button>
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+          className="flex items-center gap-1.5 rounded border border-[rgba(255,255,255,0.1)] px-3 py-1.5 text-xs text-[#6b7280] hover:bg-[rgba(255,255,255,0.05)] disabled:opacity-50"
         >
           {isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
           Save
         </button>
         <button
           onClick={handleShare}
-          className="flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+          className="flex items-center gap-1.5 rounded border border-[rgba(255,255,255,0.1)] px-3 py-1.5 text-xs text-[#6b7280] hover:bg-[rgba(255,255,255,0.05)]"
         >
           <Share2 className="h-3.5 w-3.5" /> Share
         </button>
@@ -79,7 +79,7 @@ export function Toolbar() {
           <Link
             href={`/dashboard/${id}`}
             target="_blank"
-            className="flex items-center gap-1.5 rounded bg-indigo-600 px-3 py-1.5 text-xs text-white hover:bg-indigo-700"
+            className="flex items-center gap-1.5 rounded bg-gradient-to-r from-cyan-400 to-indigo-600 px-3 py-1.5 text-xs text-white hover:opacity-90"
           >
             <Eye className="h-3.5 w-3.5" /> Preview
           </Link>
