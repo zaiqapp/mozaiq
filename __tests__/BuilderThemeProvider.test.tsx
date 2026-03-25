@@ -33,9 +33,8 @@ describe('BuilderThemeProvider', () => {
     expect(screen.getByTestId('theme').textContent).toBe('light')
   })
 
-  it('throws when used outside provider', () => {
-    const spy = jest.spyOn(console, 'error').mockImplementation(() => {})
-    expect(() => render(<TestConsumer />)).toThrow('useBuilderTheme must be used within BuilderThemeProvider')
-    spy.mockRestore()
+  it('returns dark default when used outside provider', () => {
+    render(<TestConsumer />)
+    expect(screen.getByTestId('theme').textContent).toBe('dark')
   })
 })
