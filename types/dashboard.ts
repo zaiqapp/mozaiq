@@ -59,10 +59,20 @@ export interface TextNoteConfig extends BaseWidgetConfig {
   content: string
 }
 
+export type DataSourceType = 'csv' | 'google-sheets'
+
 export interface DataSource {
-  type: 'mock' | 'google-sheets' | 'csv' | 'api'
+  type: DataSourceType
+  // CSV snapshot
+  data?: Record<string, unknown>[]
+  fileName?: string
+  // Google Sheets live
   url?: string
-  refreshInterval?: number
+  gid?: string              // optional numeric sheet tab ID for multi-tab sheets
+  refreshInterval?: number  // seconds; default 60, minimum 10 (enforced in useDataSource); 0 = manual only
+  // Shared
+  mapping?: Record<string, string>  // widgetField → columnName
+  error?: string                    // runtime-only; stripped before persisting
 }
 
 export type WidgetConfig =

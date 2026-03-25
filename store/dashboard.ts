@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { nanoid } from 'nanoid'
 import type { LayoutItem } from 'react-grid-layout'
 import type {
-  DashboardState, Widget, WidgetType, WidgetConfig, TemplateKey,
+  DashboardState, Widget, WidgetType, WidgetConfig, TemplateKey, DataSource,
 } from '@/types/dashboard'
 import { widgetRegistry } from '@/lib/widget-registry'
 import { templates } from '@/lib/templates'
@@ -16,6 +16,7 @@ interface DashboardStore extends DashboardState {
   setDashboardName: (name: string) => void
   loadTemplate: (template: TemplateKey) => void
   loadDashboard: (dashboard: { name: string; widgets: Widget[]; layout: LayoutItem[] }) => void
+  updateDataSource: (widgetId: string, dataSource: DataSource | undefined) => void
   clearCanvas: () => void
   saveDashboard: () => Promise<string>
   generateDashboard: (prompt: string) => Promise<void>
@@ -81,6 +82,15 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
     set({ ...dashboard, isDirty: false, selectedWidgetId: null })
   },
 
+  updateDataSource: (widgetId, dataSource) => {
+    set((state) => ({
+      widgets: state.widgets.map((w) =>
+        w.id === widgetId ? { ...w, dataSource } : w
+      ),
+      isDirty: true,
+    }))
+  },
+
   clearCanvas: () => {
     set({ widgets: [], layout: [], selectedWidgetId: null, isDirty: true })
   },
@@ -89,7 +99,12 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
     const { id, name, widgets, layout } = get()
     set({ isSaving: true })
     try {
-      const body = JSON.stringify({ name, widgets, layout })
+      const sanitizedWidgets = widgets.map((w) => {
+        if (!w.dataSource?.error) return w
+        const { error: _err, ...ds } = w.dataSource
+        return { ...w, dataSource: ds }
+      })
+      const body = JSON.stringify({ name, widgets: sanitizedWidgets, layout })
       let res = await fetch(id ? `/api/dashboards/${id}` : '/api/dashboards', {
         method: id ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
