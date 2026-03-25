@@ -77,8 +77,11 @@ describe('updateWidgetDataSourceId', () => {
     act(() => result.current.addWidget('bar-chart'))
     const widgetId = result.current.widgets[0]!.id
     act(() => result.current.updateWidgetDataSourceId(widgetId, 'ds1'))
+    // Set a mapping first
+    act(() => result.current.updateWidgetMapping(widgetId, { value: { column: 'revenue' } }))
     act(() => result.current.updateWidgetDataSourceId(widgetId, undefined))
     expect(result.current.widgets[0]!.dataSourceId).toBeUndefined()
+    expect(result.current.widgets[0]!.dataSourceMapping).toBeUndefined()
   })
 })
 

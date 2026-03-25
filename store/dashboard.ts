@@ -190,7 +190,9 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
   updateWidgetDataSourceId: (widgetId, dataSourceId) => {
     set((state) => ({
       widgets: state.widgets.map((w) =>
-        w.id === widgetId ? { ...w, dataSourceId } : w
+        w.id === widgetId
+          ? { ...w, dataSourceId, ...(dataSourceId === undefined && { dataSourceMapping: undefined }) }
+          : w
       ),
       isDirty: true,
     }))
