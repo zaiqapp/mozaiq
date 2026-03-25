@@ -65,6 +65,20 @@ export function RightPanel() {
             />
           </div>
 
+          {widget.type === 'text-note' && (
+            <div>
+              <p className={`mb-1 text-[10px] uppercase tracking-wider ${isDark ? 'text-[#374151]' : 'text-gray-400'}`}>Content</p>
+              <label htmlFor="widget-content" className={`mb-1 block text-xs ${isDark ? 'text-[#4b5563]' : 'text-gray-600'}`}>Note text</label>
+              <textarea
+                id="widget-content"
+                className={inputClass}
+                rows={5}
+                value={(widget.config as { content?: string }).content ?? ''}
+                onChange={(e) => updateWidgetConfig(widget.id, { content: e.target.value })}
+              />
+            </div>
+          )}
+
           {COLOR_WIDGET_TYPES.has(widget.type) && (
             <div>
               <p className={`mb-1 text-[10px] uppercase tracking-wider ${isDark ? 'text-[#374151]' : 'text-gray-400'}`}>Appearance</p>
