@@ -53,16 +53,10 @@ describe('isGenerationLimitReached', () => {
 
   it('respects AI_GENERATION_LIMIT env var', async () => {
     process.env.AI_GENERATION_LIMIT = '5'
-    jest.resetModules()
-    const freshCount = jest.fn()
-    jest.doMock('../prisma', () => ({
-      prisma: { generationLog: { count: freshCount } },
-    }))
-    const { isGenerationLimitReached: fn } = await import('../generation-limit')
-    freshCount.mockResolvedValue(4)
-    expect(await fn(null, 'user_abc')).toBe(false)
-    freshCount.mockResolvedValue(5)
-    expect(await fn(null, 'user_abc')).toBe(true)
+    mockCount.mockResolvedValue(4)
+    expect(await isGenerationLimitReached(null, 'user_abc')).toBe(false)
+    mockCount.mockResolvedValue(5)
+    expect(await isGenerationLimitReached(null, 'user_abc')).toBe(true)
   })
 
   it('returns false when both ip and userId are null', async () => {
