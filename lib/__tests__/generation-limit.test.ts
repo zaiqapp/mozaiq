@@ -64,4 +64,11 @@ describe('isGenerationLimitReached', () => {
     expect(result).toBe(false)
     expect(mockCount).not.toHaveBeenCalled()
   })
+
+  it('returns false (unlimited) when AI_GENERATION_LIMIT=0', async () => {
+    process.env.AI_GENERATION_LIMIT = '0'
+    const result = await isGenerationLimitReached('1.2.3.4', 'user_abc')
+    expect(result).toBe(false)
+    expect(mockCount).not.toHaveBeenCalled()
+  })
 })

@@ -4,7 +4,9 @@ export async function isGenerationLimitReached(
   ip: string | null,
   userId: string | null,
 ): Promise<boolean> {
-  const limit = parseInt(process.env.AI_GENERATION_LIMIT ?? '2', 10) || 2
+  const raw = process.env.AI_GENERATION_LIMIT
+  const limit = raw === '0' ? null : (parseInt(raw ?? '2', 10) || 2)
+  if (limit === null) return false
   if (userId) {
     const count = await prisma.generationLog.count({
       where: { userId, success: true },
