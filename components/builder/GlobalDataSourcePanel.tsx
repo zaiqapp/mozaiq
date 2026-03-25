@@ -36,6 +36,7 @@ export function GlobalDataSourcePanel() {
   const [csvPreview, setCsvPreview] = useState<SheetPreview | null>(null)
   const [csvWarning, setCsvWarning] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+  const expandFileRef = useRef<HTMLInputElement>(null)
 
   // Sheets state
   const [sheetsUrl, setSheetsUrl] = useState('')
@@ -192,6 +193,7 @@ export function GlobalDataSourcePanel() {
                           setExpandedId(null)
                         } else {
                           setExpandedId(ds.id)
+                          setAddMode('none')
                           // Pre-fill state with current source values
                           if (ds.type === 'google-sheets') {
                             setSheetsUrl(ds.url ?? '')
@@ -215,7 +217,7 @@ export function GlobalDataSourcePanel() {
                   {isExpanded && ds.type === 'csv' && (
                     <div className={`flex flex-col gap-2 border-t px-3 py-2 ${border}`}>
                       <p className={sectionLabel}>Replace CSV data</p>
-                      <input ref={fileRef} type="file" accept=".csv" className={inputClass} onChange={handleCsvFile} />
+                      <input ref={expandFileRef} type="file" accept=".csv" className={inputClass} onChange={handleCsvFile} />
                       {csvWarning && <p className="rounded bg-amber-50 px-2 py-1 text-[10px] text-amber-700">{csvWarning}</p>}
                       {csvPreview && (
                         <div>
@@ -233,12 +235,12 @@ export function GlobalDataSourcePanel() {
                           disabled={!csvPreview}
                           onClick={() => {
                             if (!csvPreview) return
-                            const fileName = fileRef.current?.files?.[0]?.name
+                            const fileName = expandFileRef.current?.files?.[0]?.name
                             updateGlobalDataSource(ds.id, { data: csvPreview.rows, fileName })
                             setExpandedId(null)
                             setCsvPreview(null)
                             setCsvWarning(null)
-                            if (fileRef.current) fileRef.current.value = ''
+                            if (expandFileRef.current) expandFileRef.current.value = ''
                             toast.success('CSV data replaced')
                           }}
                           className={btnPrimary}
@@ -349,7 +351,7 @@ export function GlobalDataSourcePanel() {
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <p className={sectionLabel}>Upload CSV</p>
-            <button onClick={() => { setAddMode('none'); setCsvPreview(null) }} className={textMuted}><X className="h-3 w-3" /></button>
+            <button onClick={() => { setAddMode('none'); setCsvPreview(null); setCsvWarning(null) }} className={textMuted}><X className="h-3 w-3" /></button>
           </div>
           <input ref={fileRef} type="file" accept=".csv" className={inputClass} onChange={handleCsvFile} />
           {csvWarning && <p className="rounded bg-amber-50 px-2 py-1 text-[10px] text-amber-700">{csvWarning}</p>}
