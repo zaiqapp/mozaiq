@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import type { Widget } from '@/types/dashboard'
+import { useDashboardStore } from '@/store/dashboard'
 
 export interface DataSourceResult {
   rows: Record<string, unknown>[] | null
@@ -9,25 +10,30 @@ export interface DataSourceResult {
 }
 
 export function useDataSource(widget: Widget): DataSourceResult {
-  const ds = widget.dataSource
+  const dataSources = useDashboardStore((s) => s.dataSources)
+  const ds = dataSources.find((d) => d.id === widget.dataSourceId) ?? null
 
-  const [rows, setRows] = useState<Record<string, unknown>[] | null>(
-    ds?.type === 'csv' ? (ds.data ?? null) : null
-  )
-  const [isLoading, setIsLoading] = useState(ds?.type === 'google-sheets')
+  const [rows, setRows] = useState<Record<string, unknown>[] | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [lastFetched, setLastFetched] = useState<string | null>(null)
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
-    if (ds?.type === 'csv') {
+    if (!ds) {
+      setRows(null)
+      setIsLoading(false)
+      return
+    }
+
+    if (ds.type === 'csv') {
       setRows(ds.data ?? null)
       setIsLoading(false)
       return
     }
 
-    if (ds?.type !== 'google-sheets' || !ds.url) {
+    if (ds.type !== 'google-sheets' || !ds.url) {
       setRows(null)
       setIsLoading(false)
       return
@@ -70,8 +76,6 @@ export function useDataSource(widget: Widget): DataSourceResult {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [ds?.type, ds?.url, ds?.gid, ds?.refreshInterval, ds?.data])
-
-  if (!ds) return { rows: null, isLoading: false, error: null, lastFetched: null }
 
   return { rows, isLoading, error, lastFetched }
 }
