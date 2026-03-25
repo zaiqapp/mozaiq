@@ -20,10 +20,10 @@ export function AIGeneratorBar() {
   }
 
   return (
-    <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm">
-      <Sparkles className="h-4 w-4 flex-shrink-0 text-indigo-400" />
+    <div className="flex items-center gap-2 rounded-lg border border-[rgba(6,182,212,0.2)] bg-[rgba(6,182,212,0.04)] px-3 py-2">
+      <Sparkles className="h-4 w-4 flex-shrink-0 text-cyan-400" />
       <input
-        className="flex-1 bg-transparent text-sm outline-none placeholder:text-gray-400"
+        className="flex-1 bg-transparent text-sm text-[#9ca3af] outline-none placeholder:text-[#374151]"
         placeholder='e.g. "An analytics dashboard for a SaaS startup tracking MRR, churn, and active users"'
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
@@ -33,7 +33,7 @@ export function AIGeneratorBar() {
       <button
         onClick={handleGenerate}
         disabled={!prompt.trim() || isGenerating}
-        className="flex items-center gap-1.5 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-50 hover:bg-indigo-700"
+        className="flex items-center gap-1.5 rounded-md bg-gradient-to-r from-cyan-400 to-indigo-600 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-50 hover:opacity-90"
       >
         {isGenerating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
         {isGenerating ? 'Generating...' : 'Generate →'}
