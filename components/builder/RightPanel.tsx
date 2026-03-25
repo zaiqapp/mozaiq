@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useDashboardStore } from '@/store/dashboard'
 import type { KPIConfig, ChartConfig, GaugeConfig } from '@/types/dashboard'
 import { useBuilderTheme } from './BuilderThemeProvider'
-import { DataSourcePanel } from './DataSourcePanel'
+import { WidgetMappingPanel } from './WidgetMappingPanel'
 
 const COLOR_WIDGET_TYPES = new Set(['kpi', 'line-chart', 'area-chart', 'bar-chart', 'donut-chart', 'gauge'])
 
@@ -95,7 +95,7 @@ export function RightPanel() {
 
           <div>
             <p className={`mb-2 text-[10px] uppercase tracking-wider ${isDark ? 'text-[#374151]' : 'text-gray-400'}`}>Data</p>
-            <DataSourcePanel widget={widget} />
+            <WidgetMappingPanel widget={widget} />
           </div>
         </div>
       )}
