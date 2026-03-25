@@ -40,6 +40,7 @@ export function validateGeneratedWidgets(
 
     result.push({
       type: item['type'] as WidgetType,
+      title: typeof item['title'] === 'string' ? item['title'] : undefined,
       config: (typeof item['config'] === 'object' && item['config'] !== null ? item['config'] : {}) as Record<string, unknown>,
       dataSourceId,
       dataSourceMapping: mapping,

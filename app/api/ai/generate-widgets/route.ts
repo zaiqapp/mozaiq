@@ -75,7 +75,7 @@ export async function POST(req: Request) {
     const message = err instanceof Error ? err.message : 'Generation failed'
     return NextResponse.json({ error: message }, { status: 500 })
   } finally {
-    await prisma.generationLog.create({
+    prisma.generationLog.create({
       data: {
         prompt: prompt ?? '',
         success,
