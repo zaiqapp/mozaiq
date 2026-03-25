@@ -2,16 +2,19 @@
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts'
 import type { WidgetProps, ChartConfig } from '@/types/dashboard'
 import { CATEGORY_DATA } from '@/lib/mockData'
+import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
 const COLORS = ['#6366f1', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe']
 
 export default function DonutChartWidget({ config }: WidgetProps) {
   const c = config as ChartConfig
   const data = (c.data && c.data.length > 0) ? c.data : CATEGORY_DATA
+  const { theme } = useBuilderTheme()
+  const isDark = theme === 'dark'
 
   return (
     <div className="flex h-full flex-col p-4">
-      <p className="mb-2 text-sm font-medium text-[#e5e7eb]">{c.title}</p>
+      <p className={`mb-2 text-sm font-medium ${isDark ? 'text-[#e5e7eb]' : 'text-gray-700'}`}>{c.title}</p>
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
