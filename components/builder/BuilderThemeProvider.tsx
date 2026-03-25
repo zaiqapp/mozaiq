@@ -9,7 +9,7 @@ interface BuilderThemeContextValue {
 }
 
 const BuilderThemeContext = createContext<BuilderThemeContextValue>({
-  theme: 'light',
+  theme: 'dark',
   toggleTheme: () => {},
 })
 

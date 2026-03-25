@@ -33,8 +33,8 @@ describe('BuilderThemeProvider', () => {
     expect(screen.getByTestId('theme').textContent).toBe('light')
   })
 
-  it('returns light default when used outside provider', () => {
+  it('returns dark default when used outside provider', () => {
     render(<TestConsumer />)
-    expect(screen.getByTestId('theme').textContent).toBe('light')
+    expect(screen.getByTestId('theme').textContent).toBe('dark')
   })
 })

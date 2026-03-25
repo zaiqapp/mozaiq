@@ -5,6 +5,7 @@ import type { GridLayoutProps, LayoutItem } from 'react-grid-layout'
 import type { Widget } from '@/types/dashboard'
 import { WidgetWrapper } from '@/components/widgets/WidgetWrapper'
 import { WidgetRenderer } from '@/components/widgets/WidgetRenderer'
+import { BuilderThemeProvider, useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 import Link from 'next/link'
 import 'react-grid-layout/css/styles.css'
 
@@ -15,11 +16,14 @@ const GridLayout = dynamic(
 
 interface Props { id: string; name: string; widgets: Widget[]; layout: LayoutItem[] }
 
-export function ShareView({ id, name, widgets, layout }: Props) {
+function ShareViewInner({ id, name, widgets, layout }: Props) {
+  const { theme } = useBuilderTheme()
+  const isDark = theme === 'dark'
+
   if (widgets.length === 0) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#f4f5f7]">
-        <p className="text-gray-500">This dashboard has no widgets yet.</p>
+      <div className={`flex min-h-screen flex-col items-center justify-center gap-4 ${isDark ? 'bg-[#0f1117]' : 'bg-[#f4f5f7]'}`}>
+        <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>This dashboard has no widgets yet.</p>
         <Link href={`/builder/${id}`} className="rounded bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700">
           Open in Builder
         </Link>
@@ -28,9 +32,9 @@ export function ShareView({ id, name, widgets, layout }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#f4f5f7]">
-      <header className="flex h-12 items-center justify-between border-b bg-white px-6">
-        <h1 className="text-sm font-semibold text-gray-900">{name}</h1>
+    <div className={`min-h-screen ${isDark ? 'bg-[#0f1117]' : 'bg-[#f4f5f7]'}`}>
+      <header className={`flex h-12 items-center justify-between border-b px-6 ${isDark ? 'border-[rgba(255,255,255,0.06)] bg-[#0a0a0f]' : 'border-gray-200 bg-white'}`}>
+        <h1 className={`text-sm font-semibold ${isDark ? 'text-[#f9fafb]' : 'text-gray-900'}`}>{name}</h1>
         <div className="flex items-center gap-3">
           <Link href="https://zaiq.app" target="_blank" className="text-xs text-gray-400 hover:text-gray-600">
             Built with Mozaiq
@@ -68,5 +72,13 @@ export function ShareView({ id, name, widgets, layout }: Props) {
         </GridLayout>
       </main>
     </div>
+  )
+}
+
+export function ShareView(props: Props) {
+  return (
+    <BuilderThemeProvider>
+      <ShareViewInner {...props} />
+    </BuilderThemeProvider>
   )
 }
