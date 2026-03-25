@@ -22,8 +22,8 @@ export function WidgetRenderer({ widget, isSelected, onSelect, onDelete, isReadO
 
   let patchedConfig: WidgetConfig = widget.config
 
-  if (rows !== null && widget.dataSource?.mapping) {
-    const mapping = widget.dataSource.mapping
+  if (rows !== null && widget.dataSourceMapping) {
+    const mapping = widget.dataSourceMapping
     const fields = widgetFieldRegistry[widget.type] ?? []
     const patch: Record<string, unknown> = {}
 
@@ -37,11 +37,11 @@ export function WidgetRenderer({ widget, isSelected, onSelect, onDelete, isReadO
       patch['dataKey'] = 'value'
     }
 
-    // Data table: synthesise columns from mapping when rows are live
+    // Data table: synthesise columns from mapping using displayName if available
     if (widget.type === 'data-table' && patch['rows']) {
-      patch['columns'] = Object.entries(mapping).map(([widgetKey, sourceCol]) => ({
-        key: sourceCol,
-        label: widgetKey,
+      patch['columns'] = Object.entries(mapping).map(([, axisMapping]) => ({
+        key: axisMapping.column,
+        label: axisMapping.displayName ?? axisMapping.column,
         sortable: true,
       }))
     }
