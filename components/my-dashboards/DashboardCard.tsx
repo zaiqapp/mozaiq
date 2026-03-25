@@ -135,7 +135,7 @@ export function DashboardCard({ dashboard }: { dashboard: Dashboard }) {
             value={renameValue}
             onChange={(e) => setRenameValue(e.target.value)}
             onBlur={handleRename}
-            onKeyDown={(e) => { if (e.key === 'Enter') handleRename(); if (e.key === 'Escape') setRenaming(false) }}
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.currentTarget.blur() } if (e.key === 'Escape') { setRenaming(false) } }}
           />
         ) : (
           <p className="truncate text-sm font-semibold text-[#f9fafb]">{dashboard.name}</p>
