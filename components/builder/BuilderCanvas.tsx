@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import type { Layout, GridLayoutProps } from 'react-grid-layout'
 import type { ComponentType } from 'react'
@@ -34,6 +34,10 @@ export function BuilderCanvas() {
     return () => observer.disconnect()
   }, [])
 
+  const gridConfig = useMemo(() => ({ cols: 12, rowHeight: 80, margin: [12, 12] as [number, number] }), [])
+  const dragConfig = useMemo(() => ({ enabled: true, bounded: false, handle: '.drag-handle', threshold: 3 }), [])
+  const resizeConfig = useMemo(() => ({ enabled: true, handles: ['se'] as const }), [])
+
   const handleLayoutChange = useCallback((newLayout: Layout) => {
     setLayout([...newLayout])
   }, [setLayout])
@@ -67,9 +71,9 @@ export function BuilderCanvas() {
           <GridLayout
             layout={layout}
             width={gridWidth}
-            gridConfig={{ cols: 12, rowHeight: 80, margin: [12, 12] as [number, number] }}
-            dragConfig={{ enabled: true, bounded: false, handle: '.drag-handle', threshold: 3 }}
-            resizeConfig={{ enabled: true, handles: ['se'] as const }}
+            gridConfig={gridConfig}
+            dragConfig={dragConfig}
+            resizeConfig={resizeConfig}
             onLayoutChange={handleLayoutChange}
           >
             {widgets.map((widget) => (
