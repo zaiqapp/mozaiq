@@ -1,6 +1,6 @@
 'use client'
-import { useState, useRef } from 'react'
-import { Upload, Link2, X, Pencil, Trash2, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Upload, Link2, X, Pencil, Trash2, RefreshCw, ChevronDown, ChevronUp, Wand2, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { nanoid } from 'nanoid'
 import { useDashboardStore } from '@/store/dashboard'
@@ -24,7 +24,7 @@ interface SheetPreview { columns: string[]; rows: Record<string, unknown>[] }
 export function GlobalDataSourcePanel() {
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
-  const { dataSources, addGlobalDataSource, updateGlobalDataSource, removeGlobalDataSource, widgets } = useDashboardStore()
+  const { dataSources, addGlobalDataSource, updateGlobalDataSource, removeGlobalDataSource, addGeneratedWidgets, widgets } = useDashboardStore()
 
   const [addMode, setAddMode] = useState<AddMode>('none')
   const [expandedId, setExpandedId] = useState<string | null>(null)
@@ -41,6 +41,11 @@ export function GlobalDataSourcePanel() {
   // Expand-CSV state (isolated from add-CSV flow)
   const [expandCsvPreview, setExpandCsvPreview] = useState<SheetPreview | null>(null)
   const [expandCsvWarning, setExpandCsvWarning] = useState<string | null>(null)
+
+  // AI Generate state
+  const [generatePrompt, setGeneratePrompt] = useState('')
+  const [isGeneratingWidgets, setIsGeneratingWidgets] = useState(false)
+  const [hasAutoSuggested, setHasAutoSuggested] = useState(false)
 
   // Sheets state
   const [sheetsUrl, setSheetsUrl] = useState('')
@@ -165,6 +170,48 @@ export function GlobalDataSourcePanel() {
   const rowCount = (ds: GlobalDataSource) => {
     if (ds.type === 'csv') return ds.data?.length ?? 0
     return null // live source — row count not stored
+  }
+
+  // Auto-suggest: fire when first source is connected and canvas is empty
+  useEffect(() => {
+    if (hasAutoSuggested) return
+    if (dataSources.length !== 1) return
+    if (widgets.length > 0) return
+    setHasAutoSuggested(true)
+    generateWidgets('Generate a dashboard for this data', dataSources[0]!)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataSources.length, widgets.length])
+
+  const generateWidgets = async (prompt: string, sourceOverride?: GlobalDataSource) => {
+    const source = sourceOverride ?? dataSources[0]
+    if (!source) return
+
+    const cols = source.type === 'csv'
+      ? Object.keys(source.data?.[0] ?? {})
+      : [] // Sheets: columns not available client-side without live fetch; skip if empty
+
+    const sampleRows = source.type === 'csv' ? (source.data ?? []).slice(0, 5) : []
+
+    setIsGeneratingWidgets(true)
+    try {
+      const res = await fetch('/api/ai/generate-widgets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dataSourceId: source.id,
+          columns: cols.length ? cols : ['data'],
+          sampleRows,
+          prompt,
+        }),
+      })
+      const data = await res.json() as { widgets?: { type: string; config: Record<string, unknown>; dataSourceId: string; dataSourceMapping: Record<string, { column: string }> }[]; error?: string }
+      if (!res.ok || data.error) { toast.error(data.error ?? 'Generation failed'); return }
+      if (data.widgets?.length) {
+        addGeneratedWidgets(data.widgets as Parameters<typeof addGeneratedWidgets>[0])
+        toast.success(`Added ${data.widgets.length} widgets`)
+      }
+    } catch { toast.error('Generation failed') }
+    finally { setIsGeneratingWidgets(false) }
   }
 
   return (
@@ -419,6 +466,35 @@ export function GlobalDataSourcePanel() {
                 </table>
               </div>
               <button onClick={handleSheetsConnect} className={`${btnPrimary} mt-2 w-full justify-center`}>Use this data</button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Zone 3 — AI Generate (visible when sources are connected) */}
+      {dataSources.length > 0 && addMode === 'none' && (
+        <div className={`mt-3 border-t pt-3 ${border}`}>
+          <p className={`mb-2 ${sectionLabel}`}>AI Generate</p>
+          {isGeneratingWidgets ? (
+            <div className={`flex items-center gap-2 text-xs ${textMuted}`}>
+              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Generating widgets…
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                className={inputClass + ' flex-1'}
+                placeholder="What would you like to visualize?"
+                value={generatePrompt}
+                onChange={(e) => setGeneratePrompt(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter' && generatePrompt.trim()) { generateWidgets(generatePrompt); setGeneratePrompt('') } }}
+              />
+              <button
+                disabled={!generatePrompt.trim()}
+                onClick={() => { generateWidgets(generatePrompt); setGeneratePrompt('') }}
+                className={`flex items-center gap-1.5 rounded bg-gradient-to-r from-cyan-400 to-indigo-600 px-3 py-1.5 text-xs text-white hover:opacity-90 disabled:opacity-50`}
+              >
+                <Wand2 className="h-3.5 w-3.5" /> Generate
+              </button>
             </div>
           )}
         </div>
