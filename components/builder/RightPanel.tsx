@@ -5,12 +5,13 @@ import { useDashboardStore } from '@/store/dashboard'
 import { useBuilderTheme } from './BuilderThemeProvider'
 import { WidgetConfigPanel } from './WidgetConfigPanel'
 import { WidgetDataPanel } from './data-editors/WidgetDataPanel'
+import { WidgetInsightPanel } from './WidgetInsightPanel'
 
 export function RightPanel() {
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
   const [collapsed, setCollapsed] = useState(false)
-  const [activeTab, setActiveTab] = useState<'properties' | 'data'>('properties')
+  const [activeTab, setActiveTab] = useState<'properties' | 'data' | 'ai'>('properties')
   const { widgets, selectedWidgetId } = useDashboardStore()
   const widget = widgets.find((w) => w.id === selectedWidgetId)
 
@@ -67,16 +68,30 @@ export function RightPanel() {
                 {tab === 'properties' ? 'Properties' : 'Data'}
               </button>
             ))}
+            <button
+              onClick={() => setActiveTab('ai')}
+              className={`flex-1 py-2 text-xs font-medium transition-colors ${
+                activeTab === 'ai'
+                  ? 'border-b-2 border-cyan-500 text-cyan-400'
+                  : isDark
+                  ? 'text-[#4b5563] hover:text-[#6b7280]'
+                  : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              ✦ AI
+            </button>
           </div>
 
           {/* Tab content */}
           <div className="flex-1 overflow-y-auto">
             {activeTab === 'properties' ? (
               <WidgetConfigPanel widget={widget} />
-            ) : (
+            ) : activeTab === 'data' ? (
               <div className="p-4">
                 <WidgetDataPanel key={widget.id} widget={widget} />
               </div>
+            ) : (
+              <WidgetInsightPanel key={widget.id} widget={widget} />
             )}
           </div>
         </div>

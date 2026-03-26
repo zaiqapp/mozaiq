@@ -48,6 +48,8 @@ interface DashboardStore extends DashboardState {
   clearCanvas: () => void
   saveDashboard: () => Promise<string>
   generateDashboard: (prompt: string) => Promise<void>
+  insightsDrawerOpen: boolean
+  setInsightsDrawerOpen: (open: boolean) => void
 }
 
 const initialState: DashboardState = {
@@ -336,4 +338,7 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
       set({ isGenerating: false })
     }
   },
+
+  insightsDrawerOpen: false,
+  setInsightsDrawerOpen: (open) => set({ insightsDrawerOpen: open }),
 }))
