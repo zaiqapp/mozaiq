@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import type { ComponentType } from 'react'
 import type { GridLayoutProps, LayoutItem } from 'react-grid-layout'
@@ -29,7 +29,20 @@ function ViewPageInner({ id, name, widgets, layout, dataSources = [] }: Props) {
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
   const [insightsOpen, setInsightsOpen] = useState(false)
+  const [gridWidth, setGridWidth] = useState(1200)
+  const containerRef = useRef<HTMLDivElement>(null)
   const loadDashboard = useDashboardStore((s) => s.loadDashboard)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0]
+      if (entry) setGridWidth(entry.contentRect.width)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     loadDashboard({ name, widgets, layout, dataSources })
@@ -85,7 +98,7 @@ function ViewPageInner({ id, name, widgets, layout, dataSources = [] }: Props) {
 
       {/* Canvas + optional insights drawer */}
       <div className="flex flex-1 overflow-hidden">
-        <main className="flex-1 overflow-y-auto p-4">
+        <main ref={containerRef} className="flex-1 overflow-y-auto p-4">
           {widgets.length === 0 ? (
             <div className="flex h-full items-center justify-center">
               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
@@ -95,7 +108,7 @@ function ViewPageInner({ id, name, widgets, layout, dataSources = [] }: Props) {
           ) : (
             <GridLayout
               layout={layout}
-              width={1200}
+              width={gridWidth}
               gridConfig={{ cols: 12, rowHeight: 80, margin: [12, 12] as [number, number] }}
               dragConfig={{ enabled: false }}
               resizeConfig={{ enabled: false }}
