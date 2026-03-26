@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { X, Loader2 } from 'lucide-react'
 import type { Widget } from '@/types/dashboard'
+import { useDashboardStore } from '@/store/dashboard'
 import { useBuilderTheme } from './BuilderThemeProvider'
 
 interface Props {
@@ -20,6 +21,7 @@ export function DashboardInsightsDrawer({ widgets, dashboardName, onClose }: Pro
   const [state, setState] = useState<InsightState>({ status: 'idle' })
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
+  const dataSources = useDashboardStore((s) => s.dataSources)
 
   const generate = async () => {
     setState({ status: 'loading' })
@@ -29,7 +31,15 @@ export function DashboardInsightsDrawer({ widgets, dashboardName, onClose }: Pro
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           dashboardName,
-          widgets: widgets.map((w) => ({ type: w.type, config: w.config })),
+          widgets: widgets.map((w) => {
+            const ds = w.dataSourceId ? dataSources.find((d) => d.id === w.dataSourceId) : undefined
+            return {
+              type: w.type,
+              config: w.config,
+              data: ds?.data ?? [],
+              mapping: w.dataSourceMapping ?? {},
+            }
+          }),
         }),
       })
       if (!res.ok) {

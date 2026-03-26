@@ -11,7 +11,7 @@ import {
 export async function POST(req: Request) {
   const body = await req.json() as {
     dashboardName?: string
-    widgets?: Array<{ type: string; config: unknown }>
+    widgets?: Array<{ type: string; config: unknown; data?: Record<string, unknown>[]; mapping?: Record<string, { column: string }> }>
   }
   const { dashboardName = '', widgets } = body
 

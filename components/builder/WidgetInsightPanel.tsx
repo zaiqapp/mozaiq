@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import type { Widget } from '@/types/dashboard'
+import { useDashboardStore } from '@/store/dashboard'
 import { useBuilderTheme } from './BuilderThemeProvider'
 
 interface Props {
@@ -18,14 +19,21 @@ export function WidgetInsightPanel({ widget }: Props) {
   const [state, setState] = useState<InsightState>({ status: 'idle' })
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
+  const dataSources = useDashboardStore((s) => s.dataSources)
 
   const generate = async () => {
     setState({ status: 'loading' })
+    const ds = widget.dataSourceId ? dataSources.find((d) => d.id === widget.dataSourceId) : undefined
     try {
       const res = await fetch('/api/ai/insights', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ widgetType: widget.type, config: widget.config }),
+        body: JSON.stringify({
+          widgetType: widget.type,
+          config: widget.config,
+          data: ds?.data ?? [],
+          mapping: widget.dataSourceMapping ?? {},
+        }),
       })
       if (!res.ok) {
         let message = 'Generation failed'

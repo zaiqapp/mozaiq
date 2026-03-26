@@ -10,8 +10,13 @@ import {
 import type { WidgetConfig, WidgetType } from '@/types/dashboard'
 
 export async function POST(req: Request) {
-  const body = await req.json() as { widgetType?: WidgetType; config?: WidgetConfig }
-  const { widgetType, config } = body
+  const body = await req.json() as {
+    widgetType?: WidgetType
+    config?: WidgetConfig
+    data?: Record<string, unknown>[]
+    mapping?: Record<string, { column: string }>
+  }
+  const { widgetType, config, data, mapping } = body
 
   if (!widgetType || config === undefined) {
     return NextResponse.json({ error: 'widgetType and config are required' }, { status: 400 })
@@ -34,7 +39,7 @@ export async function POST(req: Request) {
     const { text } = await generateText({
       model: 'anthropic/claude-sonnet-4.6',
       system: WIDGET_INSIGHT_SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: buildWidgetUserMessage(widgetType, config) }],
+      messages: [{ role: 'user', content: buildWidgetUserMessage(widgetType, config, data, mapping) }],
       maxOutputTokens: 400,
       providerOptions: {
         gateway: { tags: ['feature:widget-insight'], user: clientIp ?? undefined },
