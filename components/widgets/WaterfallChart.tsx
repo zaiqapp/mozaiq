@@ -61,10 +61,21 @@ export default function WaterfallChart({ config }: WidgetProps) {
             <XAxis dataKey="label" tick={{ fontSize: 10, fill: axisColor }} />
             <YAxis tick={{ fontSize: 10, fill: axisColor }} />
             <Tooltip
-              contentStyle={{ fontSize: 11 }}
-              formatter={(value, name) =>
-                name === 'base' ? null : [(value as number).toLocaleString(), 'Value']
-              }
+              content={({ active, payload, label }) => {
+                if (!active || !payload?.length) return null
+                const entry = payload.find((p) => p.dataKey === 'delta')
+                if (!entry) return null
+                return (
+                  <div style={{
+                    background: isDark ? '#1f2937' : '#fff',
+                    border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : '#e5e7eb'}`,
+                    borderRadius: 4, padding: '4px 8px', fontSize: 11,
+                    color: isDark ? '#9ca3af' : '#374151',
+                  }}>
+                    <p style={{ margin: 0 }}>{label}: {(entry.value as number).toLocaleString()}</p>
+                  </div>
+                )
+              }}
             />
             <Bar dataKey="base" stackId="w" fill="transparent" />
             <Bar dataKey="delta" stackId="w">
