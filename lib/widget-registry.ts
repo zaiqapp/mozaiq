@@ -3,9 +3,14 @@ import type { LucideIcon } from 'lucide-react'
 import {
   BarChart2, TrendingUp, BarChart, PieChart, Filter,
   Activity, Table, CheckSquare, Zap, FileText,
+  ArrowLeftRight, Layers, BarChart3, List, GitFork, Table2, ScatterChart,
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import type { WidgetType, WidgetConfig, WidgetProps } from '@/types/dashboard'
+import type {
+  WidgetType, WidgetConfig, WidgetProps,
+  StatComparisonConfig, MultiSeriesConfig, ScatterChartConfig,
+  ComboChartConfig, RankedListConfig, WaterfallChartConfig, TreemapConfig,
+} from '@/types/dashboard'
 
 export interface WidgetRegistryEntry {
   component: ComponentType<WidgetProps>
@@ -100,5 +105,100 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
     defaultSize: { w: 6, h: 2 },
     defaultConfig: { title: 'Note', content: '' },
     label: 'Text / Note', icon: FileText, category: 'misc',
+  },
+  'stat-comparison': {
+    component: dynamic(() => import('@/components/widgets/StatComparison')) as unknown as ComponentType<WidgetProps>,
+    defaultSize: { w: 4, h: 2 },
+    defaultConfig: {
+      title: 'Comparison',
+      primaryLabel: 'Primary',
+      secondaryLabel: 'Secondary',
+      primary: 0,
+      secondary: 0,
+      prefix: '',
+      suffix: '',
+      deltaPositiveIsGood: true,
+    } satisfies StatComparisonConfig,
+    label: 'Stat Comparison',
+    icon: ArrowLeftRight,
+    category: 'metrics',
+  },
+  'multi-line-chart': {
+    component: dynamic(() => import('@/components/widgets/MultiLineChart')) as unknown as ComponentType<WidgetProps>,
+    defaultSize: { w: 6, h: 3 },
+    defaultConfig: {
+      title: 'Multi-Line Chart',
+      seriesLabels: { series1: 'Series 1', series2: 'Series 2' },
+    } satisfies MultiSeriesConfig,
+    label: 'Multi-Line Chart',
+    icon: TrendingUp,
+    category: 'charts',
+  },
+  'grouped-bar-chart': {
+    component: dynamic(() => import('@/components/widgets/GroupedBarChart')) as unknown as ComponentType<WidgetProps>,
+    defaultSize: { w: 6, h: 3 },
+    defaultConfig: {
+      title: 'Grouped Bar Chart',
+      seriesLabels: { series1: 'Series 1', series2: 'Series 2' },
+    } satisfies MultiSeriesConfig,
+    label: 'Grouped Bar Chart',
+    icon: BarChart2,
+    category: 'charts',
+  },
+  'stacked-bar-chart': {
+    component: dynamic(() => import('@/components/widgets/StackedBarChart')) as unknown as ComponentType<WidgetProps>,
+    defaultSize: { w: 6, h: 3 },
+    defaultConfig: {
+      title: 'Stacked Bar Chart',
+      seriesLabels: { series1: 'Series 1', series2: 'Series 2' },
+    } satisfies MultiSeriesConfig,
+    label: 'Stacked Bar Chart',
+    icon: Layers,
+    category: 'charts',
+  },
+  'scatter-chart': {
+    component: dynamic(() => import('@/components/widgets/ScatterChart')) as unknown as ComponentType<WidgetProps>,
+    defaultSize: { w: 5, h: 3 },
+    defaultConfig: { title: 'Scatter Chart', xLabel: 'X', yLabel: 'Y' } satisfies ScatterChartConfig,
+    label: 'Scatter Chart',
+    icon: ScatterChart,
+    category: 'charts',
+  },
+  'combo-chart': {
+    component: dynamic(() => import('@/components/widgets/ComboChart')) as unknown as ComponentType<WidgetProps>,
+    defaultSize: { w: 6, h: 3 },
+    defaultConfig: { title: 'Combo Chart', barLabel: 'Volume', lineLabel: 'Rate' } satisfies ComboChartConfig,
+    label: 'Combo Chart',
+    icon: BarChart3,
+    category: 'charts',
+  },
+  'ranked-list': {
+    component: dynamic(() => import('@/components/widgets/RankedList')) as unknown as ComponentType<WidgetProps>,
+    defaultSize: { w: 4, h: 3 },
+    defaultConfig: { title: 'Ranked List', color: '#6366f1', maxItems: 10 } satisfies RankedListConfig,
+    label: 'Ranked List',
+    icon: List,
+    category: 'data',
+  },
+  'waterfall-chart': {
+    component: dynamic(() => import('@/components/widgets/WaterfallChart')) as unknown as ComponentType<WidgetProps>,
+    defaultSize: { w: 6, h: 3 },
+    defaultConfig: {
+      title: 'Waterfall Chart',
+      positiveColor: '#10b981',
+      negativeColor: '#ef4444',
+      totalColor: '#6366f1',
+    } satisfies WaterfallChartConfig,
+    label: 'Waterfall Chart',
+    icon: GitFork,
+    category: 'charts',
+  },
+  treemap: {
+    component: dynamic(() => import('@/components/widgets/Treemap')) as unknown as ComponentType<WidgetProps>,
+    defaultSize: { w: 5, h: 3 },
+    defaultConfig: { title: 'Treemap' } satisfies TreemapConfig,
+    label: 'Treemap',
+    icon: Table2,
+    category: 'charts',
   },
 }
