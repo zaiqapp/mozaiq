@@ -49,7 +49,7 @@ export async function POST(req: Request) {
   } finally {
     prisma.generationLog.create({
       data: {
-        prompt: widgetType,
+        prompt: buildWidgetUserMessage(widgetType, config),
         success,
         ip: clientIp,
         ...(userId ? { userId } : {}),
