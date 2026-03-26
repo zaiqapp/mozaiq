@@ -4,6 +4,8 @@ export type WidgetType =
   | 'kpi' | 'line-chart' | 'area-chart' | 'bar-chart' | 'donut-chart'
   | 'funnel-chart' | 'gauge' | 'data-table' | 'progress-tracker'
   | 'activity-feed' | 'text-note'
+  | 'stat-comparison' | 'multi-line-chart' | 'grouped-bar-chart' | 'stacked-bar-chart'
+  | 'scatter-chart' | 'combo-chart' | 'ranked-list' | 'waterfall-chart' | 'treemap'
 
 export type TemplateKey = 'analytics' | 'inventory' | 'purchasing'
 
@@ -59,9 +61,57 @@ export interface TextNoteConfig extends BaseWidgetConfig {
   content: string
 }
 
+// --- v2.4 new widget config types ---
+
+export interface StatComparisonConfig extends BaseWidgetConfig {
+  primaryLabel: string
+  secondaryLabel: string
+  primary: number
+  secondary: number
+  prefix?: string
+  suffix?: string
+  deltaPositiveIsGood?: boolean
+}
+
+export interface MultiSeriesConfig extends BaseWidgetConfig {
+  seriesLabels?: Record<string, string>
+  data?: Record<string, unknown>[]
+}
+
+export interface ScatterChartConfig extends BaseWidgetConfig {
+  xLabel?: string
+  yLabel?: string
+  data?: Record<string, unknown>[]
+}
+
+export interface ComboChartConfig extends BaseWidgetConfig {
+  barLabel?: string
+  lineLabel?: string
+  data?: Record<string, unknown>[]
+}
+
+export interface RankedListConfig extends BaseWidgetConfig {
+  color?: string
+  maxItems?: number
+  data?: Record<string, unknown>[]
+}
+
+export interface WaterfallChartConfig extends BaseWidgetConfig {
+  positiveColor?: string
+  negativeColor?: string
+  totalColor?: string
+  data?: Record<string, unknown>[]
+}
+
+export interface TreemapConfig extends BaseWidgetConfig {
+  data?: Record<string, unknown>[]
+}
+
 export type WidgetConfig =
   | KPIConfig | ChartConfig | FunnelConfig | GaugeConfig
   | TableConfig | ProgressConfig | ActivityConfig | TextNoteConfig
+  | StatComparisonConfig | MultiSeriesConfig | ScatterChartConfig | ComboChartConfig
+  | RankedListConfig | WaterfallChartConfig | TreemapConfig
 
 // --- v2.3 global data source types ---
 
