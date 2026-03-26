@@ -75,7 +75,7 @@ export function RightPanel() {
               <WidgetConfigPanel widget={widget} />
             ) : (
               <div className="p-4">
-                <WidgetDataPanel widget={widget} />
+                <WidgetDataPanel key={widget.id} widget={widget} />
               </div>
             )}
           </div>
