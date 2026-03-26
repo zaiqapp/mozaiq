@@ -42,19 +42,8 @@ const FUNNEL_COLUMNS: ColumnDef[] = [
 ]
 
 const WATERFALL_COLUMNS: ColumnDef[] = [
-  { key: 'name', label: 'Label', type: 'text' },
+  { key: 'label', label: 'Label', type: 'text' },
   { key: 'value', label: 'Value', type: 'number' },
-  {
-    key: 'type',
-    label: 'Type',
-    type: 'select',
-    width: 90,
-    options: [
-      { value: 'positive', label: 'Gain' },
-      { value: 'negative', label: 'Loss' },
-      { value: 'total', label: 'Total' },
-    ],
-  },
 ]
 
 const SCATTER_COLUMNS: ColumnDef[] = [
@@ -72,6 +61,11 @@ const PROGRESS_COLUMNS: ColumnDef[] = [
 const ACTIVITY_COLUMNS: ColumnDef[] = [
   { key: 'label', label: 'Label', type: 'text' },
   { key: 'time', label: 'Time', type: 'text', width: 80 },
+]
+
+const RANKED_LIST_COLUMNS: ColumnDef[] = [
+  { key: 'label', label: 'Label', type: 'text' },
+  { key: 'value', label: 'Value', type: 'number' },
 ]
 
 // ── Scalar field definitions ─────────────────────────────────────────────────
@@ -243,7 +237,7 @@ function renderEditor(
           columns={WATERFALL_COLUMNS}
           rows={draft as Record<string, unknown>[]}
           onChange={rows => setDraft(rows)}
-          newRowTemplate={{ name: '', value: 0, type: 'positive' }}
+          newRowTemplate={{ label: '', value: 0 }}
         />
       )
     case 'multi-line-chart':
@@ -264,10 +258,10 @@ function renderEditor(
     case 'ranked-list':
       return (
         <ArrayRowEditor
-          columns={CHART_COLUMNS}
+          columns={RANKED_LIST_COLUMNS}
           rows={draft as Record<string, unknown>[]}
           onChange={rows => setDraft(rows)}
-          newRowTemplate={{ name: '', value: 0 }}
+          newRowTemplate={{ label: '', value: 0 }}
         />
       )
     case 'treemap':
