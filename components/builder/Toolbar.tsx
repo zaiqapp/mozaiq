@@ -15,7 +15,7 @@ import { GlobalDataSourcePanel } from './GlobalDataSourcePanel'
 const PENDING_SAVE_KEY = 'mozaiq_pending_save'
 
 export function Toolbar() {
-  const { name, id, isDirty, isSaving, setDashboardName, saveDashboard, clearCanvas, dataSources } = useDashboardStore()
+  const { name, id, isDirty, isSaving, setDashboardName, saveDashboard, clearCanvas, dataSources, widgets, insightsDrawerOpen, setInsightsDrawerOpen } = useDashboardStore()
   const [editingName, setEditingName] = useState(false)
   const [dataPanelOpen, setDataPanelOpen] = useState(false)
   const { theme, toggleTheme } = useBuilderTheme()
@@ -139,6 +139,21 @@ export function Toolbar() {
           </button>
           <button onClick={() => clearCanvas()} className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs ${isDark ? 'text-[#4b5563] hover:bg-[rgba(255,255,255,0.05)]' : 'text-gray-500 hover:bg-gray-100'}`}>
             <Trash2 className="h-3.5 w-3.5" /> Clear
+          </button>
+          <button
+            onClick={() => setInsightsDrawerOpen(!insightsDrawerOpen)}
+            disabled={widgets.length === 0}
+            className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs disabled:opacity-40 ${
+              insightsDrawerOpen
+                ? isDark
+                  ? 'border-cyan-500/50 bg-[rgba(34,211,238,0.08)] text-cyan-400'
+                  : 'border-indigo-400 bg-indigo-50 text-indigo-600'
+                : isDark
+                  ? 'border-[rgba(255,255,255,0.1)] text-[#6b7280] hover:bg-[rgba(255,255,255,0.05)]'
+                  : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+            }`}
+          >
+            ✦ Insights
           </button>
           <button onClick={handleSave} disabled={isSaving} className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs disabled:opacity-50 ${isDark ? 'border-[rgba(255,255,255,0.1)] text-[#6b7280] hover:bg-[rgba(255,255,255,0.05)]' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
             {isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
