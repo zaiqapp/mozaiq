@@ -12,18 +12,21 @@ export function LeftSidebar() {
   const isDark = theme === 'dark'
 
   return (
-    <aside className={`flex h-full w-[260px] flex-shrink-0 flex-col ${
-      isDark ? 'bg-[#0f1117]' : 'bg-white border-r border-gray-200'
-    }`}>
+    <aside
+      className={`flex h-full w-[260px] flex-shrink-0 flex-col ${
+        isDark ? 'bg-[rgba(255,255,255,0.07)] backdrop-blur-[12px]' : 'bg-white border-r border-gray-200'
+      }`}
+      style={isDark ? { boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.08), inset -1px -1px 1px rgba(255,255,255,0.04)' } : undefined}
+    >
       <div className={`flex items-center gap-2 p-4 ${
-        isDark ? 'border-b border-[#1f2937]' : 'border-b border-gray-200'
+        isDark ? 'border-b border-white/[0.08]' : 'border-b border-gray-200'
       }`}>
         <div className="h-6 w-6 rounded bg-indigo-600" />
         <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Mozaiq</span>
       </div>
 
       <Tabs defaultValue="components" className="flex flex-1 flex-col overflow-hidden">
-        <TabsList className={`mx-3 mt-2 grid grid-cols-2 ${isDark ? 'bg-[#1f2937]' : 'bg-gray-100'}`}>
+        <TabsList className={`mx-3 mt-2 grid grid-cols-2 ${isDark ? 'bg-[rgba(255,255,255,0.06)]' : 'bg-gray-100'}`}>
           <TabsTrigger value="components" className="text-xs">Components</TabsTrigger>
           <TabsTrigger value="templates" className="text-xs">Templates</TabsTrigger>
         </TabsList>
