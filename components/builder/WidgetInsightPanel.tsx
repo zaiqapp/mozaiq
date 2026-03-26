@@ -27,19 +27,24 @@ export function WidgetInsightPanel({ widget }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ widgetType: widget.type, config: widget.config }),
       })
-      const data = await res.json() as { insight?: string; error?: string }
       if (!res.ok) {
-        setState({ status: 'error', message: data.error ?? 'Generation failed' })
+        let message = 'Generation failed'
+        try {
+          const body = await res.json() as { error?: string }
+          if (body.error) message = body.error
+        } catch { /* non-JSON error body */ }
+        setState({ status: 'error', message })
         return
       }
+      const data = await res.json() as { insight?: string }
       setState({ status: 'done', text: data.insight ?? '' })
     } catch {
       setState({ status: 'error', message: 'Network error — please try again' })
     }
   }
 
-  const labelClass = `text-[9px] uppercase tracking-widest ${isDark ? 'text-[#374151]' : 'text-gray-400'}`
-  const mutedClass = `text-[9px] ${isDark ? 'text-[#374151]' : 'text-gray-400'}`
+  const labelClass = `text-[9px] uppercase tracking-widest ${isDark ? 'text-[#6b7280]' : 'text-gray-400'}`
+  const mutedClass = `text-[9px] ${isDark ? 'text-[#6b7280]' : 'text-gray-400'}`
   const btnClass = `w-full rounded border px-3 py-2 text-xs transition-colors ${
     isDark
       ? 'border-[rgba(34,211,238,0.2)] bg-[rgba(34,211,238,0.08)] text-cyan-400 hover:bg-[rgba(34,211,238,0.12)]'
