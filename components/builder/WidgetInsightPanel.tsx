@@ -2,7 +2,8 @@
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import type { Widget } from '@/types/dashboard'
-import { useDashboardStore } from '@/store/dashboard'
+import { useDataSource } from '@/hooks/useDataSource'
+import { widgetFieldRegistry } from '@/lib/widget-field-registry'
 import { useBuilderTheme } from './BuilderThemeProvider'
 
 interface Props {
@@ -15,23 +16,37 @@ type InsightState =
   | { status: 'done'; text: string }
   | { status: 'error'; message: string }
 
+// Keys in widget.config that hold inline data — must be stripped when a data source is connected
+const DATA_FIELD_KEYS = new Set(
+  Object.values(widgetFieldRegistry).flatMap((fields) => fields.map((f) => f.key))
+)
+
 export function WidgetInsightPanel({ widget }: Props) {
   const [state, setState] = useState<InsightState>({ status: 'idle' })
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
-  const dataSources = useDashboardStore((s) => s.dataSources)
+  const { rows } = useDataSource(widget)
 
   const generate = async () => {
     setState({ status: 'loading' })
-    const ds = widget.dataSourceId ? dataSources.find((d) => d.id === widget.dataSourceId) : undefined
+
+    // When a data source is connected, strip inline override data from config
+    // so the model only sees display settings (title, color, etc.), not stale values
+    const displayConfig = widget.dataSourceId
+      ? Object.fromEntries(Object.entries(widget.config).filter(([k]) => !DATA_FIELD_KEYS.has(k)))
+      : widget.config
+
+    // rows comes from useDataSource — resolves CSV inline data or live Google Sheets fetch
+    const resolvedRows = rows ?? []
+
     try {
       const res = await fetch('/api/ai/insights', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           widgetType: widget.type,
-          config: widget.config,
-          data: ds?.data ?? [],
+          config: displayConfig,
+          data: resolvedRows,
           mapping: widget.dataSourceMapping ?? {},
         }),
       })
@@ -44,8 +59,8 @@ export function WidgetInsightPanel({ widget }: Props) {
         setState({ status: 'error', message })
         return
       }
-      const data = await res.json() as { insight?: string }
-      setState({ status: 'done', text: data.insight ?? '' })
+      const result = await res.json() as { insight?: string }
+      setState({ status: 'done', text: result.insight ?? '' })
     } catch {
       setState({ status: 'error', message: 'Network error — please try again' })
     }

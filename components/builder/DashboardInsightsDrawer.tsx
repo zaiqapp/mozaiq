@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { X, Loader2 } from 'lucide-react'
 import type { Widget } from '@/types/dashboard'
 import { useDashboardStore } from '@/store/dashboard'
+import { widgetFieldRegistry } from '@/lib/widget-field-registry'
 import { useBuilderTheme } from './BuilderThemeProvider'
 
 interface Props {
@@ -16,6 +17,10 @@ type InsightState =
   | { status: 'loading' }
   | { status: 'done'; text: string; widgetCount: number }
   | { status: 'error'; message: string }
+
+const DATA_FIELD_KEYS = new Set(
+  Object.values(widgetFieldRegistry).flatMap((fields) => fields.map((f) => f.key))
+)
 
 export function DashboardInsightsDrawer({ widgets, dashboardName, onClose }: Props) {
   const [state, setState] = useState<InsightState>({ status: 'idle' })
@@ -33,9 +38,13 @@ export function DashboardInsightsDrawer({ widgets, dashboardName, onClose }: Pro
           dashboardName,
           widgets: widgets.map((w) => {
             const ds = w.dataSourceId ? dataSources.find((d) => d.id === w.dataSourceId) : undefined
+            // Strip inline override data from config when an external source is connected
+            const displayConfig = w.dataSourceId
+              ? Object.fromEntries(Object.entries(w.config).filter(([k]) => !DATA_FIELD_KEYS.has(k)))
+              : w.config
             return {
               type: w.type,
-              config: w.config,
+              config: displayConfig,
               data: ds?.data ?? [],
               mapping: w.dataSourceMapping ?? {},
             }
