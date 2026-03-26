@@ -2,6 +2,9 @@ import Link from 'next/link'
 import { auth } from '@clerk/nextjs/server'
 import { AnimatedSection } from '@/components/landing/AnimatedSection'
 import { Nav } from '@/components/landing/Nav'
+import { BentoGrid, type BentoItem } from '@/components/ui/bento-grid'
+import { PricingCard } from '@/components/ui/pricing-card'
+import { GlassEffect } from '@/components/ui/liquid-glass'
 
 // ---- Hero ----
 function Hero() {
@@ -48,17 +51,25 @@ function Hero() {
           >
             Start Building Free
           </Link>
-          <a
-            href="https://github.com/zaiqapp/mozaiq"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-lg border border-[rgba(255,255,255,0.1)] px-6 py-3 text-sm font-semibold text-[#6b7280] transition hover:border-[rgba(255,255,255,0.2)] hover:text-white"
-          >
-            View on GitHub →
-          </a>
+          <GlassEffect>
+            <a
+              href="https://github.com/zaiqapp/mozaiq"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-semibold text-[#6b7280] transition hover:text-white"
+            >
+              View on GitHub →
+            </a>
+          </GlassEffect>
         </div>
 
-        <div className="mx-auto mt-12 max-w-2xl rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] p-8 text-center">
+        <div
+          className="mx-auto mt-12 max-w-2xl rounded-xl border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] p-8 text-center backdrop-blur-[8px]"
+          style={{
+            boxShadow:
+              'inset 2px 2px 1px rgba(255,255,255,0.08), inset -1px -1px 1px rgba(255,255,255,0.04)',
+          }}
+        >
           <p className="text-sm text-[#374151]">[ Builder screenshot / demo GIF ]</p>
         </div>
       </div>
@@ -67,13 +78,43 @@ function Hero() {
 }
 
 // ---- Features (Bento Grid) ----
-const FEATURES = [
-  { title: 'Drag & Drop Builder', desc: '11 widget types. Resize, reorder, configure inline.', featured: true },
-  { title: 'AI Generator', desc: 'Describe your dashboard, get a full layout in seconds.', featured: false },
-  { title: 'Share Anywhere', desc: 'One link. Embeddable via iframe. No login required.', featured: false },
-  { title: 'Starter Templates', desc: 'Analytics, Inventory, Purchasing — ready in one click.', featured: false },
-  { title: 'Open Source', desc: 'AGPL-3.0. Self-host forever. One-click deploy to Vercel.', featured: false },
-  { title: 'Data Ready', desc: 'Google Sheets, CSV, REST API connectors coming soon.', featured: false, wide: true },
+const FEATURES: BentoItem[] = [
+  {
+    title: 'Drag & Drop Builder',
+    description: '11 widget types. Resize, reorder, configure inline.',
+    colSpan: 2,
+    hasPersistentHover: true,
+    featured: true,
+    tags: ['resize', 'reorder', 'inline config'],
+  },
+  {
+    title: 'AI Generator',
+    description: 'Describe your dashboard, get a full layout in seconds.',
+    colSpan: 1,
+    status: 'Included',
+  },
+  {
+    title: 'Share Anywhere',
+    description: 'One link. Embeddable via iframe. No login required.',
+    colSpan: 1,
+  },
+  {
+    title: 'Starter Templates',
+    description: 'Analytics, Inventory, Purchasing — ready in one click.',
+    colSpan: 1,
+  },
+  {
+    title: 'Open Source',
+    description: 'AGPL-3.0. Self-host forever. One-click deploy to Vercel.',
+    colSpan: 1,
+  },
+  {
+    title: 'Data Ready',
+    description: 'Google Sheets, CSV, REST API connectors coming soon.',
+    colSpan: 3,
+    status: 'Coming soon',
+    tags: ['Google Sheets', 'CSV', 'REST API'],
+  },
 ]
 
 function Features() {
@@ -89,29 +130,9 @@ function Features() {
           </h2>
           <p className="mt-3 text-[#9ca3af]">No backend required. No data connections needed to start.</p>
         </AnimatedSection>
-
-        <div className="grid grid-cols-3 gap-4">
-          {FEATURES.map((f, i) => (
-            <AnimatedSection
-              key={f.title}
-              delay={80 + i * 80}
-              className={f.wide ? 'col-span-3' : f.featured ? 'col-span-2' : 'col-span-1'}
-            >
-              <div
-                className={`h-full rounded-xl border p-5 ${
-                  f.featured
-                    ? 'border-[rgba(6,182,212,0.14)] bg-[rgba(6,182,212,0.04)]'
-                    : 'border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)]'
-                }`}
-              >
-                <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-cyan-400">
-                  ✦ {f.title}
-                </span>
-                <p className="text-sm text-[#9ca3af]">{f.desc}</p>
-              </div>
-            </AnimatedSection>
-          ))}
-        </div>
+        <AnimatedSection delay={80}>
+          <BentoGrid items={FEATURES} />
+        </AnimatedSection>
       </div>
     </section>
   )
@@ -161,38 +182,6 @@ function TemplatesPreview() {
 }
 
 // ---- Pricing ----
-const PLANS = [
-  {
-    name: 'Free',
-    price: '$0',
-    features: ['3 dashboards', 'Watermark on share', 'Community support'],
-    cta: 'Start for free',
-    ctaHref: '/builder' as string | null,
-    ctaDisabled: false,
-    highlight: false,
-  },
-  {
-    name: 'Pro',
-    price: '$15',
-    per: '/mo',
-    features: ['Unlimited dashboards', 'No watermark', '✨ AI generator', 'Google Sheets + CSV', 'Priority support'],
-    cta: 'Coming soon',
-    ctaHref: null as string | null,
-    ctaDisabled: true,
-    highlight: true,
-  },
-  {
-    name: 'White-label',
-    price: '$199',
-    per: '/mo',
-    features: ['Everything in Pro', 'Remove branding', 'Custom domain', 'Team access'],
-    cta: 'Coming soon',
-    ctaHref: null as string | null,
-    ctaDisabled: true,
-    highlight: false,
-  },
-]
-
 function Pricing() {
   return (
     <section className="bg-[#080810] py-20">
@@ -208,48 +197,92 @@ function Pricing() {
         </AnimatedSection>
 
         <div className="grid grid-cols-3 gap-6">
-          {PLANS.map((plan, i) => (
-            <AnimatedSection key={plan.name} delay={80 + i * 80}>
-              <div
-                className={`relative h-full rounded-xl border p-6 ${
-                  plan.highlight
-                    ? 'border-cyan-500/30 bg-[rgba(6,182,212,0.05)]'
-                    : 'border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)]'
-                }`}
-              >
-                {plan.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gradient-to-r from-cyan-400 to-indigo-600 px-3 py-1 text-xs font-semibold text-white">
-                    Most popular
-                  </div>
-                )}
-                <h3 className="font-semibold text-[#f9fafb]">{plan.name}</h3>
-                <div className="mt-2 flex items-baseline gap-1">
-                  <span className="text-3xl font-extrabold text-[#f9fafb]">{plan.price}</span>
-                  {plan.per && <span className="text-sm text-[#4b5563]">{plan.per}</span>}
-                </div>
-                <ul className="mt-4 space-y-2">
-                  {plan.features.map((f) => (
-                    <li key={f} className="text-sm text-[#9ca3af]">{f}</li>
-                  ))}
-                </ul>
-                {plan.ctaDisabled ? (
-                  <button
-                    disabled
-                    className="mt-6 w-full rounded-lg border border-[rgba(255,255,255,0.1)] py-2 text-sm text-[#6b7280] cursor-not-allowed"
-                  >
-                    {plan.cta}
-                  </button>
-                ) : (
-                  <Link
-                    href={plan.ctaHref!}
-                    className="mt-6 block w-full rounded-lg bg-gradient-to-r from-cyan-400 to-indigo-600 py-2 text-center text-sm font-semibold text-white transition hover:opacity-90"
-                  >
-                    {plan.cta}
-                  </Link>
-                )}
-              </div>
-            </AnimatedSection>
-          ))}
+          {/* Free */}
+          <AnimatedSection delay={80}>
+            <PricingCard.Card>
+              <PricingCard.Header>
+                <PricingCard.Plan>
+                  <PricingCard.PlanName>Free</PricingCard.PlanName>
+                </PricingCard.Plan>
+                <PricingCard.Price>
+                  <PricingCard.MainPrice>$0</PricingCard.MainPrice>
+                </PricingCard.Price>
+              </PricingCard.Header>
+              <PricingCard.Body>
+                <PricingCard.List>
+                  <PricingCard.ListItem>3 dashboards</PricingCard.ListItem>
+                  <PricingCard.ListItem>Watermark on share</PricingCard.ListItem>
+                  <PricingCard.ListItem>Community support</PricingCard.ListItem>
+                </PricingCard.List>
+                <Link
+                  href="/builder"
+                  className="mt-6 block w-full rounded-lg bg-gradient-to-r from-cyan-400 to-indigo-600 py-2 text-center text-sm font-semibold text-white transition hover:opacity-90"
+                >
+                  Start for free
+                </Link>
+              </PricingCard.Body>
+            </PricingCard.Card>
+          </AnimatedSection>
+
+          {/* Pro */}
+          <AnimatedSection delay={160}>
+            <PricingCard.Card className="border-cyan-500/25">
+              <PricingCard.Badge>Popular</PricingCard.Badge>
+              <PricingCard.Header>
+                <PricingCard.Plan>
+                  <PricingCard.PlanName>Pro</PricingCard.PlanName>
+                </PricingCard.Plan>
+                <PricingCard.Price>
+                  <PricingCard.MainPrice>$15</PricingCard.MainPrice>
+                  <PricingCard.Period>/mo</PricingCard.Period>
+                </PricingCard.Price>
+              </PricingCard.Header>
+              <PricingCard.Body>
+                <PricingCard.List>
+                  <PricingCard.ListItem>Unlimited dashboards</PricingCard.ListItem>
+                  <PricingCard.ListItem>No watermark</PricingCard.ListItem>
+                  <PricingCard.ListItem>✨ AI generator</PricingCard.ListItem>
+                  <PricingCard.ListItem>Google Sheets + CSV</PricingCard.ListItem>
+                  <PricingCard.ListItem>Priority support</PricingCard.ListItem>
+                </PricingCard.List>
+                <button
+                  disabled
+                  className="mt-6 w-full rounded-lg bg-gradient-to-r from-cyan-400 to-indigo-600 py-2 text-sm font-semibold text-white opacity-60 cursor-not-allowed"
+                >
+                  Coming soon
+                </button>
+              </PricingCard.Body>
+            </PricingCard.Card>
+          </AnimatedSection>
+
+          {/* White-label */}
+          <AnimatedSection delay={240}>
+            <PricingCard.Card>
+              <PricingCard.Header>
+                <PricingCard.Plan>
+                  <PricingCard.PlanName>White-label</PricingCard.PlanName>
+                </PricingCard.Plan>
+                <PricingCard.Price>
+                  <PricingCard.MainPrice>$199</PricingCard.MainPrice>
+                  <PricingCard.Period>/mo</PricingCard.Period>
+                </PricingCard.Price>
+              </PricingCard.Header>
+              <PricingCard.Body>
+                <PricingCard.List>
+                  <PricingCard.ListItem>Everything in Pro</PricingCard.ListItem>
+                  <PricingCard.ListItem>Remove branding</PricingCard.ListItem>
+                  <PricingCard.ListItem>Custom domain</PricingCard.ListItem>
+                  <PricingCard.ListItem>Team access</PricingCard.ListItem>
+                </PricingCard.List>
+                <button
+                  disabled
+                  className="mt-6 w-full rounded-lg border border-[rgba(255,255,255,0.1)] py-2 text-sm text-[#6b7280] cursor-not-allowed"
+                >
+                  Coming soon
+                </button>
+              </PricingCard.Body>
+            </PricingCard.Card>
+          </AnimatedSection>
         </div>
       </div>
     </section>
@@ -259,7 +292,7 @@ function Pricing() {
 // ---- Footer ----
 function Footer() {
   return (
-    <footer className="border-t border-[rgba(255,255,255,0.05)] bg-[#080810] px-6 py-8">
+    <footer className="border-t border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] px-6 py-8 backdrop-blur-[8px]">
       <div className="mx-auto flex max-w-5xl items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-4 w-4 rounded bg-gradient-to-br from-cyan-400 to-indigo-600" />
