@@ -71,11 +71,14 @@ export function Toolbar() {
 
   return (
     <>
-      <header className={`flex h-12 items-center justify-between px-4 ${
-        isDark
-          ? 'border-b border-[rgba(255,255,255,0.06)] bg-[#0a0a0f]'
-          : 'border-b border-gray-200 bg-white'
-      }`}>
+      <header
+        className={`flex h-12 items-center justify-between px-4 ${
+          isDark
+            ? 'border-b border-[rgba(255,255,255,0.13)] bg-[rgba(255,255,255,0.07)] backdrop-blur-[12px]'
+            : 'border-b border-gray-200 bg-white'
+        }`}
+        style={isDark ? { boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.08), inset -1px -1px 1px rgba(255,255,255,0.04)' } : undefined}
+      >
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80">
             <div className="h-6 w-6 rounded bg-gradient-to-br from-cyan-400 to-indigo-600" />
