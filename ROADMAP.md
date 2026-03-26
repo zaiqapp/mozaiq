@@ -10,7 +10,7 @@
 - Embeddable via iframe
 - One-click Deploy to Vercel
 
-## V2 — Auth + Real Data Sources
+## V2 — Auth + Real Data Sources ✅
 - NextAuth.js (GitHub + Google)
 - User accounts + /my-dashboards
 - Google Sheets connector
