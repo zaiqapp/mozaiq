@@ -18,6 +18,7 @@ export function PaperShader() {
       noise={0.2}
       softness={0.7}
       shape="blob"
+      speed={0}
     />
   )
 }

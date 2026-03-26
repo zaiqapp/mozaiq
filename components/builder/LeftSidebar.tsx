@@ -14,7 +14,7 @@ export function LeftSidebar() {
   return (
     <aside
       className={`flex h-full w-[260px] flex-shrink-0 flex-col ${
-        isDark ? 'bg-[rgba(255,255,255,0.07)] backdrop-blur-[12px]' : 'bg-white border-r border-gray-200'
+        isDark ? 'bg-[rgba(255,255,255,0.07)] backdrop-blur-[12px] border-r border-[rgba(255,255,255,0.13)]' : 'bg-white border-r border-gray-200'
       }`}
       style={isDark ? { boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.08), inset -1px -1px 1px rgba(255,255,255,0.04)' } : undefined}
     >

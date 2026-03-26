@@ -292,7 +292,7 @@ function Pricing() {
 // ---- Footer ----
 function Footer() {
   return (
-    <footer className="border-t border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] px-6 py-8 backdrop-blur-[8px]">
+    <footer className="border-t border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] px-6 py-8">
       <div className="mx-auto flex max-w-5xl items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-4 w-4 rounded bg-gradient-to-br from-cyan-400 to-indigo-600" />

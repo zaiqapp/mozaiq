@@ -4,6 +4,12 @@ import { Nav } from '@/components/landing/Nav'
 // Mock Clerk components
 jest.mock('@clerk/nextjs', () => ({
   SignInButton: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  useClerk: () => ({ signOut: jest.fn() }),
+  useUser: () => ({ user: null }),
+}))
+
+// Mock custom UserMenu to avoid Clerk hook complexity in Nav tests
+jest.mock('@/components/nav/UserMenu', () => ({
   UserMenu: () => <div data-testid="user-menu" />,
 }))
 

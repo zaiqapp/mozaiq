@@ -1,7 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { SignInButton, UserMenu } from '@clerk/nextjs'
+import { SignInButton } from '@clerk/nextjs'
+import { UserMenu } from '@/components/nav/UserMenu'
 
 interface NavProps {
   userId: string | null

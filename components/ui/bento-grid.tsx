@@ -34,7 +34,7 @@ export function BentoGrid({ items }: BentoGridProps) {
 
         return (
           <div
-            key={i}
+            key={item.title}
             data-testid={`bento-item-${i}`}
             className={`h-full rounded-xl border p-5 transition-all duration-200 backdrop-blur-[8px]
               [box-shadow:inset_2px_2px_1px_rgba(255,255,255,0.08),inset_-1px_-1px_1px_rgba(255,255,255,0.04)]

@@ -43,7 +43,7 @@ export function GlassEffect({ children, className = '' }: GlassEffectProps) {
         </defs>
       </svg>
       <div
-        className="rounded-lg border border-white/10 bg-white/[0.04] px-6 py-3 backdrop-blur-[8px]"
+        className="rounded-lg border border-[rgba(255,255,255,0.09)] bg-white/[0.04] px-6 py-3 backdrop-blur-[8px]"
         style={{
           filter: `url(#${filterId})`,
           boxShadow:
