@@ -72,7 +72,7 @@ export function Toolbar() {
   return (
     <>
       <header
-        className={`flex h-12 items-center justify-between px-4 ${
+        className={`relative z-10 flex h-12 items-center justify-between px-4 ${
           isDark
             ? 'border-b border-[rgba(255,255,255,0.13)] bg-[rgba(255,255,255,0.07)] backdrop-blur-[12px]'
             : 'border-b border-gray-200 bg-white'
