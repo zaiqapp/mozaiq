@@ -53,7 +53,7 @@ export function ArrayRowEditor({ columns, rows, onChange, newRowTemplate }: Prop
       {/* Rows */}
       <div className="flex flex-col gap-1">
         {rows.map((row, rowIdx) => (
-          <div key={rowIdx} className="grid items-center gap-1" style={{ gridTemplateColumns: gridCols }}>
+          <div key={(row._id as string) ?? String(rowIdx)} className="grid items-center gap-1" style={{ gridTemplateColumns: gridCols }}>
             {columns.map(col => (
               <div key={col.key}>
                 {col.type === 'color' ? (
@@ -64,6 +64,11 @@ export function ArrayRowEditor({ columns, rows, onChange, newRowTemplate }: Prop
                     }`}
                     value={typeof row[col.key] === 'string' ? (row[col.key] as string) : '#6366f1'}
                     onChange={e => handleCellChange(rowIdx, col.key, e.target.value)}
+                    onFocus={() => {
+                      if (typeof row[col.key] !== 'string') {
+                        handleCellChange(rowIdx, col.key, '#6366f1')
+                      }
+                    }}
                   />
                 ) : (
                   <input
@@ -94,7 +99,7 @@ export function ArrayRowEditor({ columns, rows, onChange, newRowTemplate }: Prop
       </div>
 
       <button
-        onClick={() => onChange([...rows, { ...newRowTemplate }])}
+        onClick={() => onChange([...rows, { _id: crypto.randomUUID(), ...newRowTemplate }])}
         className={addClass}
       >
         + Add row
