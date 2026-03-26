@@ -1,10 +1,10 @@
 'use client'
 
-import { GrainGradient } from '@paper-design/shaders-react'
+import { MeshGradient } from '@paper-design/shaders-react'
 
 export function PaperShader() {
   return (
-    <GrainGradient
+    <MeshGradient
       style={{
         position: 'fixed',
         inset: 0,
@@ -13,12 +13,8 @@ export function PaperShader() {
         width: '100%',
         height: '100%',
       }}
-      colorBack="#080810"
-      colors={['hsl(190,100%,45%)', 'hsl(245,80%,60%)', 'hsl(220,30%,15%)']}
-      noise={0.2}
-      softness={0.7}
-      shape="blob"
-      speed={0}
+      colors={['#080810', '#061820', '#0d1520', '#080818']}
+      speed={0.4}
     />
   )
 }

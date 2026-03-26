@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { auth } from '@clerk/nextjs/server'
 import { AnimatedSection } from '@/components/landing/AnimatedSection'
 import { Nav } from '@/components/landing/Nav'
-import { BentoGrid, type BentoItem } from '@/components/ui/bento-grid'
-import { PricingCard } from '@/components/ui/pricing-card'
+import BentoGrid from '@/components/ui/bento-grid'
+import PricingCard from '@/components/ui/pricing-card'
 import { GlassEffect } from '@/components/ui/liquid-glass'
 
 // ---- Hero ----
@@ -78,45 +78,6 @@ function Hero() {
 }
 
 // ---- Features (Bento Grid) ----
-const FEATURES: BentoItem[] = [
-  {
-    title: 'Drag & Drop Builder',
-    description: '11 widget types. Resize, reorder, configure inline.',
-    colSpan: 2,
-    hasPersistentHover: true,
-    featured: true,
-    tags: ['resize', 'reorder', 'inline config'],
-  },
-  {
-    title: 'AI Generator',
-    description: 'Describe your dashboard, get a full layout in seconds.',
-    colSpan: 1,
-    status: 'Included',
-  },
-  {
-    title: 'Share Anywhere',
-    description: 'One link. Embeddable via iframe. No login required.',
-    colSpan: 1,
-  },
-  {
-    title: 'Starter Templates',
-    description: 'Analytics, Inventory, Purchasing — ready in one click.',
-    colSpan: 1,
-  },
-  {
-    title: 'Open Source',
-    description: 'AGPL-3.0. Self-host forever. One-click deploy to Vercel.',
-    colSpan: 1,
-  },
-  {
-    title: 'Data Ready',
-    description: 'Google Sheets, CSV, REST API connectors coming soon.',
-    colSpan: 3,
-    status: 'Coming soon',
-    tags: ['Google Sheets', 'CSV', 'REST API'],
-  },
-]
-
 function Features() {
   return (
     <section className="py-20">
@@ -131,7 +92,7 @@ function Features() {
           <p className="mt-3 text-[#9ca3af]">No backend required. No data connections needed to start.</p>
         </AnimatedSection>
         <AnimatedSection delay={80}>
-          <BentoGrid items={FEATURES} />
+          <BentoGrid />
         </AnimatedSection>
       </div>
     </section>
@@ -196,94 +157,9 @@ function Pricing() {
           <p className="mt-3 text-[#9ca3af]">Open source — self-host for free forever</p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-3 gap-6">
-          {/* Free */}
-          <AnimatedSection delay={80}>
-            <PricingCard.Card>
-              <PricingCard.Header>
-                <PricingCard.Plan>
-                  <PricingCard.PlanName>Free</PricingCard.PlanName>
-                </PricingCard.Plan>
-                <PricingCard.Price>
-                  <PricingCard.MainPrice>$0</PricingCard.MainPrice>
-                </PricingCard.Price>
-              </PricingCard.Header>
-              <PricingCard.Body>
-                <PricingCard.List>
-                  <PricingCard.ListItem>3 dashboards</PricingCard.ListItem>
-                  <PricingCard.ListItem>Watermark on share</PricingCard.ListItem>
-                  <PricingCard.ListItem>Community support</PricingCard.ListItem>
-                </PricingCard.List>
-                <Link
-                  href="/builder"
-                  className="mt-6 block w-full rounded-lg bg-gradient-to-r from-cyan-400 to-indigo-600 py-2 text-center text-sm font-semibold text-white transition hover:opacity-90"
-                >
-                  Start for free
-                </Link>
-              </PricingCard.Body>
-            </PricingCard.Card>
-          </AnimatedSection>
-
-          {/* Pro */}
-          <AnimatedSection delay={160}>
-            <PricingCard.Card className="border-cyan-500/25">
-              <PricingCard.Badge>Popular</PricingCard.Badge>
-              <PricingCard.Header>
-                <PricingCard.Plan>
-                  <PricingCard.PlanName>Pro</PricingCard.PlanName>
-                </PricingCard.Plan>
-                <PricingCard.Price>
-                  <PricingCard.MainPrice>$15</PricingCard.MainPrice>
-                  <PricingCard.Period>/mo</PricingCard.Period>
-                </PricingCard.Price>
-              </PricingCard.Header>
-              <PricingCard.Body>
-                <PricingCard.List>
-                  <PricingCard.ListItem>Unlimited dashboards</PricingCard.ListItem>
-                  <PricingCard.ListItem>No watermark</PricingCard.ListItem>
-                  <PricingCard.ListItem>✨ AI generator</PricingCard.ListItem>
-                  <PricingCard.ListItem>Google Sheets + CSV</PricingCard.ListItem>
-                  <PricingCard.ListItem>Priority support</PricingCard.ListItem>
-                </PricingCard.List>
-                <button
-                  disabled
-                  className="mt-6 w-full rounded-lg bg-gradient-to-r from-cyan-400 to-indigo-600 py-2 text-sm font-semibold text-white opacity-60 cursor-not-allowed"
-                >
-                  Coming soon
-                </button>
-              </PricingCard.Body>
-            </PricingCard.Card>
-          </AnimatedSection>
-
-          {/* White-label */}
-          <AnimatedSection delay={240}>
-            <PricingCard.Card>
-              <PricingCard.Header>
-                <PricingCard.Plan>
-                  <PricingCard.PlanName>White-label</PricingCard.PlanName>
-                </PricingCard.Plan>
-                <PricingCard.Price>
-                  <PricingCard.MainPrice>$199</PricingCard.MainPrice>
-                  <PricingCard.Period>/mo</PricingCard.Period>
-                </PricingCard.Price>
-              </PricingCard.Header>
-              <PricingCard.Body>
-                <PricingCard.List>
-                  <PricingCard.ListItem>Everything in Pro</PricingCard.ListItem>
-                  <PricingCard.ListItem>Remove branding</PricingCard.ListItem>
-                  <PricingCard.ListItem>Custom domain</PricingCard.ListItem>
-                  <PricingCard.ListItem>Team access</PricingCard.ListItem>
-                </PricingCard.List>
-                <button
-                  disabled
-                  className="mt-6 w-full rounded-lg border border-[rgba(255,255,255,0.1)] py-2 text-sm text-[#6b7280] cursor-not-allowed"
-                >
-                  Coming soon
-                </button>
-              </PricingCard.Body>
-            </PricingCard.Card>
-          </AnimatedSection>
-        </div>
+        <AnimatedSection delay={80}>
+          <PricingCard />
+        </AnimatedSection>
       </div>
     </section>
   )
