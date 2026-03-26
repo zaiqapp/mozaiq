@@ -118,6 +118,23 @@ export const GlassButton: React.FC<{ children: React.ReactNode; href?: string }>
   </GlassEffect>
 );
 
+// Card / Panel Component — built on GlassEffect, adapted for card/container use
+export const GlassCard: React.FC<{
+  children: React.ReactNode
+  className?: string
+  style?: React.CSSProperties
+  onClick?: () => void
+}> = ({ children, className = '', style = {}, onClick }) => (
+  <GlassEffect
+    className={`flex-col cursor-default text-white ${className}`}
+    style={style}
+  >
+    <div onClick={onClick} className="flex flex-col h-full w-full">
+      {children}
+    </div>
+  </GlassEffect>
+)
+
 // SVG Filter Component — render once in the DOM (e.g. in layout.tsx)
 export const GlassFilter: React.FC = () => (
   <svg style={{ display: "none" }} aria-hidden="true">

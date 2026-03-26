@@ -10,6 +10,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import NumberFlow from "@number-flow/react";
 import { AnimatePresence, motion, LayoutGroup } from "motion/react";
 import { useState } from "react";
+import { GlassCard } from "@/components/ui/liquid-glass";
 
 const plans = [
   {
@@ -69,7 +70,7 @@ export default function PricingCard() {
 
   return (
     <LayoutGroup>
-      <div className="w-full max-w-[450px] flex flex-col gap-6 p-5 px-4 sm:p-6 rounded-2xl border border-white/10 bg-zinc-900/80 shadow-sm transition-colors duration-300 not-prose mx-auto">
+      <GlassCard className="w-full max-w-[450px] flex flex-col gap-6 p-5 px-4 sm:p-6 rounded-2xl mx-auto not-prose">
         <div className="flex flex-col gap-4 mb-2">
           <h1 className="text-2xl font-semibold text-white tracking-tight">
             Select a Plan
@@ -276,7 +277,7 @@ export default function PricingCard() {
             );
           })}
         </div>
-      </div>
+      </GlassCard>
     </LayoutGroup>
   );
 }

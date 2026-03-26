@@ -4,6 +4,7 @@ import { AnimatedSection } from '@/components/landing/AnimatedSection'
 import { Nav } from '@/components/landing/Nav'
 import BentoGrid from '@/components/ui/bento-grid'
 import PricingCard from '@/components/ui/pricing-card'
+import { GlassCard, GlassButton } from '@/components/ui/liquid-glass'
 
 // ---- Hero ----
 function Hero() {
@@ -50,26 +51,16 @@ function Hero() {
           >
             Start Building Free
           </Link>
-          <a
-            href="https://github.com/zaiqapp/mozaiq"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-lg border border-[rgba(255,255,255,0.10)] bg-[rgba(255,255,255,0.04)] px-6 py-3 text-sm font-semibold text-[#9ca3af] backdrop-blur-[8px] transition hover:border-white/20 hover:text-white"
-            style={{ boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' }}
-          >
-            View on GitHub →
-          </a>
+          <GlassButton href="https://github.com/zaiqapp/mozaiq">
+            <span className="text-sm font-semibold text-white/70 transition hover:text-white">
+              View on GitHub →
+            </span>
+          </GlassButton>
         </div>
 
-        <div
-          className="mx-auto mt-12 max-w-2xl rounded-xl border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] p-8 text-center backdrop-blur-[8px]"
-          style={{
-            boxShadow:
-              'inset 2px 2px 1px rgba(255,255,255,0.08), inset -1px -1px 1px rgba(255,255,255,0.04)',
-          }}
-        >
+        <GlassCard className="mx-auto mt-12 max-w-2xl rounded-xl p-8 text-center">
           <p className="text-sm text-[#374151]">[ Builder screenshot / demo GIF ]</p>
-        </div>
+        </GlassCard>
       </div>
     </section>
   )
@@ -121,16 +112,11 @@ function TemplatesPreview() {
         <div className="grid grid-cols-3 gap-4">
           {TEMPLATES.map((t, i) => (
             <AnimatedSection key={t.name} delay={80 + i * 80}>
-              <Link
-                href="/builder"
-                className={`flex flex-col gap-2 rounded-xl border p-6 transition hover:border-cyan-500/40 ${
-                  t.highlight
-                    ? 'border-cyan-500/20 bg-[rgba(6,182,212,0.04)]'
-                    : 'border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)]'
-                }`}
-              >
-                <h3 className="font-semibold text-[#f9fafb]">{t.name}</h3>
-                <p className="text-sm text-[#9ca3af]">{t.desc}</p>
+              <Link href="/builder">
+                <GlassCard className="flex flex-col gap-2 rounded-xl p-6 transition hover:scale-[1.02]">
+                  <h3 className="font-semibold text-[#f9fafb]">{t.name}</h3>
+                  <p className="text-sm text-[#9ca3af]">{t.desc}</p>
+                </GlassCard>
               </Link>
             </AnimatedSection>
           ))}
