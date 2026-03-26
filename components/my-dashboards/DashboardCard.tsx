@@ -125,7 +125,13 @@ export function DashboardCard({ dashboard }: { dashboard: Dashboard }) {
   }
 
   return (
-    <li className="flex items-center gap-3.5 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#0f0f1a] px-4 py-3.5">
+    <li
+      className="flex items-center gap-3.5 rounded-xl border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] px-4 py-3.5 backdrop-blur-[8px] transition-all duration-200 hover:-translate-y-0.5 hover:border-[rgba(255,255,255,0.18)]"
+      style={{
+        boxShadow:
+          'inset 2px 2px 1px rgba(255,255,255,0.08), inset -1px -1px 1px rgba(255,255,255,0.04)',
+      }}
+    >
       <MiniPreview types={dashboard.widgetTypes} />
       <div className="min-w-0 flex-1">
         {renaming ? (
@@ -165,7 +171,7 @@ export function DashboardCard({ dashboard }: { dashboard: Dashboard }) {
             ⋯
           </button>
           {menuOpen && (
-            <div className="absolute right-0 top-full z-10 mt-1 w-36 overflow-hidden rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#1a1a2e] shadow-xl">
+            <div className="absolute right-0 top-full z-10 mt-1 w-36 overflow-hidden rounded-lg border border-[rgba(255,255,255,0.18)] bg-[rgba(255,255,255,0.11)] shadow-xl backdrop-blur-[12px]">
               <button
                 onClick={handleDuplicate}
                 className="w-full px-3 py-2 text-left text-xs text-[#d1d5db] hover:bg-[rgba(255,255,255,0.06)]"
