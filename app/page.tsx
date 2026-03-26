@@ -9,7 +9,7 @@ import { GlassEffect } from '@/components/ui/liquid-glass'
 // ---- Hero ----
 function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[#080810] py-28 text-center">
+    <section className="relative overflow-hidden py-28 text-center">
       {/* Dot grid */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -119,7 +119,7 @@ const FEATURES: BentoItem[] = [
 
 function Features() {
   return (
-    <section className="bg-[#080810] py-20">
+    <section className="py-20">
       <div className="mx-auto max-w-5xl px-6">
         <AnimatedSection delay={0} className="mb-12 text-center">
           <h2
@@ -147,7 +147,7 @@ const TEMPLATES = [
 
 function TemplatesPreview() {
   return (
-    <section className="bg-[#080810] py-20">
+    <section className="py-20">
       <div className="mx-auto max-w-5xl px-6">
         <AnimatedSection delay={0} className="mb-10 text-center">
           <h2
@@ -184,7 +184,7 @@ function TemplatesPreview() {
 // ---- Pricing ----
 function Pricing() {
   return (
-    <section className="bg-[#080810] py-20">
+    <section className="py-20">
       <div className="mx-auto max-w-4xl px-6">
         <AnimatedSection delay={0} className="mb-12 text-center">
           <h2
@@ -312,7 +312,7 @@ function Footer() {
 export default async function LandingPage() {
   const { userId } = await auth()
   return (
-    <div className="min-h-screen bg-[#080810]">
+    <div className="min-h-screen">
       <Nav userId={userId} />
       <Hero />
       <Features />
