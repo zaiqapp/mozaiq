@@ -12,8 +12,8 @@ function m(pairs: Record<string, string>): Record<string, AxisMapping> {
 }
 
 describe('applyMapping — number type', () => {
-  it('extracts number from first row', () => {
-    expect(applyMapping('value', 'number', rows, m({ value: 'revenue' }))).toBe(120)
+  it('sums all row values', () => {
+    expect(applyMapping('value', 'number', rows, m({ value: 'revenue' }))).toBe(320)
   })
 
   it('returns null when column not in mapping', () => {

@@ -28,15 +28,15 @@ export function validateGeneratedWidgets(
     if (!mappingRaw || typeof mappingRaw !== 'object') continue
 
     const mapping: Record<string, AxisMapping> = {}
-    let valid = true
     for (const [fieldKey, val] of Object.entries(mappingRaw)) {
       const col = typeof val === 'object' && val !== null
         ? (val as Record<string, unknown>)['column'] as string | undefined
         : typeof val === 'string' ? val : undefined
-      if (!col || !colSet.has(col)) { valid = false; break }
-      mapping[fieldKey] = { column: col }
+      // Skip fields with invalid/unknown columns rather than dropping the whole widget
+      if (!col || !colSet.has(col.trim())) continue
+      mapping[fieldKey] = { column: col.trim() }
     }
-    if (!valid || Object.keys(mapping).length === 0) continue
+    if (Object.keys(mapping).length === 0) continue
 
     result.push({
       type: item['type'] as WidgetType,
