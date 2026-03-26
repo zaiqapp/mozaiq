@@ -11,14 +11,14 @@ const ALL_TYPES: WidgetType[] = [
 describe('widgetConfigSchema', () => {
   it('has a non-empty entry for every widget type', () => {
     for (const type of ALL_TYPES) {
-      expect(widgetConfigSchema[type], `missing schema for "${type}"`).toBeDefined()
-      expect(widgetConfigSchema[type].length, `empty schema for "${type}"`).toBeGreaterThan(0)
+      expect(widgetConfigSchema[type]).toBeDefined()
+      expect(widgetConfigSchema[type].length).toBeGreaterThan(0)
     }
   })
 
   it('every schema has title as its first field', () => {
     for (const type of ALL_TYPES) {
-      expect(widgetConfigSchema[type][0]?.key, `"${type}" must start with title`).toBe('title')
+      expect(widgetConfigSchema[type][0]?.key).toBe('title')
     }
   })
 })
