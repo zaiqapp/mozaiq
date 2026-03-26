@@ -4,7 +4,6 @@ import { AnimatedSection } from '@/components/landing/AnimatedSection'
 import { Nav } from '@/components/landing/Nav'
 import BentoGrid from '@/components/ui/bento-grid'
 import PricingCard from '@/components/ui/pricing-card'
-import { GlassEffect } from '@/components/ui/liquid-glass'
 
 // ---- Hero ----
 function Hero() {
@@ -51,16 +50,15 @@ function Hero() {
           >
             Start Building Free
           </Link>
-          <GlassEffect>
-            <a
-              href="https://github.com/zaiqapp/mozaiq"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-semibold text-[#6b7280] transition hover:text-white"
-            >
-              View on GitHub →
-            </a>
-          </GlassEffect>
+          <a
+            href="https://github.com/zaiqapp/mozaiq"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg border border-[rgba(255,255,255,0.10)] bg-[rgba(255,255,255,0.04)] px-6 py-3 text-sm font-semibold text-[#9ca3af] backdrop-blur-[8px] transition hover:border-white/20 hover:text-white"
+            style={{ boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' }}
+          >
+            View on GitHub →
+          </a>
         </div>
 
         <div
@@ -188,7 +186,7 @@ function Footer() {
 export default async function LandingPage() {
   const { userId } = await auth()
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-20">
       <Nav userId={userId} />
       <Hero />
       <Features />

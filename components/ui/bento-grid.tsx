@@ -205,7 +205,8 @@ export default function BentoGrid() {
 
       {/* 1. Drag & Drop — Tall (2×2) */}
       <motion.div
-        className="md:col-span-2 md:row-span-2 bg-zinc-900/80 border border-zinc-800 rounded-xl p-8 flex flex-col hover:border-zinc-700 transition-colors cursor-pointer overflow-hidden"
+        className="md:col-span-2 md:row-span-2 rounded-xl p-8 flex flex-col cursor-pointer overflow-hidden border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] backdrop-blur-[8px] transition-colors hover:border-[rgba(255,255,255,0.18)]"
+        style={{ boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -215,7 +216,7 @@ export default function BentoGrid() {
           <DragDropDemo />
         </div>
         <div className="mt-4">
-          <h3 className="font-serif text-xl text-white font-medium flex items-center gap-2">
+          <h3 className="text-base font-semibold text-white flex items-center gap-2">
             <LayoutGrid className="w-5 h-5" />
             Drag &amp; Drop
           </h3>
@@ -225,7 +226,8 @@ export default function BentoGrid() {
 
       {/* 2. AI Generator — Standard (2×1) */}
       <motion.div
-        className="md:col-span-2 bg-zinc-900/80 border border-zinc-800 rounded-xl p-8 flex flex-col hover:border-zinc-700 transition-colors cursor-pointer overflow-hidden"
+        className="md:col-span-2 rounded-xl p-8 flex flex-col cursor-pointer overflow-hidden border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] backdrop-blur-[8px] transition-colors hover:border-[rgba(255,255,255,0.18)]"
+        style={{ boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -236,7 +238,7 @@ export default function BentoGrid() {
           <AIGeneratorDemo />
         </div>
         <div className="mt-4">
-          <h3 className="font-serif text-xl text-white font-medium flex items-center gap-2">
+          <h3 className="text-base font-semibold text-white flex items-center gap-2">
             <Sparkles className="w-5 h-5" />
             AI Generator
           </h3>
@@ -246,7 +248,8 @@ export default function BentoGrid() {
 
       {/* 3. Share — Tall (2×2) */}
       <motion.div
-        className="md:col-span-2 md:row-span-2 bg-zinc-900/80 border border-zinc-800 rounded-xl p-6 flex flex-col hover:border-zinc-700 transition-colors cursor-pointer overflow-hidden"
+        className="md:col-span-2 md:row-span-2 rounded-xl p-6 flex flex-col cursor-pointer overflow-hidden border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] backdrop-blur-[8px] transition-colors hover:border-[rgba(255,255,255,0.18)]"
+        style={{ boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -256,8 +259,8 @@ export default function BentoGrid() {
         <div className="flex-1 flex items-center justify-center">
           <ShareDemo />
         </div>
-        <div className="mt-auto relative z-20 bg-zinc-900/50 backdrop-blur-sm rounded-lg p-2">
-          <h3 className="font-serif text-xl text-white flex items-center gap-2 font-medium">
+        <div className="mt-auto relative z-20 bg-[rgba(8,8,16,0.5)] backdrop-blur-sm rounded-lg p-2">
+          <h3 className="text-base font-semibold text-white flex items-center gap-2">
             <Share2 className="w-5 h-5" />
             Share Anywhere
           </h3>
@@ -267,7 +270,8 @@ export default function BentoGrid() {
 
       {/* 4. Templates — Standard (2×1) */}
       <motion.div
-        className="md:col-span-2 bg-zinc-900/80 border border-zinc-800 rounded-xl p-8 flex flex-col hover:border-zinc-700 transition-colors cursor-pointer overflow-hidden"
+        className="md:col-span-2 rounded-xl p-8 flex flex-col cursor-pointer overflow-hidden border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] backdrop-blur-[8px] transition-colors hover:border-[rgba(255,255,255,0.18)]"
+        style={{ boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -278,14 +282,15 @@ export default function BentoGrid() {
           <TemplatesDemo />
         </div>
         <div className="mt-4">
-          <h3 className="font-serif text-xl text-white font-medium">Starter Templates</h3>
+          <h3 className="text-base font-semibold text-white">Starter Templates</h3>
           <p className="text-gray-400 text-sm mt-1">Analytics, Inventory, Purchasing — ready in one click.</p>
         </div>
       </motion.div>
 
       {/* 5. Open Source — Wide (3×1) */}
       <motion.div
-        className="md:col-span-3 bg-zinc-900/80 border border-zinc-800 rounded-xl p-8 flex flex-col hover:border-zinc-700 transition-colors cursor-pointer overflow-hidden"
+        className="md:col-span-3 rounded-xl p-8 flex flex-col cursor-pointer overflow-hidden border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] backdrop-blur-[8px] transition-colors hover:border-[rgba(255,255,255,0.18)]"
+        style={{ boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -296,7 +301,7 @@ export default function BentoGrid() {
           <OpenSourceDemo />
         </div>
         <div className="mt-4">
-          <h3 className="font-serif text-xl text-white flex items-center gap-2 font-medium">
+          <h3 className="text-base font-semibold text-white flex items-center gap-2">
             <GitBranch className="w-5 h-5" />
             Open Source
           </h3>
@@ -306,7 +311,8 @@ export default function BentoGrid() {
 
       {/* 6. Data Sources — Wide (3×1) */}
       <motion.div
-        className="md:col-span-3 bg-zinc-900/80 border border-zinc-800 rounded-xl p-8 flex flex-col hover:border-zinc-700 transition-colors cursor-pointer overflow-hidden"
+        className="md:col-span-3 rounded-xl p-8 flex flex-col cursor-pointer overflow-hidden border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] backdrop-blur-[8px] transition-colors hover:border-[rgba(255,255,255,0.18)]"
+        style={{ boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -317,7 +323,7 @@ export default function BentoGrid() {
           <DataSourcesDemo />
         </div>
         <div className="mt-4">
-          <h3 className="font-serif text-xl text-white font-medium flex items-center gap-2">
+          <h3 className="text-base font-semibold text-white flex items-center gap-2">
             <Database className="w-5 h-5" />
             Data Ready
           </h3>
