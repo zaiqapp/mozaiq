@@ -65,7 +65,7 @@ describe('POST /api/ai/dashboard-insights', () => {
 
   it('returns 200 with insight string from AI', async () => {
     mockGenerate.mockResolvedValue({
-      text: 'Revenue and users are both trending up this quarter.',
+      text: '  Revenue and users are both trending up this quarter.  ',
     } as Awaited<ReturnType<typeof generateText>>)
     const req = new Request('http://localhost/api/ai/dashboard-insights', {
       method: 'POST',
