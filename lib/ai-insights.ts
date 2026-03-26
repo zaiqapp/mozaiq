@@ -17,7 +17,8 @@ Given a list of widgets with their types and data, write exactly 2-4 sentences t
 Be specific and reference actual numbers when available. No bullet points or markdown headers. Plain English only.`
 
 export function buildWidgetUserMessage(widgetType: string, config: unknown): string {
-  return `Widget type: ${widgetType}\nConfig: ${JSON.stringify(config, null, 2)}`
+  const type = widgetType.trim()
+  return `Widget type: ${type}\nConfig: ${JSON.stringify(config, null, 2)}`
 }
 
 export function buildDashboardUserMessage(
