@@ -4,7 +4,8 @@ import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 export interface ColumnDef {
   key: string
   label: string
-  type: 'text' | 'number' | 'color'
+  type: 'text' | 'number' | 'color' | 'select'
+  options?: { value: string; label: string }[]  // for type: 'select'
   width?: number  // fixed px width; omit for flex-1
 }
 
@@ -70,6 +71,16 @@ export function ArrayRowEditor({ columns, rows, onChange, newRowTemplate }: Prop
                       }
                     }}
                   />
+                ) : col.type === 'select' ? (
+                  <select
+                    className={`${inputClass} cursor-pointer appearance-none`}
+                    value={row[col.key] === undefined ? (col.options?.[0]?.value ?? '') : String(row[col.key])}
+                    onChange={e => handleCellChange(rowIdx, col.key, e.target.value)}
+                  >
+                    {col.options?.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
                 ) : (
                   <input
                     type={col.type === 'number' ? 'number' : 'text'}
