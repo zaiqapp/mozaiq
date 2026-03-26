@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import type { ComponentType } from 'react'
 import type { GridLayoutProps, LayoutItem } from 'react-grid-layout'
@@ -21,11 +21,25 @@ interface Props { id: string; name: string; widgets: Widget[]; layout: LayoutIte
 function ShareViewInner({ id, name, widgets, layout, dataSources = [] }: Props) {
   const { theme } = useBuilderTheme()
   const loadDashboard = useDashboardStore((s) => s.loadDashboard)
+  const [gridWidth, setGridWidth] = useState(1200)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     loadDashboard({ name, widgets, layout, dataSources })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0]
+      if (entry) setGridWidth(entry.contentRect.width)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   const isDark = theme === 'dark'
 
   if (widgets.length === 0) {
@@ -56,10 +70,10 @@ function ShareViewInner({ id, name, widgets, layout, dataSources = [] }: Props) 
         </div>
       </header>
 
-      <main className="p-4">
+      <main ref={containerRef} className="p-4">
         <GridLayout
           layout={layout}
-          width={1200}
+          width={gridWidth}
           gridConfig={{ cols: 12, rowHeight: 80, margin: [12, 12] as [number, number] }}
           dragConfig={{ enabled: false }}
           resizeConfig={{ enabled: false }}
