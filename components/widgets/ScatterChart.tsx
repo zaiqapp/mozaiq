@@ -7,17 +7,12 @@ import {
 import type { WidgetProps, ScatterChartConfig } from '@/types/dashboard'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
-const MOCK = [
-  { x: 10000, y: 80 }, { x: 25000, y: 150 }, { x: 18000, y: 120 },
-  { x: 40000, y: 200 }, { x: 32000, y: 180 }, { x: 15000, y: 95 },
-]
-
 export default function ScatterChart({ config }: WidgetProps) {
   const c = config as ScatterChartConfig & { data?: Record<string, unknown>[] }
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 
-  const raw = c.data && c.data.length > 0 ? c.data : MOCK
+  const raw = c.data ?? []
   const axisColor = isDark ? '#374151' : '#9ca3af'
   const gridColor = isDark ? 'rgba(255,255,255,0.04)' : '#f3f4f6'
 

@@ -7,19 +7,12 @@ import {
 import type { WidgetProps, ComboChartConfig } from '@/types/dashboard'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
-const MOCK = [
-  { name: 'Acme', bar: 48000, line: 12.4 },
-  { name: 'Globex', bar: 32000, line: 8.1 },
-  { name: 'Initech', bar: 27000, line: 15.2 },
-  { name: 'Umbrella', bar: 19000, line: 6.7 },
-]
-
 export default function ComboChart({ config }: WidgetProps) {
   const c = config as ComboChartConfig & { data?: Record<string, unknown>[] }
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 
-  const raw = c.data && c.data.length > 0 ? c.data : MOCK
+  const raw = c.data ?? []
   const axisColor = isDark ? '#374151' : '#9ca3af'
   const gridColor = isDark ? 'rgba(255,255,255,0.04)' : '#f3f4f6'
 

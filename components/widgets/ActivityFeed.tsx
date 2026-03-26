@@ -1,11 +1,10 @@
 'use client'
 import type { WidgetProps, ActivityConfig } from '@/types/dashboard'
-import { ACTIVITY_EVENTS } from '@/lib/mockData'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
 export default function ActivityFeed({ config }: WidgetProps) {
   const c = config as ActivityConfig
-  const events = c.events.length ? c.events : ACTIVITY_EVENTS
+  const events = c.events ?? []
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 

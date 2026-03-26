@@ -2,14 +2,9 @@
 import type { WidgetProps, ProgressConfig } from '@/types/dashboard'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
-const MOCK_ITEMS = [
-  { label: 'Item A', value: 70, max: 100, color: '#6366f1' },
-  { label: 'Item B', value: 45, max: 100, color: '#8b5cf6' },
-]
-
 export default function ProgressTracker({ config }: WidgetProps) {
   const c = config as ProgressConfig
-  const items = c.items.length ? c.items : MOCK_ITEMS
+  const items = c.items ?? []
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 

@@ -3,20 +3,12 @@
 import type { WidgetProps, RankedListConfig } from '@/types/dashboard'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
-const MOCK = [
-  { label: 'Acme Corp', value: 48000 },
-  { label: 'Globex', value: 36000 },
-  { label: 'Initech', value: 27000 },
-  { label: 'Umbrella', value: 19000 },
-  { label: 'Hooli', value: 14000 },
-]
-
 export default function RankedList({ config }: WidgetProps) {
   const c = config as RankedListConfig & { data?: Record<string, unknown>[] }
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 
-  const raw = c.data && c.data.length > 0 ? c.data : MOCK
+  const raw = c.data ?? []
   const sorted = [...raw]
     .sort((a, b) => Number(b.value ?? 0) - Number(a.value ?? 0))
     .slice(0, c.maxItems ?? 10)

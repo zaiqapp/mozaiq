@@ -4,15 +4,12 @@ import type { WidgetProps, TableConfig } from '@/types/dashboard'
 import { ChevronUp, ChevronDown } from 'lucide-react'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
-const MOCK_COLUMNS = [{ key: 'name', label: 'Name' }, { key: 'value', label: 'Value', sortable: true }]
-const MOCK_ROWS = [{ name: 'Item A', value: 120 }, { name: 'Item B', value: 85 }, { name: 'Item C', value: 200 }]
-
 export default function DataTableWidget({ config }: WidgetProps) {
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
   const c = config as TableConfig
-  const columns = c.columns.length ? c.columns : MOCK_COLUMNS
-  const rows: Record<string, unknown>[] = (c.rows.length ? c.rows : MOCK_ROWS) as Record<string, unknown>[]
+  const columns = c.columns ?? []
+  const rows: Record<string, unknown>[] = (c.rows ?? []) as Record<string, unknown>[]
   const [sortKey, setSortKey] = useState<string | null>(null)
   const [sortAsc, setSortAsc] = useState(true)
 

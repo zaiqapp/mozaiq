@@ -10,20 +10,12 @@ import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 const SERIES_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444']
 const SERIES_KEYS = ['series1', 'series2'] as const
 
-const MOCK = [
-  { name: 'Jan', series1: 40, series2: 30 },
-  { name: 'Feb', series1: 55, series2: 40 },
-  { name: 'Mar', series1: 45, series2: 50 },
-  { name: 'Apr', series1: 70, series2: 45 },
-  { name: 'May', series1: 65, series2: 60 },
-]
-
 export default function MultiLineChart({ config }: WidgetProps) {
   const c = config as MultiSeriesConfig & { data?: Record<string, unknown>[] }
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 
-  const raw = c.data && c.data.length > 0 ? c.data : MOCK
+  const raw = c.data ?? []
   const activeKeys = SERIES_KEYS.filter((k) => raw[0]?.[k] !== undefined)
 
   const axisColor = isDark ? '#374151' : '#9ca3af'

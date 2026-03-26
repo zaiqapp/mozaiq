@@ -1,8 +1,41 @@
 import type { TemplateKey, Widget } from '@/types/dashboard'
 import type { LayoutItem } from 'react-grid-layout'
-import {
-  CHANNEL_DATA, generateDailyRevenue, CATEGORY_DATA, ACTIVITY_EVENTS,
-} from './mockData'
+
+const CHANNEL_DATA = [
+  { name: 'Organic', value: 4200 },
+  { name: 'Paid', value: 2800 },
+  { name: 'Social', value: 1900 },
+  { name: 'Direct', value: 1400 },
+  { name: 'Email', value: 900 },
+]
+
+const CATEGORY_DATA = [
+  { name: 'Electronics', value: 38 },
+  { name: 'Apparel', value: 24 },
+  { name: 'Home', value: 19 },
+  { name: 'Sports', value: 12 },
+  { name: 'Other', value: 7 },
+]
+
+const DAILY_REVENUE = Array.from({ length: 30 }, (_, i) => {
+  const date = new Date('2026-03-26')
+  date.setDate(date.getDate() - (30 - i))
+  return {
+    name: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    value: 3000 + Math.round(800 * Math.sin(i * 0.4 + 1)) + i * 80,
+  }
+})
+
+const ACTIVITY_EVENTS = [
+  { id: '1', label: 'New signup: alex@example.com', time: '2 min ago' },
+  { id: '2', label: 'Conversion: starter → pro', time: '8 min ago' },
+  { id: '3', label: 'New signup: morgan@acme.co', time: '15 min ago' },
+  { id: '4', label: 'Trial started: widget-co.com', time: '31 min ago' },
+  { id: '5', label: 'Conversion: trial → starter', time: '1 hr ago' },
+  { id: '6', label: 'New signup: taylor@corp.io', time: '2 hr ago' },
+  { id: '7', label: 'Upgrade: starter → pro', time: '3 hr ago' },
+  { id: '8', label: 'New signup: drew@startup.dev', time: '5 hr ago' },
+]
 
 interface TemplateDef {
   name: string
@@ -18,7 +51,7 @@ export const templates: Record<TemplateKey, TemplateDef> = {
       { id: 'kpi-users', type: 'kpi', config: { title: 'Active Users', value: '8,421', change: 5, changeLabel: 'vs last month' } },
       { id: 'kpi-cvr', type: 'kpi', config: { title: 'Conversion Rate', value: '3.2%', change: -0.4, changeLabel: 'vs last month', suffix: '%' } },
       { id: 'kpi-session', type: 'kpi', config: { title: 'Avg Session', value: '4m 32s', change: 8, changeLabel: 'vs last month' } },
-      { id: 'chart-revenue', type: 'line-chart', config: { title: 'Daily Revenue', dataKey: 'value', color: '#6366f1', data: generateDailyRevenue(30) } },
+      { id: 'chart-revenue', type: 'line-chart', config: { title: 'Daily Revenue', dataKey: 'value', color: '#6366f1', data: DAILY_REVENUE } },
       { id: 'chart-channels', type: 'bar-chart', config: { title: 'Traffic by Channel', dataKey: 'value', data: CHANNEL_DATA } },
       { id: 'feed-activity', type: 'activity-feed', config: { title: 'Recent Activity', events: ACTIVITY_EVENTS } },
     ],

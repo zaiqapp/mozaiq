@@ -6,14 +6,6 @@ import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
 const PALETTE = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#0ea5e9', '#f43f5e']
 
-const MOCK = [
-  { name: 'Client A', value: 48000 },
-  { name: 'Client B', value: 32000 },
-  { name: 'Client C', value: 27000 },
-  { name: 'Client D', value: 19000 },
-  { name: 'Client E', value: 14000 },
-]
-
 function CustomCell(props: Record<string, unknown>) {
   const { x, y, width, height, index, name } = props as {
     x: number; y: number; width: number; height: number; index: number; name: string
@@ -36,7 +28,7 @@ export default function Treemap({ config }: WidgetProps) {
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 
-  const raw = c.data && c.data.length > 0 ? c.data : MOCK
+  const raw = c.data ?? []
 
   return (
     <div className="w-full h-full flex flex-col gap-1 p-2">

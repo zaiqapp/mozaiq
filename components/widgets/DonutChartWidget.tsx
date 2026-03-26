@@ -1,14 +1,13 @@
 'use client'
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts'
 import type { WidgetProps, ChartConfig } from '@/types/dashboard'
-import { CATEGORY_DATA } from '@/lib/mockData'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
 const COLORS = ['#6366f1', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe']
 
 export default function DonutChartWidget({ config }: WidgetProps) {
   const c = config as ChartConfig
-  const data = (c.data && c.data.length > 0) ? c.data : CATEGORY_DATA
+  const data = c.data ?? []
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 

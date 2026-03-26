@@ -3,16 +3,9 @@ import { ResponsiveContainer, FunnelChart, Funnel, LabelList, Tooltip } from 're
 import type { WidgetProps, FunnelConfig } from '@/types/dashboard'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
-const MOCK = [
-  { name: 'Visits', value: 10000, fill: '#6366f1' },
-  { name: 'Leads', value: 6200, fill: '#8b5cf6' },
-  { name: 'Trials', value: 3100, fill: '#a78bfa' },
-  { name: 'Customers', value: 890, fill: '#c4b5fd' },
-]
-
 export default function FunnelChartWidget({ config }: WidgetProps) {
   const c = config as FunnelConfig
-  const data = (c.data && c.data.length > 0) ? c.data : MOCK
+  const data = c.data ?? []
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 

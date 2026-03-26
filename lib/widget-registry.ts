@@ -51,31 +51,71 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
   'line-chart': {
     component: LineChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Line Chart', dataKey: 'value' },
+    defaultConfig: {
+      title: 'Line Chart', dataKey: 'value',
+      data: [
+        { name: 'Jan', value: 400 },
+        { name: 'Feb', value: 600 },
+        { name: 'Mar', value: 500 },
+        { name: 'Apr', value: 780 },
+      ],
+    },
     label: 'Line Chart', icon: TrendingUp, category: 'charts',
   },
   'area-chart': {
     component: AreaChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Area Chart', dataKey: 'value' },
+    defaultConfig: {
+      title: 'Area Chart', dataKey: 'value',
+      data: [
+        { name: 'Jan', value: 400 },
+        { name: 'Feb', value: 600 },
+        { name: 'Mar', value: 500 },
+        { name: 'Apr', value: 780 },
+      ],
+    },
     label: 'Area Chart', icon: TrendingUp, category: 'charts',
   },
   'bar-chart': {
     component: BarChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Bar Chart', dataKey: 'value' },
+    defaultConfig: {
+      title: 'Bar Chart', dataKey: 'value',
+      data: [
+        { name: 'Jan', value: 400 },
+        { name: 'Feb', value: 600 },
+        { name: 'Mar', value: 500 },
+        { name: 'Apr', value: 780 },
+      ],
+    },
     label: 'Bar Chart', icon: BarChart, category: 'charts',
   },
   'donut-chart': {
     component: DonutChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Donut Chart', dataKey: 'value' },
+    defaultConfig: {
+      title: 'Donut Chart', dataKey: 'value',
+      data: [
+        { name: 'Electronics', value: 38 },
+        { name: 'Apparel', value: 24 },
+        { name: 'Home', value: 19 },
+        { name: 'Sports', value: 12 },
+      ],
+    },
     label: 'Donut Chart', icon: PieChart, category: 'charts',
   },
   'funnel-chart': {
     component: FunnelChartWidget,
     defaultSize: { w: 6, h: 4 },
-    defaultConfig: { title: 'Funnel Chart' },
+    defaultConfig: {
+      title: 'Funnel Chart',
+      data: [
+        { name: 'Awareness', value: 1000, fill: '#6366f1' },
+        { name: 'Interest', value: 650, fill: '#8b5cf6' },
+        { name: 'Decision', value: 280, fill: '#a78bfa' },
+        { name: 'Action', value: 120, fill: '#c4b5fd' },
+      ],
+    },
     label: 'Funnel Chart', icon: Filter, category: 'charts',
   },
   'gauge': {
@@ -87,19 +127,44 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
   'data-table': {
     component: DataTableWidget,
     defaultSize: { w: 12, h: 4 },
-    defaultConfig: { title: 'Data Table', columns: [], rows: [] },
+    defaultConfig: {
+      title: 'Data Table',
+      columns: [
+        { key: 'name', label: 'Name', sortable: true },
+        { key: 'value', label: 'Value', sortable: true },
+      ],
+      rows: [
+        { name: 'Acme Corp', value: 48000 },
+        { name: 'Globex', value: 36000 },
+        { name: 'Initech', value: 29000 },
+      ],
+    },
     label: 'Data Table', icon: Table, category: 'data',
   },
   'progress-tracker': {
     component: ProgressTracker,
     defaultSize: { w: 4, h: 4 },
-    defaultConfig: { title: 'Progress', items: [] },
+    defaultConfig: {
+      title: 'Progress',
+      items: [
+        { label: 'Revenue', value: 68, max: 100, color: '#6366f1' },
+        { label: 'Users', value: 45, max: 100, color: '#22d3ee' },
+        { label: 'Deals', value: 82, max: 100, color: '#4ade80' },
+      ],
+    },
     label: 'Progress', icon: CheckSquare, category: 'data',
   },
   'activity-feed': {
     component: ActivityFeed,
     defaultSize: { w: 4, h: 4 },
-    defaultConfig: { title: 'Activity Feed', events: [] },
+    defaultConfig: {
+      title: 'Activity Feed',
+      events: [
+        { id: '1', label: 'New user signed up', time: '2 min ago' },
+        { id: '2', label: 'Invoice #1042 paid', time: '14 min ago' },
+        { id: '3', label: 'Deal closed — Acme Corp', time: '1 hr ago' },
+      ],
+    },
     label: 'Activity Feed', icon: Zap, category: 'misc',
   },
   'text-note': {
@@ -131,6 +196,12 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
     defaultConfig: {
       title: 'Multi-Line Chart',
       seriesLabels: { series1: 'Series 1', series2: 'Series 2' },
+      data: [
+        { name: 'Jan', series1: 420, series2: 310 },
+        { name: 'Feb', series1: 580, series2: 390 },
+        { name: 'Mar', series1: 390, series2: 280 },
+        { name: 'Apr', series1: 720, series2: 450 },
+      ],
     } satisfies MultiSeriesConfig,
     label: 'Multi-Line Chart',
     icon: TrendingUp,
@@ -142,6 +213,12 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
     defaultConfig: {
       title: 'Grouped Bar Chart',
       seriesLabels: { series1: 'Series 1', series2: 'Series 2' },
+      data: [
+        { name: 'Jan', series1: 420, series2: 310 },
+        { name: 'Feb', series1: 580, series2: 390 },
+        { name: 'Mar', series1: 390, series2: 280 },
+        { name: 'Apr', series1: 720, series2: 450 },
+      ],
     } satisfies MultiSeriesConfig,
     label: 'Grouped Bar Chart',
     icon: BarChart2,
@@ -153,6 +230,12 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
     defaultConfig: {
       title: 'Stacked Bar Chart',
       seriesLabels: { series1: 'Series 1', series2: 'Series 2' },
+      data: [
+        { name: 'Jan', series1: 420, series2: 310 },
+        { name: 'Feb', series1: 580, series2: 390 },
+        { name: 'Mar', series1: 390, series2: 280 },
+        { name: 'Apr', series1: 720, series2: 450 },
+      ],
     } satisfies MultiSeriesConfig,
     label: 'Stacked Bar Chart',
     icon: Layers,
@@ -161,7 +244,15 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
   'scatter-chart': {
     component: dynamic(() => import('@/components/widgets/ScatterChart')) as unknown as ComponentType<WidgetProps>,
     defaultSize: { w: 5, h: 3 },
-    defaultConfig: { title: 'Scatter Chart', xLabel: 'X', yLabel: 'Y' } satisfies ScatterChartConfig,
+    defaultConfig: {
+      title: 'Scatter Chart', xLabel: 'X', yLabel: 'Y',
+      data: [
+        { x: 10, y: 30 },
+        { x: 40, y: 80 },
+        { x: 70, y: 50 },
+        { x: 50, y: 90 },
+      ],
+    } satisfies ScatterChartConfig,
     label: 'Scatter Chart',
     icon: ScatterChart,
     category: 'charts',
@@ -169,7 +260,15 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
   'combo-chart': {
     component: dynamic(() => import('@/components/widgets/ComboChart')) as unknown as ComponentType<WidgetProps>,
     defaultSize: { w: 6, h: 3 },
-    defaultConfig: { title: 'Combo Chart', barLabel: 'Volume', lineLabel: 'Rate' } satisfies ComboChartConfig,
+    defaultConfig: {
+      title: 'Combo Chart', barLabel: 'Volume', lineLabel: 'Rate',
+      data: [
+        { name: 'Jan', bar: 400, line: 24 },
+        { name: 'Feb', bar: 600, line: 38 },
+        { name: 'Mar', bar: 500, line: 29 },
+        { name: 'Apr', bar: 780, line: 43 },
+      ],
+    } satisfies ComboChartConfig,
     label: 'Combo Chart',
     icon: BarChart3,
     category: 'charts',
@@ -177,7 +276,16 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
   'ranked-list': {
     component: dynamic(() => import('@/components/widgets/RankedList')) as unknown as ComponentType<WidgetProps>,
     defaultSize: { w: 4, h: 3 },
-    defaultConfig: { title: 'Ranked List', color: '#6366f1', maxItems: 10 } satisfies RankedListConfig,
+    defaultConfig: {
+      title: 'Ranked List', color: '#6366f1', maxItems: 10,
+      data: [
+        { label: 'Acme Corp', value: 48000 },
+        { label: 'Globex', value: 36000 },
+        { label: 'Initech', value: 27000 },
+        { label: 'Umbrella', value: 19000 },
+        { label: 'Hooli', value: 14000 },
+      ],
+    } satisfies RankedListConfig,
     label: 'Ranked List',
     icon: List,
     category: 'data',
@@ -190,6 +298,13 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
       positiveColor: '#10b981',
       negativeColor: '#ef4444',
       totalColor: '#6366f1',
+      data: [
+        { label: 'Revenue', value: 50000 },
+        { label: 'Upsells', value: 8000 },
+        { label: 'Refunds', value: -5000 },
+        { label: 'Discounts', value: -3000 },
+        { label: 'Net', value: 50000 },
+      ],
     } satisfies WaterfallChartConfig,
     label: 'Waterfall Chart',
     icon: GitFork,
@@ -198,7 +313,15 @@ export const widgetRegistry: Record<WidgetType, WidgetRegistryEntry> = {
   treemap: {
     component: dynamic(() => import('@/components/widgets/Treemap')) as unknown as ComponentType<WidgetProps>,
     defaultSize: { w: 5, h: 3 },
-    defaultConfig: { title: 'Treemap' } satisfies TreemapConfig,
+    defaultConfig: {
+      title: 'Treemap',
+      data: [
+        { name: 'Category A', value: 400 },
+        { name: 'Category B', value: 300 },
+        { name: 'Category C', value: 200 },
+        { name: 'Category D', value: 150 },
+      ],
+    } satisfies TreemapConfig,
     label: 'Treemap',
     icon: Table2,
     category: 'charts',

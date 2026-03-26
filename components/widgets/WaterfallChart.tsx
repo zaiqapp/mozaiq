@@ -7,14 +7,6 @@ import {
 import type { WidgetProps, WaterfallChartConfig } from '@/types/dashboard'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
 
-const MOCK = [
-  { label: 'Revenue', value: 50000 },
-  { label: 'Upsells', value: 8000 },
-  { label: 'Refunds', value: -5000 },
-  { label: 'Discounts', value: -3000 },
-  { label: 'Net', value: 50000 },
-]
-
 interface ProcessedRow {
   label: string
   base: number
@@ -39,7 +31,7 @@ export default function WaterfallChart({ config }: WidgetProps) {
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 
-  const raw = c.data && c.data.length > 0 ? c.data : MOCK
+  const raw = c.data ?? []
   const processed = preprocess(raw)
 
   const positiveColor = c.positiveColor ?? '#10b981'

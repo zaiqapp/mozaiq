@@ -1,14 +1,11 @@
 'use client'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
 import type { WidgetProps, ChartConfig } from '@/types/dashboard'
-import { generateDailyRevenue } from '@/lib/mockData'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
-
-const MOCK = generateDailyRevenue(30)
 
 export default function LineChartWidget({ config }: WidgetProps) {
   const c = config as ChartConfig
-  const data = (c.data && c.data.length > 0) ? c.data : MOCK
+  const data = c.data ?? []
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
 
