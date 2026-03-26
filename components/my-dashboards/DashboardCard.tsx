@@ -152,8 +152,14 @@ export function DashboardCard({ dashboard }: { dashboard: Dashboard }) {
       </div>
       <div className="flex flex-shrink-0 items-center gap-2">
         <Link
+          href={`/view/${dashboard.id}`}
+          className="rounded-md border border-[rgba(34,211,238,0.2)] bg-[rgba(34,211,238,0.08)] px-3 py-1.5 text-xs font-medium text-cyan-400 hover:bg-[rgba(34,211,238,0.12)] transition-colors"
+        >
+          View
+        </Link>
+        <Link
           href={`/builder/${dashboard.id}`}
-          className="rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 transition-colors"
+          className="rounded-md border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs text-[#9ca3af] hover:bg-[rgba(255,255,255,0.05)] transition-colors"
         >
           Edit
         </Link>
