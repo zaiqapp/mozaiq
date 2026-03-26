@@ -110,7 +110,6 @@ export function WidgetConfigPanel({ widget }: Props) {
                   onChange={(e) => handleChange(field.key, e.target.checked)}
                   className="rounded"
                 />
-                <span className="text-sm">{field.label}</span>
               </label>
             ) : field.type === 'number' ? (
               <input
