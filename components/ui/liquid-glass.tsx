@@ -33,7 +33,7 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
 
   const content = (
     <div
-      className={`relative flex font-semibold overflow-hidden text-black cursor-pointer transition-all duration-700 ${className}`}
+      className={`relative flex font-semibold overflow-hidden cursor-pointer transition-all duration-700 ${className}`}
       style={glassStyle}
     >
       {/* Glass Layers */}

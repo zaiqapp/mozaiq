@@ -52,7 +52,7 @@ function Hero() {
             Start Building Free
           </Link>
           <GlassButton href="https://github.com/zaiqapp/mozaiq">
-            <span className="text-sm font-semibold text-white/70 transition hover:text-white">
+            <span className="text-sm font-semibold text-white px-2">
               View on GitHub →
             </span>
           </GlassButton>
