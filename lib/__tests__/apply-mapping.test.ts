@@ -12,8 +12,13 @@ function m(pairs: Record<string, string>): Record<string, AxisMapping> {
 }
 
 describe('applyMapping — number type', () => {
-  it('sums all row values', () => {
+  it('sums all row values by default', () => {
     expect(applyMapping('value', 'number', rows, m({ value: 'revenue' }))).toBe(320)
+  })
+
+  it('averages row values when aggregation is avg', () => {
+    const avgMapping: Record<string, AxisMapping> = { value: { column: 'revenue', aggregation: 'avg' } }
+    expect(applyMapping('value', 'number', rows, avgMapping)).toBe(160)
   })
 
   it('returns null when column not in mapping', () => {

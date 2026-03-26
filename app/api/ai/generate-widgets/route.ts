@@ -13,9 +13,10 @@ export async function POST(req: Request) {
     columns?: string[]
     sampleRows?: Record<string, unknown>[]
     prompt?: string
+    count?: number
   }
 
-  const { dataSourceId, columns, sampleRows, prompt } = body
+  const { dataSourceId, columns, sampleRows, prompt, count } = body
 
   if (!dataSourceId || !columns?.length || !prompt?.trim()) {
     return NextResponse.json({ error: 'dataSourceId, columns, and prompt are required' }, { status: 400 })
@@ -36,7 +37,10 @@ export async function POST(req: Request) {
   let widgetCount: number | undefined
 
   try {
-    const userMessage = `Columns: ${columns.join(', ')}\n\nSample data:\n${JSON.stringify(sampleRows?.slice(0, 5) ?? [], null, 2)}\n\nUser request: ${prompt}`
+    const countInstruction = count && count > 0
+      ? `\n\nIMPORTANT: Generate exactly ${count} widget${count === 1 ? '' : 's'} — no more, no less.`
+      : ''
+    const userMessage = `Columns: ${columns.join(', ')}\n\nSample data:\n${JSON.stringify(sampleRows?.slice(0, 5) ?? [], null, 2)}\n\nUser request: ${prompt}${countInstruction}`
 
     const { text } = await generateText({
       model: 'anthropic/claude-sonnet-4.6',
@@ -51,7 +55,9 @@ export async function POST(req: Request) {
       },
     })
 
-    const raw = JSON.parse(text) as unknown
+    // Strip markdown code fences if the model wrapped the output
+    const cleaned = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '')
+    const raw = JSON.parse(cleaned) as unknown
     const validated = validateGeneratedWidgets(raw, dataSourceId, columns)
 
     if (validated.length === 0) {

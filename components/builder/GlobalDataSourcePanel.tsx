@@ -44,6 +44,7 @@ export function GlobalDataSourcePanel() {
 
   // AI Generate state
   const [generatePrompt, setGeneratePrompt] = useState('')
+  const [generateCount, setGenerateCount] = useState(0) // 0 = auto (3-6)
   const [isGeneratingWidgets, setIsGeneratingWidgets] = useState(false)
   const [hasAutoSuggested, setHasAutoSuggested] = useState(false)
 
@@ -134,6 +135,7 @@ export function GlobalDataSourcePanel() {
       url: sheetsUrl,
       gid: sheetsGid.trim() || undefined,
       refreshInterval,
+      data: sheetsPreview.rows,
     }
     addGlobalDataSource(ds)
     setAddMode('none')
@@ -182,15 +184,20 @@ export function GlobalDataSourcePanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataSources.length, widgets.length])
 
-  const generateWidgets = async (prompt: string, sourceOverride?: GlobalDataSource) => {
+  const generateWidgets = async (prompt: string, sourceOverride?: GlobalDataSource, count?: number) => {
     const source = sourceOverride ?? dataSources[0]
     if (!source) return
 
-    const cols = source.type === 'csv'
-      ? Object.keys(source.data?.[0] ?? {})
-      : [] // Sheets: columns not available client-side without live fetch; skip if empty
+    const cols = Object.keys(source.data?.[0] ?? {})
 
-    const sampleRows = source.type === 'csv' ? (source.data ?? []).slice(0, 5) : []
+    if (!cols.length) {
+      toast.error(source.type === 'google-sheets'
+        ? 'Reconnect the sheet to refresh its column data, then try again'
+        : 'No column data available')
+      return
+    }
+
+    const sampleRows = (source.data ?? []).slice(0, 5)
 
     setIsGeneratingWidgets(true)
     try {
@@ -199,9 +206,10 @@ export function GlobalDataSourcePanel() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           dataSourceId: source.id,
-          columns: cols.length ? cols : ['data'],
+          columns: cols,
           sampleRows,
           prompt,
+          count: count && count > 0 ? count : undefined,
         }),
       })
       const data = await res.json() as { widgets?: { type: string; config: Record<string, unknown>; dataSourceId: string; dataSourceMapping: Record<string, { column: string }> }[]; error?: string }
@@ -360,6 +368,7 @@ export function GlobalDataSourcePanel() {
                               url: sheetsUrl,
                               gid: sheetsGid.trim() || undefined,
                               refreshInterval,
+                              data: sheetsPreview.rows,
                             })
                             setExpandedId(null)
                             setSheetsPreview(null)
@@ -486,11 +495,24 @@ export function GlobalDataSourcePanel() {
                 placeholder="What would you like to visualize?"
                 value={generatePrompt}
                 onChange={(e) => setGeneratePrompt(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter' && generatePrompt.trim()) { generateWidgets(generatePrompt); setGeneratePrompt('') } }}
+                onKeyDown={(e) => { if (e.key === 'Enter' && generatePrompt.trim()) { generateWidgets(generatePrompt, undefined, generateCount || undefined); setGeneratePrompt('') } }}
               />
+              <select
+                className={inputClass + ' w-20 flex-shrink-0'}
+                value={generateCount}
+                onChange={(e) => setGenerateCount(Number(e.target.value))}
+                title="Number of widgets to generate"
+              >
+                <option value={0}>Auto</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
+              </select>
               <button
                 disabled={!generatePrompt.trim()}
-                onClick={() => { generateWidgets(generatePrompt); setGeneratePrompt('') }}
+                onClick={() => { generateWidgets(generatePrompt, undefined, generateCount || undefined); setGeneratePrompt('') }}
                 className={`flex items-center gap-1.5 rounded bg-gradient-to-r from-cyan-400 to-indigo-600 px-3 py-1.5 text-xs text-white hover:opacity-90 disabled:opacity-50`}
               >
                 <Wand2 className="h-3.5 w-3.5" /> Generate

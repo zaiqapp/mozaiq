@@ -6,14 +6,14 @@ import { useDashboardStore } from '@/store/dashboard'
 import { widgetFieldRegistry } from '@/lib/widget-field-registry'
 import { useDataSource } from '@/hooks/useDataSource'
 import { useBuilderTheme } from './BuilderThemeProvider'
-import type { Widget, AxisMapping } from '@/types/dashboard'
+import type { Widget, AxisMapping, WidgetConfig } from '@/types/dashboard'
 
 interface Props { widget: Widget }
 
 export function WidgetMappingPanel({ widget }: Props) {
   const { theme } = useBuilderTheme()
   const isDark = theme === 'dark'
-  const { dataSources, updateWidgetDataSourceId, updateWidgetMapping } = useDashboardStore()
+  const { dataSources, updateWidgetDataSourceId, updateWidgetMapping, updateWidgetConfig } = useDashboardStore()
   const { rows: liveRows } = useDataSource(widget)
   const [isAutoMapping, setIsAutoMapping] = useState(false)
   const [selectingSource, setSelectingSource] = useState(false)
@@ -49,6 +49,12 @@ export function WidgetMappingPanel({ widget }: Props) {
       updated[fieldKey] = { ...existing, column }
     }
     updateWidgetMapping(widget.id, updated)
+  }
+
+  const handleUpdateAggregation = (fieldKey: string, aggregation: 'sum' | 'avg') => {
+    const existing = mapping[fieldKey]
+    if (!existing) return
+    updateWidgetMapping(widget.id, { ...mapping, [fieldKey]: { ...existing, aggregation } })
   }
 
   const handleUpdateDisplayName = (fieldKey: string, displayName: string) => {
@@ -168,6 +174,41 @@ export function WidgetMappingPanel({ widget }: Props) {
                       <option key={col} value={col}>{col}</option>
                     ))}
                   </select>
+                  {field.type === 'number' && !mapping[field.key]?.column && (
+                    <input
+                      type="number"
+                      className={inputClass + ' text-[11px]'}
+                      placeholder="Or type a value directly…"
+                      value={typeof (widget.config as Record<string, unknown>)[field.key] === 'number'
+                        ? String((widget.config as Record<string, unknown>)[field.key])
+                        : ''}
+                      onChange={(e) => {
+                        const v = e.target.value === '' ? undefined : Number(e.target.value)
+                        updateWidgetConfig(widget.id, { [field.key]: v } as Partial<WidgetConfig>)
+                      }}
+                    />
+                  )}
+                  {field.type === 'number' && mapping[field.key]?.column && (
+                    <div className="flex gap-1">
+                      {(['sum', 'avg'] as const).map((mode) => (
+                        <button
+                          key={mode}
+                          onClick={() => handleUpdateAggregation(field.key, mode)}
+                          className={`flex-1 rounded border py-0.5 text-[10px] ${
+                            (mapping[field.key]?.aggregation ?? 'sum') === mode
+                              ? isDark
+                                ? 'border-cyan-500/50 bg-cyan-500/10 text-cyan-400'
+                                : 'border-indigo-400 bg-indigo-50 text-indigo-600'
+                              : isDark
+                                ? 'border-[rgba(255,255,255,0.08)] text-[#6b7280] hover:bg-[rgba(255,255,255,0.04)]'
+                                : 'border-gray-200 text-gray-400 hover:bg-gray-50'
+                          }`}
+                        >
+                          {mode === 'sum' ? 'Sum' : 'Avg'}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   {mapping[field.key]?.column && (
                     <input
                       className={inputClass + ' text-[11px]'}

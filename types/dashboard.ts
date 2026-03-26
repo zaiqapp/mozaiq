@@ -129,6 +129,7 @@ export interface GlobalDataSource {
 export interface AxisMapping {
   column: string        // source column name
   displayName?: string  // optional display label override
+  aggregation?: 'sum' | 'avg'  // for number fields; defaults to 'sum'
 }
 
 export interface Widget {

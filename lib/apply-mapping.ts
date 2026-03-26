@@ -18,14 +18,20 @@ export function applyMapping(
   if (Object.keys(mapping).length === 0) return null
 
   if (fieldType === 'number') {
-    const col = mapping[fieldKey]?.column
+    const axisMapping = mapping[fieldKey]
+    const col = axisMapping?.column
     if (!col) return null
-    const firstRow = rows[0]
-    if (!firstRow) return null
-    const raw = firstRow[col]
-    if (raw === undefined || raw === null) return null
-    const n = Number(raw)
-    return isNaN(n) ? null : n
+    const agg = axisMapping?.aggregation ?? 'sum'
+    let sum = 0
+    let count = 0
+    for (const row of rows) {
+      const raw = row[col]
+      if (raw === undefined || raw === null) continue
+      const n = Number(raw)
+      if (!isNaN(n)) { sum += n; count++ }
+    }
+    if (count === 0) return null
+    return agg === 'avg' ? Math.round((sum / count) * 100) / 100 : sum
   }
 
   if (fieldType === 'string') {
