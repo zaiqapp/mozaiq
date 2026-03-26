@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 import { useDashboardStore } from '@/store/dashboard'
 import { useBuilderTheme } from './BuilderThemeProvider'
-import { WidgetMappingPanel } from './WidgetMappingPanel'
 import { WidgetConfigPanel } from './WidgetConfigPanel'
+import { WidgetDataPanel } from './data-editors/WidgetDataPanel'
 
 export function RightPanel() {
   const { theme } = useBuilderTheme()
@@ -19,14 +19,14 @@ export function RightPanel() {
       ? 'border-[rgba(255,255,255,0.13)] bg-[rgba(255,255,255,0.07)] backdrop-blur-[12px]'
       : 'border-gray-200 bg-white'
   }`
-  const collapseButtonClass = `absolute -left-3 top-4 rounded-full border p-0.5 ${
+  const collapseButtonClass = `absolute left-1 top-2 rounded-full border p-0.5 ${
     isDark ? 'border-[rgba(255,255,255,0.13)] bg-[rgba(255,255,255,0.07)] backdrop-blur-[8px] text-[#4b5563]' : 'border-gray-200 bg-white text-gray-500'
   }`
   const asideStyle = isDark ? { boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.08), inset -1px -1px 1px rgba(255,255,255,0.04)' } as React.CSSProperties : undefined
 
   if (collapsed) {
     return (
-      <aside className={`relative flex w-6 flex-shrink-0 ${asideClass}`} style={asideStyle}>
+      <aside className={`relative flex w-6 flex-shrink-0 font-sans ${asideClass}`} style={asideStyle}>
         <button onClick={() => setCollapsed(false)} className={collapseButtonClass}>
           <ChevronLeft className="h-3 w-3" />
         </button>
@@ -35,7 +35,7 @@ export function RightPanel() {
   }
 
   return (
-    <aside className={`relative flex h-full w-[280px] flex-shrink-0 flex-col ${asideClass}`} style={asideStyle}>
+    <aside className={`relative flex h-full w-[280px] flex-shrink-0 flex-col font-sans ${asideClass}`} style={asideStyle}>
       <button onClick={() => setCollapsed(true)} className={collapseButtonClass}>
         <ChevronRight className="h-3 w-3" />
       </button>
@@ -75,7 +75,7 @@ export function RightPanel() {
               <WidgetConfigPanel widget={widget} />
             ) : (
               <div className="p-4">
-                <WidgetMappingPanel widget={widget} />
+                <WidgetDataPanel widget={widget} />
               </div>
             )}
           </div>
