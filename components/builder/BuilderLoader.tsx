@@ -26,7 +26,7 @@ export function BuilderLoader({ id, name: initialName, widgets: initialWidgets, 
   }, [id, initialName, initialWidgets, layout, dataSources, loadDashboard])
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
+    <div className="flex h-screen flex-col overflow-hidden font-system">
       <Toolbar />
       <div className="flex flex-1 overflow-hidden">
         <LeftSidebar />
