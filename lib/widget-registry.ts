@@ -25,6 +25,8 @@ export const WIDGET_TYPES: WidgetType[] = [
   'kpi', 'line-chart', 'area-chart', 'bar-chart', 'donut-chart',
   'funnel-chart', 'gauge', 'data-table', 'progress-tracker',
   'activity-feed', 'text-note',
+  'stat-comparison', 'multi-line-chart', 'grouped-bar-chart', 'stacked-bar-chart',
+  'scatter-chart', 'combo-chart', 'ranked-list', 'waterfall-chart', 'treemap',
 ]
 
 const KPICard = dynamic(() => import('@/components/widgets/KPICard')) as unknown as ComponentType<WidgetProps>
