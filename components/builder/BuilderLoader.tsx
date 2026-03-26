@@ -29,7 +29,7 @@ export function BuilderLoader({ id, name, widgets, layout, dataSources = [] }: P
       <Toolbar />
       <div className="flex flex-1 overflow-hidden">
         <LeftSidebar />
-        <main className="flex-1 overflow-hidden"><BuilderCanvas /></main>
+        <main className="flex-1 overflow-y-auto"><BuilderCanvas /></main>
         <RightPanel />
       </div>
     </div>

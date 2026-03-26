@@ -22,7 +22,8 @@ export async function POST(req: Request) {
       },
     })
     return NextResponse.json({ id: dashboard.id, shareUrl: shareUrl(dashboard.id) }, { status: 201 })
-  } catch {
+  } catch (err) {
+    console.error('[POST /api/dashboards]', err)
     return NextResponse.json({ error: 'Failed to create dashboard' }, { status: 500 })
   }
 }

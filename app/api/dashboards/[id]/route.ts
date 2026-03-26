@@ -36,7 +36,8 @@ export async function PATCH(req: Request, { params }: Params) {
       },
     })
     return NextResponse.json(updated)
-  } catch {
+  } catch (err) {
+    console.error('[PATCH /api/dashboards/:id]', err)
     return NextResponse.json({ error: 'Failed to update' }, { status: 500 })
   }
 }

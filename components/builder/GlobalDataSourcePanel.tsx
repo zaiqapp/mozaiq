@@ -491,14 +491,14 @@ export function GlobalDataSourcePanel() {
           ) : (
             <div className="flex gap-2">
               <input
-                className={inputClass + ' flex-1'}
+                className={`min-w-0 flex-1 rounded border px-2 py-1.5 text-sm outline-none ${isDark ? 'border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] text-[#9ca3af] focus:border-cyan-500/50' : 'border-gray-200 bg-white text-gray-900 focus:border-indigo-400'}`}
                 placeholder="What would you like to visualize?"
                 value={generatePrompt}
                 onChange={(e) => setGeneratePrompt(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && generatePrompt.trim()) { generateWidgets(generatePrompt, undefined, generateCount || undefined); setGeneratePrompt('') } }}
               />
               <select
-                className={inputClass + ' w-20 flex-shrink-0'}
+                className={`w-20 shrink-0 rounded border px-2 py-1.5 text-sm outline-none ${isDark ? 'border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] text-[#9ca3af] focus:border-cyan-500/50' : 'border-gray-200 bg-white text-gray-900 focus:border-indigo-400'}`}
                 value={generateCount}
                 onChange={(e) => setGenerateCount(Number(e.target.value))}
                 title="Number of widgets to generate"

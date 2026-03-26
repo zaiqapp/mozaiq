@@ -281,8 +281,14 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
     const { id, name, widgets, layout, dataSources } = get()
     set({ isSaving: true })
     try {
+      // Strip inline row data from live sources (Google Sheets) — they re-fetch on load.
+      // Only CSV sources need their data persisted inline.
+      const dataSourcesForSave = dataSources.map((ds) =>
+        ds.type === 'google-sheets' ? { ...ds, data: undefined } : ds
+      )
+
       // CSV size guard: sum inline data across all CSV global sources
-      const csvSize = dataSources.reduce((acc, ds) => {
+      const csvSize = dataSourcesForSave.reduce((acc, ds) => {
         if (ds.type === 'csv' && ds.data) {
           return acc + JSON.stringify(ds.data).length
         }
@@ -292,7 +298,7 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
         throw new Error('CSV data is too large to save (>3MB). Try uploading a smaller file.')
       }
 
-      const body = JSON.stringify({ name, widgets, layout, dataSources })
+      const body = JSON.stringify({ name, widgets, layout, dataSources: dataSourcesForSave })
       let res = await fetch(id ? `/api/dashboards/${id}` : '/api/dashboards', {
         method: id ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },

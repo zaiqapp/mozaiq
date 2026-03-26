@@ -1,11 +1,13 @@
 'use client'
+import { useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import type { ComponentType } from 'react'
 import type { GridLayoutProps, LayoutItem } from 'react-grid-layout'
-import type { Widget } from '@/types/dashboard'
+import type { Widget, GlobalDataSource } from '@/types/dashboard'
 import { WidgetWrapper } from '@/components/widgets/WidgetWrapper'
 import { WidgetRenderer } from '@/components/widgets/WidgetRenderer'
 import { BuilderThemeProvider, useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
+import { useDashboardStore } from '@/store/dashboard'
 import Link from 'next/link'
 import 'react-grid-layout/css/styles.css'
 
@@ -14,10 +16,16 @@ const GridLayout = dynamic(
   { ssr: false }
 ) as ComponentType<GridLayoutProps>
 
-interface Props { id: string; name: string; widgets: Widget[]; layout: LayoutItem[] }
+interface Props { id: string; name: string; widgets: Widget[]; layout: LayoutItem[]; dataSources?: GlobalDataSource[] }
 
-function ShareViewInner({ id, name, widgets, layout }: Props) {
+function ShareViewInner({ id, name, widgets, layout, dataSources = [] }: Props) {
   const { theme } = useBuilderTheme()
+  const loadDashboard = useDashboardStore((s) => s.loadDashboard)
+
+  useEffect(() => {
+    loadDashboard({ name, widgets, layout, dataSources })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id])
   const isDark = theme === 'dark'
 
   if (widgets.length === 0) {
