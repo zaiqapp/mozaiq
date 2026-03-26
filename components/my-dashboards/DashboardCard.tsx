@@ -126,7 +126,7 @@ export function DashboardCard({ dashboard }: { dashboard: Dashboard }) {
 
   return (
     <li
-      className="flex items-center gap-3.5 rounded-xl border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] px-4 py-3.5 backdrop-blur-[8px] transition-all duration-200 hover:-translate-y-0.5 hover:border-[rgba(255,255,255,0.18)]"
+      className={`relative flex items-center gap-3.5 rounded-xl border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] px-4 py-3.5 backdrop-blur-[8px] transition-all duration-200 hover:-translate-y-0.5 hover:border-[rgba(255,255,255,0.18)] ${menuOpen ? 'z-10' : ''}`}
       style={{
         boxShadow:
           'inset 2px 2px 1px rgba(255,255,255,0.08), inset -1px -1px 1px rgba(255,255,255,0.04)',
