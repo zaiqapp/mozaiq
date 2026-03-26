@@ -2,19 +2,12 @@
 
 import React from "react";
 
-// Types
 interface GlassEffectProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
   href?: string;
   target?: string;
-}
-
-interface DockIcon {
-  src: string;
-  alt: string;
-  onClick?: () => void;
 }
 
 // Glass Effect Wrapper Component
@@ -36,7 +29,6 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
       className={`relative flex font-semibold overflow-hidden cursor-pointer transition-all duration-700 ${className}`}
       style={glassStyle}
     >
-      {/* Glass Layers */}
       <div
         className="absolute inset-0 z-0 overflow-hidden rounded-inherit rounded-3xl"
         style={{
@@ -56,8 +48,6 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
             "inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5)",
         }}
       />
-
-      {/* Content */}
       <div className="relative z-30">{children}</div>
     </div>
   );
@@ -71,71 +61,7 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
   );
 };
 
-// Dock Component
-export const GlassDock: React.FC<{ icons: DockIcon[]; href?: string }> = ({
-  icons,
-  href,
-}) => (
-  <GlassEffect
-    href={href}
-    className="rounded-3xl p-3 hover:p-4 hover:rounded-4xl"
-  >
-    <div className="flex items-center justify-center gap-2 rounded-3xl p-3 py-0 px-0.5 overflow-hidden">
-      {icons.map((icon, index) => (
-        <img
-          key={index}
-          src={icon.src}
-          alt={icon.alt}
-          className="w-16 h-16 transition-all duration-700 hover:scale-110 cursor-pointer"
-          style={{
-            transformOrigin: "center center",
-            transitionTimingFunction: "cubic-bezier(0.175, 0.885, 0.32, 2.2)",
-          }}
-          onClick={icon.onClick}
-        />
-      ))}
-    </div>
-  </GlassEffect>
-);
-
-// Button Component
-export const GlassButton: React.FC<{ children: React.ReactNode; href?: string }> = ({
-  children,
-  href,
-}) => (
-  <GlassEffect
-    href={href}
-    className="rounded-3xl px-10 py-6 hover:px-11 hover:py-7 hover:rounded-4xl overflow-hidden"
-  >
-    <div
-      className="transition-all duration-700 hover:scale-95"
-      style={{
-        transitionTimingFunction: "cubic-bezier(0.175, 0.885, 0.32, 2.2)",
-      }}
-    >
-      {children}
-    </div>
-  </GlassEffect>
-);
-
-// Card / Panel Component — built on GlassEffect, adapted for card/container use
-export const GlassCard: React.FC<{
-  children: React.ReactNode
-  className?: string
-  style?: React.CSSProperties
-  onClick?: () => void
-}> = ({ children, className = '', style = {}, onClick }) => (
-  <GlassEffect
-    className={`flex-col cursor-default text-white ${className}`}
-    style={style}
-  >
-    <div onClick={onClick} className="flex flex-col h-full w-full">
-      {children}
-    </div>
-  </GlassEffect>
-)
-
-// SVG Filter Component — render once in the DOM (e.g. in layout.tsx)
+// SVG Filter — render once in layout.tsx
 export const GlassFilter: React.FC = () => (
   <svg style={{ display: "none" }} aria-hidden="true">
     <filter
