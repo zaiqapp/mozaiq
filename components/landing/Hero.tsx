@@ -40,7 +40,7 @@ export function Hero() {
           style={{ letterSpacing: '-0.03em' }}
         >
           <LayoutGroup>
-            <motion.p className="flex whitespace-pre" layout>
+            <motion.span className="flex whitespace-pre" layout>
               <motion.span
                 className="bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent"
                 layout
@@ -64,7 +64,7 @@ export function Hero() {
                 transition={{ type: 'spring', damping: 30, stiffness: 400 }}
                 rotationInterval={3000}
               />
-            </motion.p>
+            </motion.span>
           </LayoutGroup>
         </h1>
 
