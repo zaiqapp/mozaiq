@@ -4,7 +4,11 @@ import { AnimatedSection } from '@/components/landing/AnimatedSection'
 import { Nav } from '@/components/landing/Nav'
 import BentoGrid from '@/components/ui/bento-grid'
 import PricingCard from '@/components/ui/pricing-card'
-import { GlassCard, GlassButton } from '@/components/ui/liquid-glass'
+
+const glassBox = {
+  className: 'rounded-xl border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] backdrop-blur-[8px] transition-colors hover:border-[rgba(255,255,255,0.18)]',
+  style: { boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' },
+}
 
 // ---- Hero ----
 function Hero() {
@@ -51,16 +55,23 @@ function Hero() {
           >
             Start Building Free
           </Link>
-          <GlassButton href="https://github.com/zaiqapp/mozaiq">
-            <span className="text-sm font-semibold text-white px-2">
-              View on GitHub →
-            </span>
-          </GlassButton>
+          <a
+            href="https://github.com/zaiqapp/mozaiq"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${glassBox.className} px-5 py-2.5`}
+            style={glassBox.style}
+          >
+            <span className="text-sm font-semibold text-white">View on GitHub →</span>
+          </a>
         </div>
 
-        <GlassCard className="mx-auto mt-12 max-w-2xl rounded-xl p-8 text-center">
+        <div
+          className={`mx-auto mt-12 max-w-2xl p-8 text-center ${glassBox.className}`}
+          style={glassBox.style}
+        >
           <p className="text-sm text-[#374151]">[ Builder screenshot / demo GIF ]</p>
-        </GlassCard>
+        </div>
       </div>
     </section>
   )
@@ -91,7 +102,7 @@ function Features() {
 // ---- Templates Preview ----
 const TEMPLATES = [
   { name: 'Analytics', desc: 'MRR, users, conversion, session time' },
-  { name: 'Inventory', desc: 'SKUs, stock levels, turnover, value', highlight: true },
+  { name: 'Inventory', desc: 'SKUs, stock levels, turnover, value' },
   { name: 'Purchasing', desc: 'POs, vendor spend, lead times, delivery' },
 ]
 
@@ -113,10 +124,13 @@ function TemplatesPreview() {
           {TEMPLATES.map((t, i) => (
             <AnimatedSection key={t.name} delay={80 + i * 80}>
               <Link href="/builder">
-                <GlassCard className="flex flex-col gap-2 rounded-xl p-6 transition hover:scale-[1.02]">
+                <div
+                  className={`flex flex-col gap-2 p-6 ${glassBox.className}`}
+                  style={glassBox.style}
+                >
                   <h3 className="font-semibold text-[#f9fafb]">{t.name}</h3>
                   <p className="text-sm text-[#9ca3af]">{t.desc}</p>
-                </GlassCard>
+                </div>
               </Link>
             </AnimatedSection>
           ))}
@@ -172,7 +186,7 @@ function Footer() {
 export default async function LandingPage() {
   const { userId } = await auth()
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen">
       <Nav userId={userId} />
       <Hero />
       <Features />

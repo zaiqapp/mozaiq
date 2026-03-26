@@ -148,3 +148,9 @@
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* Clerk modal input placeholder */
+.cl-formFieldInput::placeholder,
+.cl-input::placeholder {
+  color: rgba(249, 250, 251, 0.45) !important;
+}

@@ -4,7 +4,6 @@ import { Sparkles } from 'lucide-react'
 import { useDashboardStore } from '@/store/dashboard'
 import { toast } from 'sonner'
 import { useBuilderTheme } from '@/components/builder/BuilderThemeProvider'
-import { AnimatedGenerateButton } from '@/components/ui/animated-generate-button'
 
 export function AIGeneratorBar() {
   const [prompt, setPrompt] = useState('')
@@ -52,24 +51,17 @@ export function AIGeneratorBar() {
         onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
         disabled={isGenerating}
       />
-      {isDark ? (
-        <AnimatedGenerateButton
-          generating={isGenerating}
-          labelIdle="Generate"
-          labelActive="Building"
-          highlightHueDeg={195}
-          onClick={handleGenerate}
-          disabled={!prompt.trim()}
-        />
-      ) : (
-        <button
-          onClick={handleGenerate}
-          disabled={!prompt.trim() || isGenerating}
-          className="flex items-center gap-1.5 rounded-md bg-gradient-to-r from-cyan-400 to-indigo-600 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-50 hover:opacity-90"
-        >
-          {isGenerating ? 'Generating...' : 'Generate →'}
-        </button>
-      )}
+      <button
+        onClick={handleGenerate}
+        disabled={!prompt.trim() || isGenerating}
+        className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium disabled:opacity-50 hover:opacity-90 ${
+          isDark
+            ? 'bg-gradient-to-r from-cyan-400 to-indigo-600 text-white'
+            : 'bg-gradient-to-r from-cyan-400 to-indigo-600 text-white'
+        }`}
+      >
+        {isGenerating ? 'Generating...' : 'Generate →'}
+      </button>
     </div>
   )
 }

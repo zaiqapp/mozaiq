@@ -33,9 +33,10 @@ export function Nav({ userId }: NavProps) {
       >
         <div
           className={cn(
-            'mx-auto mt-2 max-w-6xl px-6 transition-all duration-300',
-            isScrolled &&
-              'max-w-4xl rounded-2xl border border-white/[0.10] bg-[rgba(8,8,16,0.6)] backdrop-blur-[20px] px-5',
+            'mx-auto mt-2 rounded-2xl border border-transparent px-6 transition-all duration-300',
+            isScrolled
+              ? 'max-w-4xl border-white/[0.10] bg-[rgba(8,8,16,0.6)] px-5 backdrop-blur-[20px]'
+              : 'max-w-7xl',
           )}
           style={
             isScrolled
