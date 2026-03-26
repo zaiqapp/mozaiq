@@ -35,7 +35,7 @@ export default function RankedList({ config }: WidgetProps) {
         const val = Number(row.value ?? 0)
         const pct = max > 0 ? (val / max) * 100 : 0
         return (
-          <div key={i} className="flex items-center gap-2">
+          <div key={String(row.label ?? i)} className="flex items-center gap-2">
             <span className={`text-[10px] w-4 text-right ${mutedText}`}>{i + 1}</span>
             <div className="flex-1 flex items-center gap-2">
               <div className="flex-1 h-2 rounded overflow-hidden bg-muted/30">

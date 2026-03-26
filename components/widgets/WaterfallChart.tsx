@@ -24,10 +24,12 @@ interface ProcessedRow {
 
 function preprocess(rows: Record<string, unknown>[]): ProcessedRow[] {
   let running = 0
+  const lastIndex = rows.length - 1
   return rows.map((row, i) => {
     const delta = Number(row.value ?? 0)
-    const base = i === 0 ? 0 : running
-    running += delta
+    const isLast = i === lastIndex
+    const base = (i === 0 || isLast) ? 0 : running
+    if (!isLast) running += delta
     return { label: String(row.label ?? ''), base, delta, positive: delta >= 0 }
   })
 }
@@ -68,7 +70,7 @@ export default function WaterfallChart({ config }: WidgetProps) {
             <Bar dataKey="delta" stackId="w">
               {processed.map((entry, i) => (
                 <Cell
-                  key={i}
+                  key={entry.label}
                   fill={i === lastIndex ? totalColor : entry.positive ? positiveColor : negativeColor}
                 />
               ))}
