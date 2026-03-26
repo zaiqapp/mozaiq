@@ -72,12 +72,26 @@ Available widget types and their dataSourceMapping fields:
 - "data-table": { "<any label>": { "column": "<col>" }, ... } (one entry per column to show)
 - "progress-tracker": { "items": { "column": "<items col>" } }
 - "activity-feed": { "events": { "column": "<events col>" } }
+- "stat-comparison": { "primary": { "column": "<numeric col>" }, "secondary": { "column": "<numeric col>" } } — use for head-to-head comparisons (budgeted vs actual, this vs last period). Always include config: { "primaryLabel": "<col1 name>", "secondaryLabel": "<col2 name>" }
+- "multi-line-chart": { "name": { "column": "<x col>" }, "series1": { "column": "<y col>" }, "series2": { "column": "<y col>" } } — 2 series; use when comparing trends of 2 metrics over time. Config: { "seriesLabels": { "series1": "<col1 name>", "series2": "<col2 name>" } }
+- "grouped-bar-chart": { "name": { "column": "<category>" }, "series1": { "column": "<val>" }, "series2": { "column": "<val>" } } — side-by-side bars per category. Config: { "seriesLabels": { "series1": "<col1 name>", "series2": "<col2 name>" } }
+- "stacked-bar-chart": same mapping as grouped-bar-chart — use when part-to-whole breakdown matters
+- "scatter-chart": { "x": { "column": "<numeric>" }, "y": { "column": "<numeric>" }, "label": { "column": "<category>" } } — use for correlation between two numeric columns
+- "combo-chart": { "name": { "column": "<category>" }, "bar": { "column": "<numeric>" }, "line": { "column": "<numeric>" } } — use when one metric is volume and another is a rate/ratio. Config: { "barLabel": "<col1 name>", "lineLabel": "<col2 name>" }
+- "ranked-list": { "label": { "column": "<category>" }, "value": { "column": "<numeric>" } } — use for top-N rankings; simpler than bar-chart
+- "waterfall-chart": { "label": { "column": "<category>" }, "value": { "column": "<numeric>" } } — use for sequential cumulative breakdowns
+- "treemap": { "name": { "column": "<category>" }, "value": { "column": "<numeric>" } } — use for proportional share when there are many categories
 
 Rules:
 - Generate 3–6 widgets total
 - Include a "data-table" when there are more than 3 columns
 - Prefer "line-chart" or "area-chart" for time-series data (date/month/week columns)
 - Prefer "bar-chart" or "donut-chart" for categorical data
-- Use "kpi" for single important numeric values
+- Use "kpi" for single important numeric values — it automatically sums the column across all rows
+- CRITICAL: Each chart type supports exactly ONE "value" column. To compare two metrics (e.g. "budgeted vs actual hours"), use "stat-comparison" or "grouped-bar-chart" / "multi-line-chart" — NOT two separate single-series charts
+- Prefer "stat-comparison" over two separate KPIs when directly comparing two metrics
+- Prefer "multi-line-chart" or "grouped-bar-chart" over separate single-series charts for multi-metric comparisons
+- Prefer "ranked-list" over "bar-chart" for simple top-N use cases
+- When generating multi-series widgets, always populate config.seriesLabels with human-readable names from the column names
 - ALL column values in dataSourceMapping MUST exactly match one of the column names provided
 - Return ONLY the JSON array. No preamble, no explanation.`
