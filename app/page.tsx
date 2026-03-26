@@ -2,79 +2,13 @@ import Link from 'next/link'
 import { auth } from '@clerk/nextjs/server'
 import { AnimatedSection } from '@/components/landing/AnimatedSection'
 import { Nav } from '@/components/landing/Nav'
+import { Hero } from '@/components/landing/Hero'
 import BentoGrid from '@/components/ui/bento-grid'
 import PricingCard from '@/components/ui/pricing-card'
 
 const glassBox = {
   className: 'rounded-xl border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] backdrop-blur-[8px] transition-colors hover:border-[rgba(255,255,255,0.18)]',
   style: { boxShadow: 'inset 2px 2px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(255,255,255,0.03)' },
-}
-
-// ---- Hero ----
-function Hero() {
-  return (
-    <section className="relative overflow-hidden py-28 text-center">
-      {/* Dot grid */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px)',
-          backgroundSize: '22px 22px',
-        }}
-      />
-      {/* Cyan orb */}
-      <div className="pointer-events-none absolute left-[10%] top-[-80px] h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.18)_0%,transparent_70%)] blur-3xl" />
-      {/* Indigo orb */}
-      <div className="pointer-events-none absolute right-[10%] top-[-60px] h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.14)_0%,transparent_70%)] blur-3xl" />
-
-      <div className="hero-fade relative mx-auto max-w-3xl px-6">
-        {/* Badge */}
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/[0.06] px-3 py-1">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />
-          <span className="text-[10px] font-medium uppercase tracking-[0.05em] text-cyan-300">
-            AI-POWERED DASHBOARD BUILDER · OPEN SOURCE
-          </span>
-        </div>
-
-        <h1 className="mb-4 text-5xl font-extrabold leading-tight tracking-tight" style={{ letterSpacing: '-0.03em' }}>
-          <span className="text-white">Drag. Describe. Share.</span>
-          <br />
-          <span className="bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">
-            Dashboards in minutes.
-          </span>
-        </h1>
-
-        <p className="mb-8 text-base text-[#4b5563]">
-          Drag, drop, and describe. Mozaiq turns your data into shareable dashboards — no code required.
-        </p>
-
-        <div className="flex items-center justify-center gap-4">
-          <Link
-            href="/builder"
-            className="rounded-lg bg-gradient-to-r from-cyan-400 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_0_24px_rgba(6,182,212,0.3)] transition hover:opacity-90"
-          >
-            Start Building Free
-          </Link>
-          <a
-            href="https://github.com/zaiqapp/mozaiq"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${glassBox.className} px-5 py-2.5`}
-            style={glassBox.style}
-          >
-            <span className="text-sm font-semibold text-white">View on GitHub →</span>
-          </a>
-        </div>
-
-        <div
-          className={`mx-auto mt-12 max-w-2xl p-8 text-center ${glassBox.className}`}
-          style={glassBox.style}
-        >
-          <p className="text-sm text-[#374151]">[ Builder screenshot / demo GIF ]</p>
-        </div>
-      </div>
-    </section>
-  )
 }
 
 // ---- Features (Bento Grid) ----
